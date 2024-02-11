@@ -4,6 +4,7 @@ require "user.keymaps"
 require "user.plugins"
 require "user.autocommands"
 require "user.colorscheme"
+-- require "user.kanagawa.nvim"
 
 -- PLUGINS
 

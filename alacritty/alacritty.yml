@@ -1,6 +1,10 @@
 # NOTE: to config with Tmux and Fish, see 'Shell' below
 # REQUIRES: set default terminal in the terminal with:
 # gsettings set org.gnome.desktop.default-applications.terminal exec 'alacritty'
+import = [
+    "~/.config/alacritty/themes/themes/kanagawa_dragon toml"
+]
+
 colors:
   # Default colors
   primary:

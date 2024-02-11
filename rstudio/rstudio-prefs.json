@@ -1,0 +1,40 @@
+{
+    "initial_working_directory": "~",
+    "editor_theme": "Pastel On Dark",
+    "posix_terminal_shell": "zsh",
+    "scroll_past_end_of_document": true,
+    "rainbow_parentheses": true,
+    "pdf_previewer": "system",
+    "panes": {
+        "quadrants": [
+            "Source",
+            "Console",
+            "TabSet1",
+            "TabSet2"
+        ],
+        "tabSet1": [
+            "Environment",
+            "History",
+            "Files",
+            "Viewer",
+            "Presentation"
+        ],
+        "tabSet2": [
+            "Plots",
+            "Packages",
+            "Help",
+            "Presentations"
+        ],
+        "hiddenTabSet": [
+            "Connections",
+            "Build",
+            "VCS",
+            "Tutorial"
+        ],
+        "console_left_on_top": false,
+        "console_right_on_top": true,
+        "additional_source_columns": 0
+    },
+    "font_size_points": 12,
+    "editor_keybindings": "vim"
+}

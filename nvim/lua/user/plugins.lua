@@ -93,7 +93,7 @@ return packer.startup(function(use)
   -- use { "savq/melange" }
   -- use { "EdenEast/nightfox.nvim" }
   -- use { "navarasu/onedark.nvim" }
-  vim.cmd("colorscheme kanagawa")
+  -- vim.cmd("colorscheme kanagawa")
 
 -- CMP 
   use { "hrsh7th/nvim-cmp" }
@@ -175,6 +175,9 @@ return packer.startup(function(use)
 
 -- Git
 	use { "lewis6991/gitsigns.nvim" }
+
+-- Vim Be Good
+  use { "ThePrimeagen/vim-be-good" }
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
