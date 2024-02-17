@@ -1,5 +1,7 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH="/Library/TeX/texbin:$PATH"
+export nvim="/usr/local/bin/nvim"
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -108,3 +110,12 @@ source <(curl -sL init.zshell.dev); zzinit
 # Starship prompt
 eval "$(starship init zsh)"
 
+
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+path=('/Users/dante/.juliaup/bin' $path)
+export PATH
+
+# <<< juliaup initialize <<<

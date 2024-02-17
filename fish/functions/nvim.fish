@@ -1,4 +1,4 @@
-function nvim --wraps='~/neovim/bin/nvim' --description 'alias nvim=~/neovim/bin/nvim'
-  ~/neovim/bin/nvim $argv
+function nvim --wraps='/usr/local/bin/nvim' --description 'alias nvim=/usr/local/bin/nvim'
+  /usr/local/bin/nvim $argv
         
 end

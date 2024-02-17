@@ -157,6 +157,11 @@ _G.packer_plugins = {
     path = "/Users/dante/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
     url = "https://github.com/lewis6991/gitsigns.nvim"
   },
+  ["gruvbox-baby"] = {
+    loaded = true,
+    path = "/Users/dante/.local/share/nvim/site/pack/packer/start/gruvbox-baby",
+    url = "https://github.com/luisiacc/gruvbox-baby"
+  },
   ["impatient.nvim"] = {
     loaded = true,
     path = "/Users/dante/.local/share/nvim/site/pack/packer/start/impatient.nvim",
@@ -196,6 +201,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/dante/.local/share/nvim/site/pack/packer/start/neo-tree.nvim",
     url = "https://github.com/nvim-neo-tree/neo-tree.nvim"
+  },
+  ["neovim-ayu"] = {
+    loaded = true,
+    path = "/Users/dante/.local/share/nvim/site/pack/packer/start/neovim-ayu",
+    url = "https://github.com/Shatur/neovim-ayu"
   },
   ["neovim-session-manager"] = {
     loaded = true,
@@ -309,8 +319,8 @@ vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
-vim.cmd [[au FileType markdown ++once lua require("packer.load")({'autolist.nvim'}, { ft = "markdown" }, _G.packer_plugins)]]
 vim.cmd [[au FileType norg ++once lua require("packer.load")({'autolist.nvim'}, { ft = "norg" }, _G.packer_plugins)]]
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'autolist.nvim'}, { ft = "markdown" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
 vim.cmd("augroup END")
 

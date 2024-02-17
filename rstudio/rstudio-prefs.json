@@ -36,5 +36,6 @@
         "additional_source_columns": 0
     },
     "font_size_points": 12,
-    "editor_keybindings": "vim"
+    "editor_keybindings": "vim",
+    "jobs_tab_visibility": "shown"
 }

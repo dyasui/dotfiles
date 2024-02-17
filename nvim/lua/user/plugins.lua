@@ -86,7 +86,8 @@ return packer.startup(function(use)
 -- Colorschemes
   -- use { "ellisonleao/gruvbox.nvim" }
   use { "rebelot/kanagawa.nvim" }
-  -- use { "luisiacc/gruvbox-baby" }
+  use { "luisiacc/gruvbox-baby" }
+  use { "Shatur/neovim-ayu" }
   -- use { "folke/tokyonight.nvim" }
   -- use { "lunarvim/darkplus.nvim" }
   -- use { "navarasu/onedark.nvim" }

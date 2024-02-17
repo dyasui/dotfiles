@@ -1,4 +1,15 @@
--- KANAGAWA
+-- GRUVBOX --
+
+-- local colorscheme = "gruvbox"
+-- local colorscheme = "gruvbox-baby"
+
+-- AYU --
+require('ayu').setup({
+    mirage = true, -- Set to `true` to use `mirage` variant instead of `dark` for dark background.
+    overrides = {}, -- A dictionary of group names, each associated with a dictionary of parameters (`bg`, `fg`, `sp` and `style`) and colors in hex.
+})
+
+-- -- KANAGAWA
 -- return {
 --   "rebelot/kanagawa.nvim",
 --   priority = 1000, -- make sure to load this before all the other start plugins
@@ -33,11 +44,6 @@
 --   end,
 -- }
 
--- GRUVBOX --
-
-local colorscheme = "nord"
--- local colorscheme = "gruvbox"
--- local colorscheme = "gruvbox-baby"
 
 -- OTHER ---
 
