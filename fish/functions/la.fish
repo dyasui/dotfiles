@@ -1,4 +1,4 @@
-function la --wraps='eza -lbhHigUmuSa --time-style=long-iso --git --color-scale' --description 'alias la=eza -lbhHigUmuSa --time-style=long-iso --git --color-scale'
-  eza -lbhHigUmuSa --time-style=long-iso --git --color-scale $argv
+function la --wraps='eza -lahUm  --git --color-scale' --description 'alias la=eza lahUm --git --color-scale'
+  eza -lahUm --git --color-scale $argv
         
 end

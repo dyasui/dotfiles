@@ -84,6 +84,11 @@ _G.packer_plugins = {
     path = "/Users/dante/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
+  ["Nvim-R"] = {
+    loaded = true,
+    path = "/Users/dante/.local/share/nvim/site/pack/packer/start/Nvim-R",
+    url = "https://github.com/jamespeapen/Nvim-R"
+  },
   ["alpha-nvim"] = {
     loaded = true,
     path = "/Users/dante/.local/share/nvim/site/pack/packer/start/alpha-nvim",

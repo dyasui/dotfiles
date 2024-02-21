@@ -9,8 +9,8 @@
         "quadrants": [
             "Source",
             "Console",
-            "TabSet1",
-            "TabSet2"
+            "TabSet2",
+            "TabSet1"
         ],
         "tabSet1": [
             "Environment",

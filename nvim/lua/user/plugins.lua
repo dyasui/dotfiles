@@ -123,6 +123,9 @@ return packer.startup(function(use)
   -- for formatters and linters
 	use { "jose-elias-alvarez/null-ls.nvim" }
 
+-- R
+  use { "jamespeapen/Nvim-R" } -- support for editing R code
+
 -- LaTeX
   use { "lervag/vimtex" } -- essential for LaTeX; Vimscript
   use { "kdheepak/cmp-latex-symbols" }

@@ -13,6 +13,7 @@ configs.setup({
     "yaml", 
     "perl", 
     "c", 
+    "r",
     "json", 
     "html", 
     -- "help", 

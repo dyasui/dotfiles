@@ -1,0 +1,16 @@
+{
+    "focusNextPane": "Ctrl+P",
+    "focusPreviousPane": "Ctrl+Shift+P",
+    "moveTabLeft": "Ctrl+Shift+H",
+    "consoleClear": "Ctrl+C",
+    "moveTabRight": "Ctrl+Shift+L",
+    "setWorkingDir": "Ctrl+Shift+D",
+    "layoutZoomSource": "Ctrl+Shift+=",
+    "firstTab": "Ctrl+Shift+1",
+    "lastTab": "",
+    "nextTab": "Ctrl+L",
+    "previousTab": "Ctrl+H",
+    "openNewTerminalAtEditorLocation": "Shift+Cmd+N",
+    "newSourceDoc": "Shift+Cmd+R",
+    "paneLayout": "Ctrl+Alt+Shift+Ò"
+}
