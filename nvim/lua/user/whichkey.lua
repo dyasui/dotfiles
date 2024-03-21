@@ -170,6 +170,10 @@ local mappings = {
     p = { "<cmd>TermExec cmd='pandoc %:p -o %:p:r.pdf'<CR>"  , "pdf"},
     -- x = { "<cmd>echo "run: unoconv -f pdf path-to.docx""  , "word to pdf"},
   },
+  r = {
+    name = "R",
+    s = { "<Plug>RStart", "start" }
+  },
   s = {
     name = "SURROUND",
     s = { "<Plug>(nvim-surround-normal)", "surround" },

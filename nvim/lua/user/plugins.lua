@@ -124,7 +124,7 @@ return packer.startup(function(use)
 	use { "jose-elias-alvarez/null-ls.nvim" }
 
 -- R
-  use { "jamespeapen/Nvim-R" } -- support for editing R code
+  use { "R-nvim/R.nvim" } -- support for editing R code
 
 -- LaTeX
   use { "lervag/vimtex" } -- essential for LaTeX; Vimscript
@@ -132,6 +132,10 @@ return packer.startup(function(use)
   use { "jbyuki/nabla.nvim" } -- show symbols in editor
 
 -- Markdown
+  use({
+      "iamcco/markdown-preview.nvim",
+      run = function() vim.fn["mkdp#util#install"]() end,
+  })
   use({
     "gaoDean/autolist.nvim",
     ft = {
@@ -156,7 +160,32 @@ return packer.startup(function(use)
       vim.keymap.set("v", "d", "d<cmd>AutolistRecalculate<cr>")
     end,
   })
-
+  use({
+    "epwalsh/obsidian.nvim",
+    tag = "*",  -- recommended, use latest release instead of latest commit
+    requires = {
+      -- Required.
+      "nvim-lua/plenary.nvim",
+  
+      -- see below for full list of optional dependencies 👇
+    },
+    config = function()
+      require("obsidian").setup({
+        workspaces = {
+          {
+            name = "FieldPaperLit",
+            path = "~/Desktop/FieldPaper/Literature",
+          },
+          {
+            name = "Personal",
+            path = "~/PersonalHome",
+          },
+        },
+  
+        -- see below for full list of options 👇
+      })
+    end,
+  })
 -- Snippets
   --snippet engine
   use { "L3MON4D3/LuaSnip" }

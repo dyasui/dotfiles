@@ -1,5 +1,14 @@
 # -- SNIPPETS --
 #
+
+# new beamer frame
+snippet frame "Beamer Frame" b
+	\begin{frame}{${1}}
+		${2}
+	\end{frame}
+
+# vvv CONSIDER DELETING vvv
+
 # new glossary entry
 snippet gloss "Glossary Entry"  b
 	\newglossaryentry{${1:entry}}{
@@ -101,14 +110,10 @@ snippet enum "Enumerate" b
 # Itemize
 snippet item "Itemize" b
 	\begin{itemize}
-		\item[${1:\it} ${2:Label:}] ${0}
+		\item ${1}
 	\end{itemize}
 #
 
-#Item
-snippet i "Item"
-	\item[${1:\it} ${2:Label:}] ${0}
-#
 
 # Cases
 snippet case "Cases" 

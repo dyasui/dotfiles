@@ -258,4 +258,5 @@ neotree.setup({
   -- }
 })
 
-vim.cmd([[nnoremap \ :Neotree reveal<cr>]])
+-- vim.cmd([[nnoremap \ :Neotree reveal<cr>]])
+vim.keymap.set('n', '<leader>e', 'Neotree reveal<CR>', {})
