@@ -1,1 +1,3 @@
-{}
+{
+    "devtools::test_active_file": "Shift+Cmd+T"
+}
