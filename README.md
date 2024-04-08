@@ -22,10 +22,10 @@
     - Meta + J : move focus down
     - Meta + K : move focus up
     - Meta + L : move focus left
-    - Meta + Ctrl + H : decrease window width
-    - Meta + Ctrl + J : increase window height
-    - Meta + Ctrl + K : decrease window height
-    - Meta + Ctrl + L : increase window width
+    - Shift + Alt - a : decrease window width
+    - Shift + Alt - s : increase window height
+    - Shift + Alt - w : decrease window height
+    - Shift + Alt - d : increase window width
     - Alt + Space : activate application launcher 
     - Meta + Tab : walk through activities
     - Meta + Shift + Tab : reverse walk through activities
