@@ -1,3 +1,7 @@
+# Don't listen for shrotcuts in these apps:
+.blacklist [
+  "RStudio"
+]
 # open terminal 
 cmd - return : /Applications/iTerm.app/Contents/MacOS/iTerm2
 
