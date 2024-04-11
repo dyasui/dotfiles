@@ -4,50 +4,24 @@ import = [
     "~/.config/alacritty/themes/themes/kanagawa_wave.toml"
 ]
 
-# [colors]
-# draw_bold_text_with_bright_colors = true
-# 
-# [colors.bright]
-# black = "#5c6370"
-# blue = "#61afef"
-# cyan = "#56b6c2"
-# green = "#98c379"
-# magenta = "#c678dd"
-# red = "#e06c75"
-# white = "#ECEFF4"
-# yellow = "#d19a66"
-# 
-# [colors.normal]
-# black = "#3B4252"
-# blue = "#81A1C1"
-# cyan = "#88C0D0"
-# green = "#A3BE8C"
-# magenta = "#B48EAD"
-# red = "#BF616A"
-# white = "#abb2bf"
-# yellow = "#EBCB8B"
-# 
-# [colors.primary]
-# background = "#1e2127"
-# foreground = "#D8DEE9"
 
 [font]
-size = 16.0
+size = 10.0
 
 [font.bold]
-family = "CaskaydiaCove Nerd Font Mono"
+family = "LigaSFMono Nerd Font"
 style = "Bold"
 
 [font.bold_italic]
-family = "CaskaydiaCove Nerd Font Mono"
+family = "LigaSFMono Nerd Font"
 style = "Bold Italic"
 
 [font.italic]
-family = "CaskaydiaCove Nerd Font Mono"
+family = "LigaSFMono Nerd Font"
 style = "Italic"
 
 [font.normal]
-family = "CaskaydiaCove Nerd Font Mono"
+family = "LigaSFMono Nerd Font"
 style = "Regular"
 
 [font.offset]
@@ -63,13 +37,13 @@ save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
 [shell]
-program = "/usr/local/bin/fish"
-args = ["-l", "-c", "tmux attach || tmux"]
+program = "zsh"
+args = ["-l", "-c", "tmux && tmux source ~/.config/tmux/.tmux.conf"]
 
 [window]
-decorations = "transparent"
+decorations = "None"
 opacity = 1.0
-startup_mode = "Windowed"
+startup_mode = "Fullscreen"
 title = "Alacritty"
 
 [window.class]
