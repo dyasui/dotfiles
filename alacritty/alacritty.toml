@@ -38,11 +38,11 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
 [shell]
 program = "zsh"
-args = ["-l", "-c", "tmux && tmux source ~/.config/tmux/.tmux.conf"]
+# args = ["-l", "-c", "tmux && tmux source ~/.config/tmux/.tmux.conf"]
 
 [window]
 decorations = "None"
-opacity = 1.0
+opacity = 0.6
 startup_mode = "Fullscreen"
 title = "Alacritty"
 

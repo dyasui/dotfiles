@@ -1,61 +1,15 @@
--- GENERAL
-require "user.options"
-require "user.keymaps"
-require "user.plugins"
-require "user.autocommands"
-require "user.colorscheme"
--- require "user.kanagawa.nvim"
+-- NOTE: Throughout this config, some plugins are
+-- disabled by default. This is because I don't use
+-- them on a daily basis, but I still want to keep
+-- them around as examples.
+-- You can enable them by changing `enabled = false`
+-- to `enabled = true` in the respective plugin spec.
+-- Some of these also have the
+-- PERF: (performance) comment, which
+-- indicates that I found them to slow down the config.
+-- (may be outdated with newer versions of the plugins,
+-- check for yourself if you're interested in using them)
 
--- PLUGINS
-
-require "user.autopairs"
-require "user.comment"
-require "user.impatient"
-require "user.surround"
-require "user.yanky"
--- require "user.undotree"
-
--- Mappings
-require "user.whichkey"
-
--- Terminal
-require "user.toggleterm"
-
--- File Management
--- require "user.nvim-tree"
-require "user.neo-tree"
-require "user.sessions"
-
--- Appearance
-require "user.bufferline"
-require "user.lualine"
-require "user.indentline"
-require "user.alpha"
-require "user.illuminate"
-
--- Autocomplete
-require "user.cmp"
-
--- LaTeX
-require "user.vimtex"
-
--- Markdown
-require "user.autolist"
-
--- Snippets
-require "user.luasnip"
-
--- Telescope
-require "user.telescope"
-require "user.dressing"
-
--- Treesitter
-require "user.treesitter"
-
--- Git
-require "user.gitsigns"
-
-
-
-
-
+require 'config.global'
+require 'config.lazy'
+require 'config.autocommands'
