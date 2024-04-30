@@ -94,20 +94,14 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 
+# mouse natural scrolling 
+input "2362:9488:PixArt_USB_Optical_Mouse" {
+    natural_scroll enabled
+}
+
 bar {
   swaybar_command waybar
 
-  # swaybar_command swaybar
-  #
-  # status_command /usr/bin/i3status-rs $HOME/.config/i3status/config.toml
-  # position top
-  # font pango:CaskaydiaCove Nerd Font 12
-  #
-  # colors {
-  #   background #050505
-  #
-  #   focused_workspace #97a97c #87986a #050505
-  # }
 }
 
 # startup executions
@@ -122,6 +116,9 @@ client.focused_inactive #373b41   #969896  #969896  #282a2e    #282a2e
 client.unfocused        #373b41   #969896  #969896  #282a2e    #282a2e
 client.urgent           #373b41   #900000  #ffffff  #282a2e    #900000
 client.placeholder      #373b41   #373b41  #ffffff  #282a2e    #969896
+
+# choose program windows to float
+# for_window [class="pavucontrol"] floating enable
 
 # swayfx config
 # blur enable
@@ -138,4 +135,4 @@ gaps inner 4
 gaps outer 4
 
 # includes
-include /etc/sway/config.d/*
+# include /etc/sway/config.d/*
