@@ -7,7 +7,7 @@ set $right l
 set $term  kitty
 set $menu  exec tofi-drun | xargs swaymsg exec --
 
-font pango:Liga SFMono Nerd Font 12
+font pango:Liga SFMono Nerd Font 24
 
 # setting the solid.
 # output * bg #a89984 solid_color
@@ -24,12 +24,11 @@ output DP-3 bg `find $wallpaper -type f | shuf -n 1` fill
 # common bindings
 bindsym $mod+Return exec $term
 bindsym $mod+d exec $menu
-bindsym $mod+Shift+q kill
+bindsym $mod+q kill
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Exit Sway?' -B 'Yes, exit sway' 'swaymsg exit' --font="Liga SFMono Nerd Font"
 
 floating_modifier $mod normal
-
 
 # more bindings
 bindsym $mod+$left        focus left
@@ -98,6 +97,9 @@ mode "resize" {
 input "2362:9488:PixArt_USB_Optical_Mouse" {
     natural_scroll enabled
 }
+input "9639:64035:Compx_2.4G_Receiver_Mouse" {
+    natural_scroll enabled
+}
 
 bar {
   swaybar_command waybar
@@ -106,6 +108,7 @@ bar {
 
 # startup executions
 # exec swww init
+exec_always nm-applet --indicator
 
 default_border pixel 0
 default_floating_border pixel 0
