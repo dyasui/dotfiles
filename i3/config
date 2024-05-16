@@ -102,7 +102,7 @@ set $ws3 "3:  "
 set $ws4 "4:  "
 set $ws5 "5: 󰟔 "
 set $ws6 "6:  "
-set $ws7 "7:  "
+set $ws7 "7:  "
 set $ws8 "8:  "
 set $ws9 "9:  "
 set $ws10 "10:  "
@@ -110,6 +110,8 @@ set $ws10 "10:  "
 assign [class="(?)firefox"] $ws2
 # assign [class="Alacritty"] $ws2
 assign [class="rstudio"] $ws5
+assign [class="steam"] $ws7
+
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
@@ -251,3 +253,5 @@ for_window [class="plasmashell" window_type="notification"] floating enable, bor
 no_focus [class="plasmashell" window_type="notification"] 
 
 
+# randomize wallpaper
+exec --no-startup-id feh --randomize --bg-fill ~/Pictures/Hokusai/
