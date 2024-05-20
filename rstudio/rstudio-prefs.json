@@ -1,1 +1,12 @@
-{}
+{
+    "jobs_tab_visibility": "shown",
+    "initial_working_directory": "~",
+    "editor_keybindings": "vim",
+    "font_size_points": 16,
+    "posix_terminal_shell": "zsh",
+    "editor_theme": "Nord Polar Night Aurora {rsthemes}",
+    "relative_line_numbers": true,
+    "scroll_past_end_of_document": true,
+    "rainbow_parentheses": true,
+    "help_font_size_points": 12
+}
