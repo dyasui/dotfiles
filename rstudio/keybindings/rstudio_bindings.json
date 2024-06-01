@@ -1,4 +1,5 @@
 {
-    "compilePDF": "Alt+Cmd+˚",
-    "commentUncomment": "Cmd+/"
+    "compileNotebook": "Shift+Cmd+K",
+    "testTestthatFile": "Shift+Cmd+T",
+    "testPackage": ""
 }

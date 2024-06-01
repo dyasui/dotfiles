@@ -173,12 +173,8 @@ return packer.startup(function(use)
       require("obsidian").setup({
         workspaces = {
           {
-            name = "FieldPaperLit",
-            path = "~/Desktop/FieldPaper/Literature",
-          },
-          {
             name = "Personal",
-            path = "~/PersonalHome",
+            path = "~/Sync/PersonalHome",
           },
         },
   
