@@ -1,0 +1,5 @@
+{
+    "compileNotebook": "Shift+Cmd+K",
+    "testTestthatFile": "Shift+Cmd+T",
+    "testPackage": ""
+}
