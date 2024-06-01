@@ -34,7 +34,8 @@ return {
      ["core.dirman"] = {
        config = {
          workspaces = {
-           Notes = "~/Notes",
+           Journal = "~/Sync/PersonalHome/Journal",
+           org     = "~/Dropbox/org/",
          }
        }
      },
