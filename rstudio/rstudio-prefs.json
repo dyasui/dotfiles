@@ -43,5 +43,6 @@
     "blinking_cursor": false,
     "help_font_size_points": 12,
     "terminal_bell_style": "none",
-    "editor_theme": "BreezeDark"
+    "editor_theme": "Flat White {rsthemes}",
+    "show_panel_focus_rectangle": true
 }

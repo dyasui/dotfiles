@@ -51,3 +51,5 @@
 
 (package! evil-tutor)
 (package! peep-dired)
+(package! markdown-mode)
+(package! poly-R)
