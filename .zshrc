@@ -74,6 +74,7 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 alias ls='ls --color'
 alias la='ls -a --color'
 alias c='clear'
+alias skim='/Applications/Skim.app/Contents/MacOS/Skim'
 
 # Shell integrations
 eval "$(fzf --zsh)"
