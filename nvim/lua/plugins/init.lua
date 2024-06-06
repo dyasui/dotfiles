@@ -224,16 +224,25 @@ return {
     opts = {
       workspaces = {
         {
-          name = "personal",
-          path = "~/vaults/personal",
+          name = "Personal",
+          path = "~/Personal",
         },
         {
-          name = "work",
-          path = "~/vaults/work",
+          name = "Research",
+          path = "~/Research",
         },
       },
       preferred_link_style = "markdown"
     },
+  },
+
+  -- instant markdown table creation
+  -- {
+  --   "dhruvasagar/vim-table-mode",
+  -- }
+
+  {
+    "junegunn/vim-easy-align"
   },
 
 }
