@@ -12,11 +12,12 @@
 set $mod Mod4
 default_border pixel 2
 hide_edge_borders both
+default_orientation vertical
 
 # gaps between windows
-# gaps inner 5px
-# gaps outer 5px
-# smart_gaps inverse_outer
+gaps inner 5px
+gaps outer 5px
+smart_gaps inverse_outer
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -48,6 +49,9 @@ floating_modifier $mod
 # start a terminal
 bindsym $mod+Return exec kitty
 
+# start emacs
+bindsym Mod1+e exec emacs
+
 # kill focused window
 bindsym $mod+q kill
 
@@ -55,6 +59,12 @@ bindsym $mod+q kill
 bindsym $mod+d exec --no-startup-id dmenu_run
 
 bindsym $mod+space exec rofi -show run
+
+# open syncthing GUI
+bindsym $mod+Shift+s exec firefox http://127.0.0.1:8384/#
+
+# open new firefox window 
+bindsym $mod+Shift+f exec firefox
 
 # change focus
 bindsym $mod+h focus left
@@ -98,10 +108,10 @@ bindsym $mod+a focus parent
 # We use variables to avoid repeating the names in multiple places.
 set $ws1 "1:  "
 set $ws2 "2:  "
-set $ws3 "3:  "
+set $ws3 "3:  "
 set $ws4 "4:  "
 set $ws5 "5: 󰟔 "
-set $ws6 "6:  "
+set $ws6 "6: 󰗚 "
 set $ws7 "7:  "
 set $ws8 "8:  "
 set $ws9 "9:  "
@@ -123,8 +133,8 @@ bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
-bindsym $mod+Tab workspace next 
-bindsym $mod+Shift+Tab workspace prev
+bindsym $mod+Right workspace next 
+bindsym $mod+Left workspace prev
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number $ws1
@@ -212,8 +222,6 @@ bindsym $mod+shift+m exec redshift -P -O 10000
 
 # Pipewire-pulse
 bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
@@ -230,9 +238,9 @@ bindsym XF86AudioPrev exec playerctl previous
 # bindsym XF86AudioPrev exec playerctl previous
 # 
 # # Use pactl to adjust volume in PulseAudio.
-# set $refresh_i3status killall -SIGUSR1 i3status
-# bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-# bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
 # bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 # bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
@@ -254,4 +262,7 @@ no_focus [class="plasmashell" window_type="notification"]
 
 
 # randomize wallpaper
-exec --no-startup-id feh --randomize --bg-fill ~/Pictures/Hokusai/
+exec --no-startup-id feh --randomize --bg-fill ~/Pictures/HokusaiPrints/
+
+# enable natural mouse scrolling
+exec xinput set-prop "PixArt USB Optical Mouse" "libinput Natural Scrolling Enabled" 1

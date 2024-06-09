@@ -1,97 +1,165 @@
-;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;;(setq bookmark-default-file "~/.config/doom/bookmarks")
 
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
+(map! :leader
+      (:prefix ("b". "buffer")
+       :desc "List bookmarks"                          "L" #'list-bookmarks
+       :desc "Set bookmark"                            "m" #'bookmark-set
+       :desc "Delete bookmark"                         "M" #'bookmark-set
+       :desc "Save current bookmarks to bookmark file" "w" #'bookmark-save))
 
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
 
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets. It is optional.
-(setq user-full-name "Dante"
-      user-mail-address "dyasui@gmail.com")
+(evil-define-key 'normal ibuffer-mode-map
+  (kbd "f c") 'ibuffer-filter-by-content
+  (kbd "f d") 'ibuffer-filter-by-directory
+  (kbd "f f") 'ibuffer-filter-by-filename
+  (kbd "f m") 'ibuffer-filter-by-mode
+  (kbd "f n") 'ibuffer-filter-by-name
+  (kbd "f x") 'ibuffer-filter-disable
+  (kbd "g h") 'ibuffer-do-kill-lines
+  (kbd "g H") 'ibuffer-update)
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom:
-;;
-;; - `doom-font' -- the primary font to use
-;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
-;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;; - `doom-symbol-font' -- for symbols
-;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
-;;
-;; See 'C-h v doom-font' for documentation and more examples of what they
-;; accept. For example:
-;;
-(setq doom-font (font-spec :family "Liga SFMono Nerd Font" :size 18 :weight 'regular)
-     doom-variable-pitch-font (font-spec :family "Futura" :size 16))
-;;
-;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
-;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
-;; refresh your font settings. If Emacs still can't find your font, it likely
-;; wasn't installed correctly. Font issues are rarely Doom issues!
+(map! :leader
+      (:prefix ("d" . "dired")
+       :desc "Open dired" "d" #'dired
+       :desc "Dired jump to current" "j" #'dired-jump)
+      (:after dired
+       (:map dired-mode-map
+        :desc "Peep-dired image previews" "d p" #'peep-dired
+        :desc "Dired view file"           "d v" #'dired-view-file)))
 
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-tokyo-night)
+(evil-define-key 'normal dired-mode-map
+  (kbd "M-RET") 'dired-display-file
+  (kbd "h") 'dired-up-directory
+  (kbd "l") 'dired-open-file ; use dired-find-file instead of dired-open.
+  (kbd "m") 'dired-mark
+  (kbd "t") 'dired-toggle-marks
+  (kbd "u") 'dired-unmark
+  (kbd "C") 'dired-do-copy
+  (kbd "D") 'dired-do-delete
+  (kbd "J") 'dired-goto-file
+  (kbd "M") 'dired-do-chmod
+  (kbd "O") 'dired-do-chown
+  (kbd "P") 'dired-do-print
+  (kbd "R") 'dired-do-rename
+  (kbd "T") 'dired-do-touch
+  (kbd "Y") 'dired-copy-filenamecopy-filename-as-kill ; copies filename to kill ring.
+  (kbd "Z") 'dired-do-compress
+  (kbd "+") 'dired-create-directory
+  (kbd "-") 'dired-do-kill-lines
+  (kbd "% l") 'dired-downcase
+  (kbd "% m") 'dired-mark-files-regexp
+  (kbd "% u") 'dired-upcase
+  (kbd "* %") 'dired-mark-files-regexp
+  (kbd "* .") 'dired-mark-extension
+  (kbd "* /") 'dired-mark-directories
+  (kbd "; d") 'epa-dired-do-decrypt
+  (kbd "; e") 'epa-dired-do-encrypt)
+;; Get file icons in dired
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+;; With dired-open plugin, you can launch external programs for certain extensions
+;; For example, I set all .png files to open in 'sxiv' and all .mp4 files to open in 'mpv'
+(setq dired-open-extensions '(("gif" . "sxiv")
+                              ("jpg" . "sxiv")
+                              ("png" . "sxiv")
+                              ("mkv" . "mpv")
+                              ("mp4" . "mpv")))
 
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-;;(setq org-directory "~/Dropbox/org/")
-
-
-;; Whenever you reconfigure a package, make sure to wrap your config in an
-;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
-;;
-;;   (after! PACKAGE
-;;     (setq x y))
-;;
-;; The exceptions to this rule:
-;;
-;;   - Setting file/directory variables (like `org-directory')
-;;   - Setting variables which explicitly tell you to set them before their
-;;     package is loaded (see 'C-h v VARIABLE' to look up their documentation).
-;;   - Setting doom variables (which start with 'doom-' or '+').
-;;
-;; Here are some additional functions/macros that will help you configure Doom.
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;; Alternatively, use `C-h o' to look up a symbol (functions, variables, faces,
-;; etc).
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
-;;
-;; DIRED IMAGE PREVIEWS
-;; Add the j and k keys to move to next and previous files in peed-dired mode
 (evil-define-key 'normal peep-dired-mode-map
   (kbd "j") 'peep-dired-next-file
   (kbd "k") 'peep-dired-prev-file)
 (add-hook 'peep-dired-hook 'evil-normalize-keymaps)
 
-;; Add the key binding SPC d p to toggle peep-dired-mode while in dired (you can add the key binding you like)
+(setq delete-by-moving-to-trash t
+      trash-directory "~/.local/share/Trash/files/")
+
+(setq doom-theme 'kanagawa)
 (map! :leader
-       (:after dired
-        (:map dired-mode-map
-         :desc "peep mode" "i" 'peep-dired)))
+      :desc "Load new theme" "h t" #'counsel-load-theme)
 
-;;;;; Shell
-(setq-default shell-file-name "/bin/zsh")
-(setq explicit-shell-file-name "/bin/zsh")
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
 
-;; Citation management
-(setq! bibtex-completion-bibliography '("~/zotero.bib"))
-(setq! citar-bibliography '("~/zotero.bib"))
+(map! :leader
+      (:prefix ("e". "evaluate/ERC/EWW")
+       :desc "Evaluate elisp in buffer"  "b" #'eval-buffer
+       :desc "Evaluate defun"            "d" #'eval-defun
+       :desc "Evaluate elisp expression" "e" #'eval-expression
+       :desc "Evaluate last sexpression" "l" #'eval-last-sexp
+       :desc "Evaluate elisp in region"  "r" #'eval-region))
+
+(setq browse-url-browser-function 'eww-browse-url)
+(map! :leader
+      :desc "Search web for text between BEG/END"
+      "s w" #'eww-search-words
+      (:prefix ("e" . "evaluate/ERC/EWW")
+       :desc "Eww web browser" "w" #'eww
+       :desc "Eww reload page" "R" #'eww-reload))
+
+(setq doom-font (font-spec :family "Liga SFMono Nerd Font" :size 24)
+      doom-variable-pitch-font (font-spec :family "Liga SFMono Nerd Font" :size 24)
+      doom-big-font (font-spec :family "Liga SFMono Nerd Font" :size 24))
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t))
+(custom-set-faces!
+  '(font-lock-comment-face :slant italic)
+  '(font-lock-keyword-face :slant italic))
+
+(setq imenu-list-focus-after-activation t)
+
+(map! :leader
+      (:prefix ("s" . "Search")
+       :desc "Menu to jump to places in buffer" "i" #'counsel-imenu))
+
+(map! :leader
+      (:prefix ("t" . "Toggle")
+       :desc "Toggle imenu shown in a sidebar" "i" #'imenu-list-smart-toggle))
+
+(defun dt/insert-todays-date (prefix)
+  (interactive "P")
+  (let ((format (cond
+                 ((not prefix) "%A, %B %d, %Y")
+                 ((equal prefix '(4)) "%m-%d-%Y")
+                 ((equal prefix '(16)) "%Y-%m-%d"))))
+    (insert (format-time-string format))))
+
+(require 'calendar)
+(defun dt/insert-any-date (date)
+  "Insert DATE using the current locale."
+  (interactive (list (calendar-read-date)))
+  (insert (calendar-date-string date)))
+
+(map! :leader
+      (:prefix ("i d" . "Insert date")
+        :desc "Insert any date"    "a" #'dt/insert-any-date
+        :desc "Insert todays date" "t" #'dt/insert-todays-date))
+
+(setq display-line-numbers-type t)
+(map! :leader
+      :desc "Comment or uncomment lines"      "TAB TAB" #'comment-line
+      (:prefix ("t" . "toggle")
+       :desc "Toggle line numbers"            "l" #'doom/toggle-line-numbers
+       :desc "Toggle line highlight in frame" "h" #'hl-line-mode
+       :desc "Toggle line highlight globally" "H" #'global-hl-line-mode
+       :desc "Toggle truncate lines"          "t" #'toggle-truncate-lines))
+
+(custom-set-faces
+ '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
+ '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.7))))
+ '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.6))))
+ '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.5))))
+ '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.4))))
+ '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.3))))
+ '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.2)))))
+
+(setq minimap-window-location 'right)
+(map! :leader
+      (:prefix ("t" . "toggle")
+       :desc "Toggle minimap-mode" "m" #'minimap-mode))
+
+(xterm-mouse-mode 1)
+
+(map! :leader
+      :desc "Org babel tangle" "m B" #'org-babel-tangle)

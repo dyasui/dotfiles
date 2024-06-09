@@ -1,0 +1,12 @@
+[[keymaps]]
+command = "SeekForward"
+key_sequence = "right"
+[[keymaps]]
+command = "SeekBackward"
+key_sequence = "left"
+[[keymaps]]
+command = "VolumeUp"
+key_sequence = "up"
+[[keymaps]]
+command = "VolumeDown"
+key_sequence = "down"

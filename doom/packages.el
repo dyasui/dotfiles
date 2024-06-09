@@ -51,5 +51,6 @@
 
 (package! evil-tutor)
 (package! peep-dired)
-(package! markdown-mode)
-(package! poly-R)
+;;(package! org-ref
+;;  :custom
+;;  (org-ref-default-bibliography "~/zotero-library.bib"))

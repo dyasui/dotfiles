@@ -3,12 +3,23 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("774899edc1fab6a5d93025126c4cd1c7c183c3fd0809f5a88d4a686bd6784662" default))
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
- '(org-agenda-files '("~/Desktop/org-mode-test.org"))
- '(package-selected-packages '(auctex)))
+ '(org-agenda-files
+   '("~/Downloads/paper.org" "/home/dante/Desktop/org-mode-test.org"))
+ '(package-selected-packages '(ivy-bibtex ivy org-ref auctex)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(font-lock-comment-face ((t (:slant italic))))
+ '(font-lock-keyword-face ((t (:slant italic))))
+ '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
+ '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.7))))
+ '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.6))))
+ '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.5))))
+ '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.4))))
+ '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.3))))
+ '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.2)))))

@@ -1,0 +1,434 @@
+#+TITLE: DT's Doom Emacs Config
+#+AUTHOR: Derek Taylor (DT)
+#+DESCRIPTION: DT's personal Doom Emacs config.
+#+STARTUP: showeverything
+
+* TABLE OF CONTENTS :toc:
+- [[#dantes-config-wip][DANTE's CONFIG WIP]]
+- [[#about-this-config][ABOUT THIS CONFIG]]
+- [[#bookmarks-and-buffers][BOOKMARKS AND BUFFERS]]
+  - [[#bookmarks][Bookmarks]]
+  - [[#buffers][Buffers]]
+  - [[#global-auto-revert][Global Auto Revert]]
+  - [[#keybindings-within-ibuffer-mode][Keybindings within ibuffer mode]]
+- [[#dired][DIRED]]
+  - [[#keybindings-to-open-dired][Keybindings To Open Dired]]
+  - [[#keybindings-within-dired][Keybindings Within Dired]]
+  - [[#keybindings-within-dired-with-peep-dired-mode-enabled][Keybindings Within Dired With Peep-Dired-Mode Enabled]]
+  - [[#making-deleted-files-go-to-trash-can][Making deleted files go to trash can]]
+- [[#doom-theme][DOOM THEME]]
+- [[#emojis][EMOJIS]]
+- [[#evaluate-elisp-expressions][EVALUATE ELISP EXPRESSIONS]]
+- [[#eww][EWW]]
+- [[#fonts][FONTS]]
+- [[#imenu][IMENU]]
+- [[#insert-date][INSERT DATE]]
+- [[#line-settings][LINE SETTINGS]]
+- [[#markdown][MARKDOWN]]
+- [[#minimap][MINIMAP]]
+- [[#mouse-support][MOUSE SUPPORT]]
+- [[#org-mode][ORG MODE]]
+
+* DANTE's CONFIG WIP
+I am currently using Derek Taylor's (Distrotube) config as a starting place for my own.
+I have been trying out doom emacs for about a week now, and I really like a lot about it
+but I think there are still a few features and settings that don't feel comfortable still.
+
+If I'm comparing NvChad to DOOM emacs, I think overall I am liking a lot about emacs,
+but some of the UI/UX choices I like more in NvChad.
+I don't know if that's because it has less features to handle compared to an emacs config
+but I'll see if I can try to adapt the DOOM settings instead of try to make vim more like emacs.
+
+
+
+* ABOUT THIS CONFIG
+This is my personal Doom Emacs config.  Doom Emacs is a distribution of Emacs that uses the "evil" keybindings (Vim keybindings) and includes a number of nice extensions and a bit of configuration out of the box.  I am maintaining this config not just for myself, but also for those that want to explore some of what is possible with Emacs.  I will add a lot of examples of plugins and settings, some of them I may not even use personally.  I do this because many people following me on YouTube look at my configs as "documentation".
+
+
+* BOOKMARKS AND BUFFERS
+Doom Emacs uses 'SPC b' for keybindings related to bookmarks and buffers.
+
+** Bookmarks
+Bookmarks are somewhat like registers in that they record positions you can jump to.  Unlike registers, they have long names, and they persist automatically from one Emacs session to the next. The prototypical use of bookmarks is to record where you were reading in various files.
+
+| COMMAND         | DESCRIPTION                            | KEYBINDING |
+|-----------------+----------------------------------------+------------|
+| list-bookmarks  | /List bookmarks/                         | SPC b L    |
+| bookmark-set    | /Set bookmark/                           | SPC b m    |
+| bookmark-delete | /Delete bookmark/                        | SPC b M    |
+| bookmark-save   | /Save current bookmark to bookmark file/ | SPC b w    |
+
+#+BEGIN_SRC emacs-lisp
+;;(setq bookmark-default-file "~/.config/doom/bookmarks")
+
+(map! :leader
+      (:prefix ("b". "buffer")
+       :desc "List bookmarks"                          "L" #'list-bookmarks
+       :desc "Set bookmark"                            "m" #'bookmark-set
+       :desc "Delete bookmark"                         "M" #'bookmark-set
+       :desc "Save current bookmarks to bookmark file" "w" #'bookmark-save))
+#+END_SRC
+
+** Buffers
+Regarding /buffers/, the text you are editing in Emacs resides in an object called a /buffer/. Each time you visit a file, a buffer is used to hold the file’s text. Each time you invoke Dired, a buffer is used to hold the directory listing.  /Ibuffer/ is a program that lists all of your Emacs /buffers/, allowing you to navigate between them and filter them.
+
+| COMMAND         | DESCRIPTION          | KEYBINDING |
+|-----------------+----------------------+------------|
+| ibuffer         | /Launch ibuffer/       | SPC b i    |
+| kill-buffer     | /Kill current buffer/  | SPC b k    |
+| next-buffer     | /Goto next buffer/     | SPC b n    |
+| previous-buffer | /Goto previous buffer/ | SPC b p    |
+| save-buffer     | /Save current buffer/  | SPC b s    |
+
+** Global Auto Revert
+A buffer can get out of sync with respect to its visited file on disk if that file is changed by another program. To keep it up to date, you can enable Auto Revert mode by typing M-x auto-revert-mode, or you can set it to be turned on globally with 'global-auto-revert-mode'.  I have also turned on Global Auto Revert on non-file buffers, which is especially useful for 'dired' buffers.
+
+#+begin_src emacs-lisp
+(global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers t)
+#+end_src
+
+** Keybindings within ibuffer mode
+| COMMAND                           | DESCRIPTION                            | KEYBINDING |
+|-----------------------------------+----------------------------------------+------------|
+| ibuffer-mark-forward              | /Mark the buffer/                        | m          |
+| ibuffer-unmark-forward            | /Unmark the buffer/                      | u          |
+| ibuffer-do-kill-on-deletion-marks | /Kill the marked buffers/                | x          |
+| ibuffer-filter-by-content         | /Ibuffer filter by content/              | f c        |
+| ibuffer-filter-by-directory       | /Ibuffer filter by directory/            | f d        |
+| ibuffer-filter-by-filename        | /Ibuffer filter by filename (full path)/ | f f        |
+| ibuffer-filter-by-mode            | /Ibuffer filter by mode/                 | f m        |
+| ibuffer-filter-by-name            | /Ibuffer filter by name/                 | f n        |
+| ibuffer-filter-disable            | /Disable ibuffer filter/                 | f x        |
+| ibuffer-do-kill-lines             | /Hide marked buffers/                    | g h        |
+| ibuffer-update                    | /Restore hidden buffers/                 | g H        |
+
+#+begin_src emacs-lisp
+(evil-define-key 'normal ibuffer-mode-map
+  (kbd "f c") 'ibuffer-filter-by-content
+  (kbd "f d") 'ibuffer-filter-by-directory
+  (kbd "f f") 'ibuffer-filter-by-filename
+  (kbd "f m") 'ibuffer-filter-by-mode
+  (kbd "f n") 'ibuffer-filter-by-name
+  (kbd "f x") 'ibuffer-filter-disable
+  (kbd "g h") 'ibuffer-do-kill-lines
+  (kbd "g H") 'ibuffer-update)
+#+end_src
+
+* DIRED
+Dired is the file manager within Emacs.  Below, I setup keybindings for image previews (peep-dired).  Doom Emacs does not use 'SPC d' for any of its keybindings, so I've chosen the format of 'SPC d' plus 'key'.
+
+** Keybindings To Open Dired
+
+| COMMAND    | DESCRIPTION                        | KEYBINDING |
+|------------+------------------------------------+------------|
+| dired      | /Open dired file manager/            | SPC d d    |
+| dired-jump | /Jump to current directory in dired/ | SPC d j    |
+
+** Keybindings Within Dired
+*** Basic dired commands
+
+| COMMAND                | DESCRIPTION                                 | KEYBINDING |
+|------------------------+---------------------------------------------+------------|
+| dired-view-file        | /View file in dired/                          | SPC d v    |
+| dired-up-directory     | /Go up in directory tree/                     | h          |
+| dired-find-file        | /Go down in directory tree (or open if file)/ | l          |
+| dired-next-line        | /Move down to next line/                      | j          |
+| dired-previous-line    | /Move up to previous line/                    | k          |
+| dired-mark             | /Mark file at point/                          | m          |
+| dired-unmark           | /Unmark file at point/                        | u          |
+| dired-do-copy          | /Copy current file or marked files/           | C          |
+| dired-do-rename        | /Rename current file or marked files/         | R          |
+| dired-hide-details     | /Toggle detailed listings on/off/             | (          |
+| dired-git-info-mode    | /Toggle git information on/off/               | )          |
+| dired-create-directory | /Create new empty directory/                  | +          |
+| dired-diff             | /Compare file at point with another/          | =          |
+| dired-subtree-toggle   | /Toggle viewing subtree at point/             | TAB        |
+
+*** Dired commands using regex
+
+| COMMAND                 | DESCRIPTION                | KEYBINDING |
+|-------------------------+----------------------------+------------|
+| dired-mark-files-regexp | /Mark files using regex/     | % m        |
+| dired-do-copy-regexp    | /Copy files using regex/     | % C        |
+| dired-do-rename-regexp  | /Rename files using regex/   | % R        |
+| dired-mark-files-regexp | /Mark all files using regex/ | * %        |
+
+*** File permissions and ownership
+
+| COMMAND         | DESCRIPTION                      | KEYBINDING |
+|-----------------+----------------------------------+------------|
+| dired-do-chgrp  | /Change the group of marked files/ | g G        |
+| dired-do-chmod  | /Change the mode of marked files/  | M          |
+| dired-do-chown  | /Change the owner of marked files/ | O          |
+| dired-do-rename | /Rename file or all marked files/  | R          |
+
+#+begin_src emacs-lisp
+(map! :leader
+      (:prefix ("d" . "dired")
+       :desc "Open dired" "d" #'dired
+       :desc "Dired jump to current" "j" #'dired-jump)
+      (:after dired
+       (:map dired-mode-map
+        :desc "Peep-dired image previews" "d p" #'peep-dired
+        :desc "Dired view file"           "d v" #'dired-view-file)))
+
+(evil-define-key 'normal dired-mode-map
+  (kbd "M-RET") 'dired-display-file
+  (kbd "h") 'dired-up-directory
+  (kbd "l") 'dired-open-file ; use dired-find-file instead of dired-open.
+  (kbd "m") 'dired-mark
+  (kbd "t") 'dired-toggle-marks
+  (kbd "u") 'dired-unmark
+  (kbd "C") 'dired-do-copy
+  (kbd "D") 'dired-do-delete
+  (kbd "J") 'dired-goto-file
+  (kbd "M") 'dired-do-chmod
+  (kbd "O") 'dired-do-chown
+  (kbd "P") 'dired-do-print
+  (kbd "R") 'dired-do-rename
+  (kbd "T") 'dired-do-touch
+  (kbd "Y") 'dired-copy-filenamecopy-filename-as-kill ; copies filename to kill ring.
+  (kbd "Z") 'dired-do-compress
+  (kbd "+") 'dired-create-directory
+  (kbd "-") 'dired-do-kill-lines
+  (kbd "% l") 'dired-downcase
+  (kbd "% m") 'dired-mark-files-regexp
+  (kbd "% u") 'dired-upcase
+  (kbd "* %") 'dired-mark-files-regexp
+  (kbd "* .") 'dired-mark-extension
+  (kbd "* /") 'dired-mark-directories
+  (kbd "; d") 'epa-dired-do-decrypt
+  (kbd "; e") 'epa-dired-do-encrypt)
+;; Get file icons in dired
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+;; With dired-open plugin, you can launch external programs for certain extensions
+;; For example, I set all .png files to open in 'sxiv' and all .mp4 files to open in 'mpv'
+(setq dired-open-extensions '(("gif" . "sxiv")
+                              ("jpg" . "sxiv")
+                              ("png" . "sxiv")
+                              ("mkv" . "mpv")
+                              ("mp4" . "mpv")))
+#+end_src
+
+** Keybindings Within Dired With Peep-Dired-Mode Enabled
+If peep-dired is enabled, you will get image previews as you go up/down with 'j' and 'k'
+
+| COMMAND              | DESCRIPTION                              | KEYBINDING |
+|----------------------+------------------------------------------+------------|
+| peep-dired           | /Toggle previews within dired/             | SPC d p    |
+| peep-dired-next-file | /Move to next file in peep-dired-mode/     | j          |
+| peep-dired-prev-file | /Move to previous file in peep-dired-mode/ | k          |
+
+#+BEGIN_SRC emacs-lisp
+(evil-define-key 'normal peep-dired-mode-map
+  (kbd "j") 'peep-dired-next-file
+  (kbd "k") 'peep-dired-prev-file)
+(add-hook 'peep-dired-hook 'evil-normalize-keymaps)
+#+END_SRC
+
+** Making deleted files go to trash can
+#+begin_src emacs-lisp
+(setq delete-by-moving-to-trash t
+      trash-directory "~/.local/share/Trash/files/")
+#+end_src
+
+=NOTE=: For convenience, you may want to create a symlink to 'local/share/Trash' in your home directory:
+#+begin_example
+cd ~/
+ln -s ~/.local/share/Trash .
+#+end_example
+
+* DOOM THEME
+Setting the theme to doom-one.  To try out new themes, I set a keybinding for counsel-load-theme with 'SPC h t'.
+
+#+BEGIN_SRC emacs-lisp
+(setq doom-theme 'kanagawa)
+(map! :leader
+      :desc "Load new theme" "h t" #'counsel-load-theme)
+#+END_SRC
+
+
+* EMOJIS
+Emojify is an Emacs extension to display emojis. It can display github style emojis like :smile: or plain ascii ones like :).
+
+#+begin_src emacs-lisp
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
+#+end_src
+
+
+* EVALUATE ELISP EXPRESSIONS
+Changing some keybindings from their defaults to better fit with Doom Emacs, and to avoid conflicts with my window managers which sometimes use the control key in their keybindings.  By default, Doom Emacs does not use 'SPC e' for anything, so I choose to use the format 'SPC e' plus 'key' for these (I also use 'SPC e' for 'eww' keybindings).
+
+| COMMAND         | DESCRIPTION                                  | KEYBINDING |
+|-----------------+----------------------------------------------+------------|
+| eval-buffer     | /Evaluate elisp in buffer/                     | SPC e b    |
+| eval-defun      | /Evaluate the defun containing or after point/ | SPC e d    |
+| eval-expression | /Evaluate an elisp expression/                 | SPC e e    |
+| eval-last-sexp  | /Evaluate elisp expression before point/       | SPC e l    |
+| eval-region     | /Evaluate elisp in region/                     | SPC e r    |
+
+#+Begin_src emacs-lisp
+(map! :leader
+      (:prefix ("e". "evaluate/ERC/EWW")
+       :desc "Evaluate elisp in buffer"  "b" #'eval-buffer
+       :desc "Evaluate defun"            "d" #'eval-defun
+       :desc "Evaluate elisp expression" "e" #'eval-expression
+       :desc "Evaluate last sexpression" "l" #'eval-last-sexp
+       :desc "Evaluate elisp in region"  "r" #'eval-region))
+#+END_SRC
+
+* EWW
+EWW is the Emacs Web Wowser, the builtin browser in Emacs.  Below I set urls to open in a specific browser (eww) with browse-url-browser-function.  By default, Doom Emacs does not use 'SPC e' for anything, so I choose to use the format 'SPC e' plus 'key' for these (I also use 'SPC e' for 'eval' keybindings).  I chose to use 'SPC s w' for eww-search-words because Doom Emacs uses 'SPC s' for 'search' commands.
+
+#+BEGIN_SRC emacs-lisp
+(setq browse-url-browser-function 'eww-browse-url)
+(map! :leader
+      :desc "Search web for text between BEG/END"
+      "s w" #'eww-search-words
+      (:prefix ("e" . "evaluate/ERC/EWW")
+       :desc "Eww web browser" "w" #'eww
+       :desc "Eww reload page" "R" #'eww-reload))
+#+END_SRC
+
+
+* FONTS
+Settings related to fonts within Doom Emacs:
++ 'doom-font' -- standard monospace font that is used for most things in Emacs.
++ 'doom-variable-pitch-font' -- variable font which is useful in some Emacs plugins.
++ 'doom-big-font' -- used in doom-big-font-mode; useful for presentations.
++ 'font-lock-comment-face' -- for comments.
++ 'font-lock-keyword-face' -- for keywords with special significance like 'setq' in elisp.
+
+#+BEGIN_SRC emacs-lisp
+(setq doom-font (font-spec :family "Liga SFMono Nerd Font" :size 24)
+      doom-variable-pitch-font (font-spec :family "Liga SFMono Nerd Font" :size 24)
+      doom-big-font (font-spec :family "Liga SFMono Nerd Font" :size 24))
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t))
+(custom-set-faces!
+  '(font-lock-comment-face :slant italic)
+  '(font-lock-keyword-face :slant italic))
+#+END_SRC
+
+* IMENU
+Imenu produces menus for accessing locations in documents, typically in the current buffer. You can access the locations using an ordinary menu (menu bar or other) or using minibuffer completion, or you can install 'imenu-list' and have the imenu displayed as a vertical split that you can toggle show/hide.
+
+| COMMAND                 | DESCRIPTION                      | KEYBINDING |
+|-------------------------+----------------------------------+------------|
+| counsel-imenu           | /Menu to jump to places in buffer/ | SPC s i    |
+| imenu-list-smart-toggle | /Toggle imenu shown in a sidebar/  | SPC t i    |
+
+#+BEGIN_SRC emacs-lisp
+(setq imenu-list-focus-after-activation t)
+
+(map! :leader
+      (:prefix ("s" . "Search")
+       :desc "Menu to jump to places in buffer" "i" #'counsel-imenu))
+
+(map! :leader
+      (:prefix ("t" . "Toggle")
+       :desc "Toggle imenu shown in a sidebar" "i" #'imenu-list-smart-toggle))
+
+#+END_SRC
+
+* INSERT DATE
+Some custom functions to insert the date.  The function 'insert-todays-date' can be used one of three different ways: (1) just the keybinding without the universal argument prefix, (2) with one universal argument prefix, or (3) with two universal argument prefixes.  The universal argument prefix is 'SPC-u' in Doom Emacs (C-u in standard GNU Emacs).  The function 'insert-any-date' only outputs to one format, which is the same format as 'insert-todays-date' without a prefix.
+
+| COMMAND               | EXAMPLE OUTPUT            | KEYBINDING            |
+|-----------------------+---------------------------+-----------------------|
+| dt/insert-todays-date | /Friday, November 19, 2021/ | SPC i d t             |
+| dt/insert-todays-date | /11-19-2021/                | SPC u SPC i d t       |
+| dt/insert-todays-date | /2021-11-19/                | SPC u SPC u SPC i d t |
+| dt/insert-any-date    | /Friday, November 19, 2021/ | SPC i d a             |
+
+#+begin_src emacs-lisp
+(defun dt/insert-todays-date (prefix)
+  (interactive "P")
+  (let ((format (cond
+                 ((not prefix) "%A, %B %d, %Y")
+                 ((equal prefix '(4)) "%m-%d-%Y")
+                 ((equal prefix '(16)) "%Y-%m-%d"))))
+    (insert (format-time-string format))))
+
+(require 'calendar)
+(defun dt/insert-any-date (date)
+  "Insert DATE using the current locale."
+  (interactive (list (calendar-read-date)))
+  (insert (calendar-date-string date)))
+
+(map! :leader
+      (:prefix ("i d" . "Insert date")
+        :desc "Insert any date"    "a" #'dt/insert-any-date
+        :desc "Insert todays date" "t" #'dt/insert-todays-date))
+#+end_src
+
+* LINE SETTINGS
+I set comment-line to 'SPC TAB TAB' which is a rather comfortable keybinding for me on my ZSA Moonlander keyboard.  The standard Emacs keybinding for comment-line is 'C-x C-;'.  The other keybindings are for commands that toggle on/off various line-related settings.  Doom Emacs uses 'SPC t' for "toggle" commands, so I choose 'SPC t' plus 'key' for those bindings.
+
+| COMMAND                  | DESCRIPTION                               | KEYBINDING  |
+|--------------------------+-------------------------------------------+-------------|
+| comment-line             | /Comment or uncomment lines/                | SPC TAB TAB |
+| hl-line-mode             | /Toggle line highlighting in current frame/ | SPC t h     |
+| global-hl-line-mode      | /Toggle line highlighting globally/         | SPC t H     |
+| doom/toggle-line-numbers | /Toggle line numbers/                       | SPC t l     |
+| toggle-truncate-lines    | /Toggle truncate lines/                     | SPC t t     |
+
+#+BEGIN_SRC emacs-lisp
+(setq display-line-numbers-type t)
+(map! :leader
+      :desc "Comment or uncomment lines"      "TAB TAB" #'comment-line
+      (:prefix ("t" . "toggle")
+       :desc "Toggle line numbers"            "l" #'doom/toggle-line-numbers
+       :desc "Toggle line highlight in frame" "h" #'hl-line-mode
+       :desc "Toggle line highlight globally" "H" #'global-hl-line-mode
+       :desc "Toggle truncate lines"          "t" #'toggle-truncate-lines))
+#+END_SRC
+
+* MARKDOWN
+
+#+begin_src emacs-lisp
+(custom-set-faces
+ '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
+ '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.7))))
+ '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.6))))
+ '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.5))))
+ '(markdown-header-face-4 ((t (:inherit markdown-header-face :height 1.4))))
+ '(markdown-header-face-5 ((t (:inherit markdown-header-face :height 1.3))))
+ '(markdown-header-face-6 ((t (:inherit markdown-header-face :height 1.2)))))
+
+#+end_src
+
+* MINIMAP
+A minimap sidebar displaying a smaller version of the current buffer on either the left or right side. It highlights the currently shown region and updates its position automatically.  Be aware that this minimap program does not work in Org documents.  This is not unusual though because I have tried several minimap programs and none of them can handle Org.
+
+| COMMAND      | DESCRIPTION                               | KEYBINDING |
+|--------------+-------------------------------------------+------------|
+| minimap-mode | /Toggle minimap-mode/                       | SPC t m    |
+
+#+begin_src emacs-lisp
+(setq minimap-window-location 'right)
+(map! :leader
+      (:prefix ("t" . "toggle")
+       :desc "Toggle minimap-mode" "m" #'minimap-mode))
+#+end_src
+
+* MOUSE SUPPORT
+Adding mouse support in the terminal version of Emacs.
+
+#+begin_src emacs-lisp
+(xterm-mouse-mode 1)
+#+end_src
+
+* ORG MODE
+I wrapped most of this block in (after! org).  Without this, my settings might be evaluated too early, which will result in my settings being overwritten by Doom's defaults.  I have also enabled org-journal, org-superstar and org-roam by adding (+journal +pretty +roam2) to the org section of my Doom Emacs init.el.
+
+=NOTE=: I have the location of my Org directory and Roam directory in $HOME/nc/ which is a Nextcloud folder that allows me to instantly sync all of my Org work between my home computer and my office computer.
+
+#+BEGIN_SRC emacs-lisp
+(map! :leader
+      :desc "Org babel tangle" "m B" #'org-babel-tangle)
+#+END_SRC
+
