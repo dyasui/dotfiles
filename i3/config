@@ -15,8 +15,8 @@ hide_edge_borders both
 default_orientation vertical
 
 # gaps between windows
-gaps inner 5px
-gaps outer 5px
+gaps inner 12px
+gaps outer 12px
 smart_gaps inverse_outer
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -106,16 +106,27 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1:  "
-set $ws2 "2:  "
-set $ws3 "3:  "
-set $ws4 "4:  "
-set $ws5 "5: 󰟔 "
-set $ws6 "6: 󰗚 "
-set $ws7 "7:  "
-set $ws8 "8:  "
-set $ws9 "9:  "
-set $ws10 "10:  "
+# set $ws1 "1:  "
+# set $ws2 "2:  "
+# set $ws3 "3:  "
+# set $ws4 "4:  "
+# set $ws5 "5: 󰟔 "
+# set $ws6 "6: 󰗚 "
+# set $ws7 "7:  "
+# set $ws8 "8:  "
+# set $ws9 "9:  "
+# set $ws10 "10:  "
+
+set $ws1 "1: 一"
+set $ws2 "2: 二"
+set $ws3 "3: 三"
+set $ws4 "4: 四"
+set $ws5 "5: 五"
+set $ws6 "6: 六"
+set $ws7 "7: 七"
+set $ws8 "8: 八"
+set $ws9 "9: 九"
+set $ws10 "10: 零"
 
 assign [class="(?)firefox"] $ws2
 # assign [class="Alacritty"] $ws2
