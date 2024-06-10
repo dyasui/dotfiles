@@ -262,7 +262,11 @@ no_focus [class="plasmashell" window_type="notification"]
 
 
 # randomize wallpaper
-exec --no-startup-id feh --randomize --bg-fill ~/Pictures/HokusaiPrints/
+# exec --no-startup-id feh --randomize --bg-fill ~/Pictures/HokusaiPrints/
+exec --no-startup-id feh --bg-fill ~/Pictures/nichika-yoshida-XNhdYWw_xcg-unsplash.jpg
 
 # enable natural mouse scrolling
 exec xinput set-prop "PixArt USB Optical Mouse" "libinput Natural Scrolling Enabled" 1
+
+# enable picom compositor
+exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
