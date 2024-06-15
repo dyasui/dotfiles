@@ -12,7 +12,7 @@
 set $mod Mod4
 default_border pixel 2
 hide_edge_borders both
-default_orientation vertical
+default_orientation horizontal
 
 # gaps between windows
 gaps inner 12px
@@ -166,6 +166,21 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (r) reboot, (Shift+s) shutdown
+
+mode "$mode_system" {
+  bindsym l exec --no-startup-id i3lock-fancy -gp, mode "default"     
+  bindsym e exec --no-startup-id i3-msg exit, mode "default"     
+  bindsym s exec --no-startup-id systemctl suspend && i3lock-fancy -gp, mode "default"     
+  bindsym r exec --no-startup-id systemctl reboot, mode "default"     
+  bindsym Shift+s exec --no-startup-id systemctl poweroff, mode "default"
+  # back to normal: Enter or Escape     
+  bindsym Return mode "default"     
+  bindsym Escape mode "default"  
+}  
+
+bindsym $mod+Ctrl+l mode "$mode_system"
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
