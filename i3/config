@@ -56,9 +56,11 @@ bindsym Mod1+e exec emacs
 bindsym $mod+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id dmenu_run
+# bindsym $mod+d exec --no-startup-id dmenu_run
 
 bindsym $mod+space exec rofi -show run
+bindsym $mod+d exec rofi -show run 
+bindsym $mod+Tab exec rofi -show window 
 
 # open syncthing GUI
 bindsym $mod+Shift+s exec firefox http://127.0.0.1:8384/#
@@ -128,10 +130,9 @@ set $ws8 "8: 八"
 set $ws9 "9: 九"
 set $ws10 "10: 零"
 
-assign [class="(?)firefox"] $ws2
-# assign [class="Alacritty"] $ws2
-assign [class="rstudio"] $ws5
-assign [class="steam"] $ws7
+# assign [class="(?)firefox"] $ws2 # assign [class="Alacritty"] $ws2
+# assign [class="rstudio"] $ws5
+# assign [class="steam"] $ws7
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
@@ -274,7 +275,7 @@ no_focus [class="plasmashell" window_type="notification"]
 
 # randomize wallpaper
 # exec --no-startup-id feh --randomize --bg-fill ~/Pictures/HokusaiPrints/
-exec --no-startup-id feh --bg-fill ~/Pictures/nichika-yoshida-XNhdYWw_xcg-unsplash.jpg
+exec --no-startup-id feh --randomize --bg-fill ~/Pictures/CityNightWallpapers/
 
 # enable natural mouse scrolling
 exec xinput set-prop "PixArt USB Optical Mouse" "libinput Natural Scrolling Enabled" 1
