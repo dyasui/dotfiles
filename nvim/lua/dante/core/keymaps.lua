@@ -37,3 +37,9 @@ keymap.set("n", "<C-h>", "<C-w>h", { desc = "window left" })
 keymap.set("n", "<C-j>", "<C-w>j", { desc = "window down" })
 keymap.set("n", "<C-k>", "<C-w>k", { desc = "window up" })
 keymap.set("n", "<C-l>", "<C-w>l", { desc = "window right" })
+
+-- Easy align columns of text
+keymap.set("n", "ga", "<Plug>(EasyAlign)")
+
+-- Exit terminal mode with ESC 
+keymap.set("t", "<ESC>", "<C-\\><C-n>", { desc = "exit terminal" })

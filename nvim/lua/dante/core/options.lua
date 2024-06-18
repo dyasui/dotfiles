@@ -35,3 +35,8 @@ opt.clipboard:append("unnamedplus")
 opt.splitright = true
 opt.splitbelow = true
 
+-- disable line numbers on terminal windows 
+vim.api.nvim_create_autocmd({"TermOpen"}, {
+  pattern = {"*"},
+  command = "setlocal nonumber norelativenumber",
+})
