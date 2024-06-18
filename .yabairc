@@ -35,6 +35,8 @@ yabai -m config window_placement second_child
 yabai -m rule --add app="^Finder" manage=off
 yabai -m rule --add app="^System Settings" manage=off
 yabai -m rule --add app="Alacritty" manage=off
+yabai -m rule --add app="Alfred 5" manage=off
+yabai -m rule --add app="Alfred Preferences" manage=off
 # yabai -m rule --add app="RStudio" manage=off
 
 echo "yabai configuration loaded.."
