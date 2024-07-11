@@ -2,11 +2,12 @@
 separator=true
 separator_block_width=15
 
-# [i3-focusedwindow]
-# color=$text-color 
-# command=~/.config/i3blocks/i3-focusedwindow 20
-# interval=persist
-# align=center
+[i3-focusedwindow]
+color=$text-color 
+command=~/.config/i3blocks/i3-focusedwindow 
+interval=persist
+min_width=2600
+align=center
 
 [disk]
 label=󰦗 

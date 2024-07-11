@@ -274,6 +274,8 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 #~
 
 # for kde plasma integration 
+for_window [class="yakuake"] floating enable
+for_window [class="systemsettings"] floating enable
 for_window [title="Desktop — Plasma"] kill, floating enable, border none
 for_window [class="plasmashell"] floating enable
 for_window [class="Plasma"] floating enable, border none
@@ -286,14 +288,18 @@ for_window [class="Plasmoidviewer"] floating enable, border none
 for_window [class="(?i)*nextcloud*"] floating disable
 for_window [class="plasmashell" window_type="notification"] floating enable, border none, move right 700px, move down 450px
 no_focus [class="plasmashell" window_type="notification"] 
-
+for_window [title="Desktop @ QRect.*"] kill; floating enable; border none
+for_window [class="dolphin"] floating enable
 
 # randomize wallpaper
-# exec --no-startup-id feh --randomize --bg-fill ~/Pictures/HokusaiPrints/
-exec --no-startup-id feh --randomize --bg-fill ~/Pictures/CityNightWallpapers/
+# exec --no-startup-id feh --randomize --bg-scale ~/Pictures/HokusaiPrints/
+exec --no-startup-id feh --randomize --bg-scale ~/Pictures/CityNightWallpapers/
 
 # enable natural mouse scrolling
 exec xinput set-prop "PixArt USB Optical Mouse" "libinput Natural Scrolling Enabled" 1
 
 # enable picom compositor
 exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
+
+# don't tile OBS studio
+for_window [title="obs"] floating enable
