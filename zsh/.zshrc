@@ -84,16 +84,9 @@ alias ssh="kitten ssh"
 alias ddgr="BROWSER=w3m ddgr"
 alias qvim="NVIM_APPNAME=quarto-nvim-kickstarter nvim"
 
-# for apt installation of fzf
-source /usr/share/doc/fzf/examples/key-bindings.zsh
-source /usr/share/doc/fzf/examples/completion.zsh
-
 # Shell integrations
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-eval "$($(brew --prefix)/bin/brew shellenv)"
 eval "$(zoxide init --cmd cd zsh)"
 
 # enable vi mode
 bindkey -v
-alias config='/usr/bin/git --git-dir=/home/dante/dotfiles --work-tree=/home/dante'
