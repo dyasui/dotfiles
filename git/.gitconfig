@@ -1,13 +1,5 @@
 [user]
 	name = dyasui
-	email = dtyasui@gmail.com
+	email = dyasui@uoregon.edu
 [init]
 	defaultBranch = main
-[credential]
-	credentialStore = gpg
-[credential "https://github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
