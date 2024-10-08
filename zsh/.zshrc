@@ -97,3 +97,12 @@ eval "$(zoxide init --cmd cd zsh)"
 # enable vi mode
 bindkey -v
 alias config='/usr/bin/git --git-dir=/home/dante/dotfiles --work-tree=/home/dante'
+
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+path=('/home/dante/.juliaup/bin' $path)
+export PATH
+
+# <<< juliaup initialize <<<
