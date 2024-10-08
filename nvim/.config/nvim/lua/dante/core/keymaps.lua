@@ -17,11 +17,15 @@ keymap.set("n", "<ESC>", ":nohl<CR>", { desc = "clear search highlights" })
 keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" })
 keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" })
 
--- window management
-keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
-keymap.set("n", "<leader>wh", "<C-w>s", { desc = "Split window horizonally" })
-keymap.set("n", "<leader>we", "<C-w>=", { desc = "Make splits equal size" })
-keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "close split" })
+-- align after scrolling up/down
+keymap.set("n", "<C-d>", "<C-d>zz")
+keymap.set("n", "<C-u>", "<C-u>zz")
+
+-- -- window management
+-- keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
+-- keymap.set("n", "<leader>wh", "<C-w>s", { desc = "Split window horizonally" })
+-- keymap.set("n", "<leader>we", "<C-w>=", { desc = "Make splits equal size" })
+-- keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "close split" })
 
 -- buffer navigation
 keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Next buffer" })
@@ -33,7 +37,7 @@ keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
 keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" })
 keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" })
 keymap.set("n", "<Tab>", "<cmd>tabn<CR>", { desc = "Go to next tab" })
-keymap.set("n", "<S-Tab>", "<cmd>tabp<CR>", { desc = "Go to next tab" })
+keymap.set("n", "<BS>", "<cmd>tabp<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>tn", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
 
 -- Better window navigation

@@ -12,6 +12,7 @@ opt.expandtab = true --expand tab to spaces
 opt.autoindent = true -- repeat indent on new line
 
 opt.wrap = false
+opt.scrolloff = 10
 
 --search settings
 opt.ignorecase = true
