@@ -119,10 +119,10 @@ alt-7 = 'workspace 7'
 alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
 alt-0 = 'workspace 0'
-alt-b = 'workspace B'
-alt-t = 'workspace T'
-alt-z = 'workspace Z'
-alt-c = 'workspace C'
+alt-b = 'workspace B' # browser
+alt-t = 'workspace T' # terminal
+alt-z = 'workspace Z' # zotero
+alt-c = 'workspace C' # calendar
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
@@ -135,11 +135,17 @@ alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
 alt-shift-0 = ['move-node-to-workspace 0', 'workspace 0']
+alt-shift-b = ['move-node-to-workspace B', 'workspace B']
+alt-shift-t = ['move-node-to-workspace T', 'workspace T']
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+alt-f = 'fullscreen'
+
+cmd-shift-t = 'layout floating tiling'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-shift-semicolon = 'mode service'
@@ -161,4 +167,14 @@ run = "move-node-to-workspace C"
 if.app-id = 'org.zotero.zotero'
 run = "move-node-to-workspace Z"
 
+[workspace-to-monitor-force-assignment]
+1 = 'main'
+2 = 'main'
+3 = 'main'
+4 = 'main'
+5 = 'main'
+6 = 'main'
+7 = 'secondary'
+8 = 'secondary'
+9 = 'secondary'
 

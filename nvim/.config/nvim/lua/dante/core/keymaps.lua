@@ -4,6 +4,9 @@ local keymap = vim.keymap -- for conciseness
 
 -- escape insert mode w/ jk
 keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode w/ jk" })
+-- leader for common functions
+keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save buffer"})
+keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Close buffer"})
 
 -- open file explorer
 -- keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "open file explorer" })
