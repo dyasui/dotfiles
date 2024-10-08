@@ -1,4 +1,5 @@
 My personal configuration files for Macos and Linux.
+Managed with GNU stow.
 
 ### Software used:
   - [kitty](https://sw.kovidgoyal.net/kitty/) terminal emulator
