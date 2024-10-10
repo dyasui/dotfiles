@@ -87,6 +87,8 @@ alias qvim="NVIM_APPNAME=quarto-nvim-kickstarter nvim"
 # Shell integrations
 
 eval "$(zoxide init --cmd cd zsh)"
-
 # enable vi mode
 bindkey -v
+
+# enable imagemagick to be found from homebrew?
+export DYLD_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_LIBRARY_PATH"
