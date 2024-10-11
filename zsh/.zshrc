@@ -92,3 +92,6 @@ bindkey -v
 
 # enable imagemagick to be found from homebrew?
 export DYLD_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_LIBRARY_PATH"
+
+# mactex install location
+eval "$(/usr/libexec/path_helper)"

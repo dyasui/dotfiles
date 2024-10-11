@@ -3,7 +3,7 @@ edit = [
   { run = 'nvim "$@"', block = true },
 ]
 read = [
-  { run = 'skim "$@"', desc = "Open" }
+  { run = 'open "$@"', desc = "Open" }
 ]
 
 [open]
