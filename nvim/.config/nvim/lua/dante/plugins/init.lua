@@ -22,4 +22,5 @@ return {
       }
     end,
   },
+  "andrewferrier/wrapping.nvim", -- detect hard or soft wrap
 }

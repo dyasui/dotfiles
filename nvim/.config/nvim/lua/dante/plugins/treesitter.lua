@@ -13,7 +13,7 @@ return {
     treesitter.setup({
       highlight = {
         enable = true,
-        disable = { "latex" },
+        disable = { "latex" , "norg" },
         additional_vim_regex_highlighting = { "markdown" },
       },
       indent = { enable = true },
@@ -28,7 +28,7 @@ return {
         "julia",
         "lua",
         "markdown_inline",
-        "norg",
+        -- "norg",
         "org",
         "r",
         "vim",
