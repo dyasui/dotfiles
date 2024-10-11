@@ -10,7 +10,7 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod1
-default_border pixel 8
+default_border pixel 6
 hide_edge_borders smart
 smart_borders on
 default_orientation horizontal
@@ -45,7 +45,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy
 exec --no-startup-id nm-applet
 
 # Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier Shift
+floating_modifier $mod
 
 # move tiling windows via drag & drop by left-clicking into the title bar,
 # or left-clicking anywhere into the window while holding the floating modifier.
@@ -86,10 +86,10 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # split in horizontal orientation
-bindsym $mod+b split h
+bindsym $mod+backslash split h
 
 # split in vertical orientation
-bindsym $mod+v split v
+bindsym $mod+minus split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -307,7 +307,8 @@ exec --no-startup-id feh --randomize --bg-scale ~/Pictures/HokusaiPrints/
 exec xinput set-prop "PixArt USB Optical Mouse" "libinput Natural Scrolling Enabled" 1
 
 # enable picom compositor
-# exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
+exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
 
-# don't tile OBS studio
+# float these windows
 for_window [title="obs"] floating enable
+for_window [title="r_x11"] floating enable
