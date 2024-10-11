@@ -44,3 +44,22 @@ keymap.set("n", "ga", "<Plug>(EasyAlign)")
 
 -- Exit terminal mode with ESC 
 keymap.set("t", "<ESC>", "<C-\\><C-n>", { desc = "exit terminal" })
+
+-- toggle zen mode
+keymap.set("n", "<leader>z", "<cmd>ZenMode<CR>", {desc = "Toggle Zen Mode"})
+
+-- tree view
+keymap.set("n", "<leader>e", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" }) -- toggle file explorer
+keymap.set("n", "<leader>ef", "<cmd>NvimTreeFindFileToggle<CR>", { desc = "Toggle file explorer on current file" }) -- toggle file explorer on current file
+keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
+keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
+
+-- auto sessions
+keymap.set("n", "<leader>r", "<cmd>SessionRestore<CR>", { desc = "Restore session for cwd" }) -- restore last workspace session for current directory
+keymap.set("n", "<leader>ss", "<cmd>SessionSave<CR>", { desc = "Save session for auto session root dir" }) -- save workspace session for current working directory
+
+-- fzf 
+keymap.set("n", "<leader>ff", "<cmd>FzfLua files<CR>", { desc = "Find files" }) -- open fzf
+keymap.set("n", "<leader>fh", "<cmd>FzfLua files cwd=~<CR>", { desc = "Find files in ~" }) -- open fzf
+keymap.set("n", "<leader>fr", "<cmd>FzfLua oldfiles<CR>", { desc = "Find recently opened files" }) 
+keymap.set("n", "<leader>fs", "<cmd>FzfLua live_grep<CR>", { desc = "Find string in cwd" }) 

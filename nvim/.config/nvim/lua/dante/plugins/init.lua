@@ -22,4 +22,5 @@ return {
       }
     end,
   },
+  {"voldikss/vim-floaterm"},
 }
