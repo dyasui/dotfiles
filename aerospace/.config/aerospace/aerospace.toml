@@ -1,3 +1,9 @@
+exec-on-workspace-change = ['/bin/bash', '-c',
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+]
+
+# on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
 # Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
 
@@ -12,7 +18,9 @@ after-login-command = []
 # You can use it to add commands that run after AeroSpace startup.
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
+after-startup-command = [
+  'exec-and-forget /opt/homebrew/opt/sketchybar/bin/sketchybar',
+]
 
 # Start AeroSpace at login
 start-at-login = true
@@ -50,7 +58,7 @@ inner.horizontal = 4
 inner.vertical =   4
 outer.left =       4
 outer.bottom =     4
-outer.top =        4
+outer.top =        28
 outer.right =      4
 
 # See https://nikitabobko.github.io/AeroSpace/guide#exec-env-vars
@@ -140,6 +148,9 @@ alt-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
+alt-right = 'workspace next'
+alt-left = 'workspace prev'
+
 alt-f = 'fullscreen'
 
 cmd-shift-t = 'layout floating tiling'
@@ -157,7 +168,7 @@ run = "move-node-to-workspace Z"
 
 [[on-window-detected]]
 if.app-id = 'net.whatsapp.WhatsApp'
-run = "move-node-to-workspace 6"
+run = "move-node-to-workspace 5"
 
 # [[on-window-detected]]
 # if.app-id = 'net.kovidgoyal.kitty'
@@ -169,9 +180,10 @@ run = "move-node-to-workspace 6"
 3 = 'main'
 4 = 'main'
 5 = 'main'
-6 = 'main'
-7 = ['secondary', 'dell', 'crestron$', 'main']
-8 = ['secondary', 'dell', 'crestron$', 'main']
-9 = ['secondary', 'dell', 'crestron$', 'main']
+6 = ['secondary', 'main']
+7 = ['secondary', 'main']
+8 = ['secondary', 'main']
+9 = ['secondary', 'main']
+10 = ['secondary', 'main']
+Z = ['secondary', 'main']
 # 10 = ['sidecar display$', '^built-in retina display$']
-10 = 'sidecar display$'
