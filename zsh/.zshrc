@@ -83,6 +83,7 @@ alias cat="bat"
 alias ssh="kitten ssh"
 alias ddgr="BROWSER=w3m ddgr"
 alias qvim="NVIM_APPNAME=quarto-nvim-kickstarter nvim"
+alias tvim="NVIM_APPNAME=neotex/nvim nvim"
 
 # Shell integrations
 
@@ -95,3 +96,15 @@ export DYLD_LIBRARY_PATH="$(brew --prefix)/lib:$DYLD_LIBRARY_PATH"
 
 # mactex install location
 eval "$(/usr/libexec/path_helper)"
+
+path=('/Users/dante/Library/Python/3.9/bin' $path)
+export PATH
+
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+path=('/Users/dante/.juliaup/bin' $path)
+export PATH
+
+# <<< juliaup initialize <<<
