@@ -106,3 +106,6 @@ path=('/home/dante/.juliaup/bin' $path)
 export PATH
 
 # <<< juliaup initialize <<<
+
+# Created by `pipx` on 2024-10-20 22:29:12
+export PATH="$PATH:/home/dante/.local/bin"

@@ -20,8 +20,8 @@ focus_follows_mouse no
 focus_wrapping no
 
 # gaps between windows
-# gaps inner 12px
-# gaps outer 12px
+gaps inner 8px
+gaps outer 8px
 # smart_gaps inverse_outer
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -68,7 +68,7 @@ bindsym $mod+d exec rofi -show run
 
 # open syncthing GUI
 bindsym $mod+Shift+s exec firefox http://127.0.0.1:8384/#
-bindsym $mod+m exec kitty spotify_player
+# bindsym $mod+m exec kitty spotify_player
 
 # open new firefox window 
 bindsym $mod+Shift+f exec firefox
@@ -312,3 +312,7 @@ exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
 # float these windows
 for_window [title="obs"] floating enable
 for_window [title="r_x11"] floating enable
+for_window [title="Thunar"] floating enable
+# show picture-in-picture across all workspaces
+for_window [title="Picture-in-Picture"] sticky enable
+
