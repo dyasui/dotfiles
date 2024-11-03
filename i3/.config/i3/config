@@ -61,7 +61,7 @@ bindsym Mod1+e exec emacs
 bindsym $mod+m exec --no-startup-id MultiMC
 
 # kill focused window
-bindsym $mod+q kill
+bindsym Mod1+q kill
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec --no-startup-id dmenu_run
@@ -98,9 +98,9 @@ bindsym $mod+minus split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+t layout tabbed
-bindsym $mod+p layout toggle split
+bindsym $mod+. layout stacking
+bindsym $mod+, layout tabbed
+bindsym $mod+/ layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -120,8 +120,8 @@ set $ws1 "1:  "
 set $ws2 "2:  " 
 set $ws3 "3:  " 
 set $ws4 "4:  " 
-set $ws5 "5:  " 
-set $ws6 "6:  " 
+set $ws5 "5:  " 
+set $ws6 "6:  " 
 set $ws7 "7: 󰗚 " 
 set $ws8 "8:  " 
 set $ws9 "9:  " 
