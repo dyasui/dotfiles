@@ -51,3 +51,6 @@
 
 (package! quarto-mode)
 (package! kanagawa-themes)
+(package! elfeed-goodies)
+(package! tldr)
+(package! evil-tutor)
