@@ -21,7 +21,7 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "MesloLGSDZ Nerd Font Mono" :size 20 ))
+(setq doom-font (font-spec :family "NotoMono Nerd Font" :size 16 ))
      ;; doom-variable-pitch-font (font-spec :family "Iosevka Nerd Font" :size 22))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
@@ -78,3 +78,8 @@
 
 (map! :leader
       :desc "Open neotree (E)xplorer" "e" #'neotree)
+
+;; Elfeed feeds
+(setq elfeed-feeds (quote
+                    (("https://www.reddit.com/r/unixporn.rss" reddit linux))
+                    ))
