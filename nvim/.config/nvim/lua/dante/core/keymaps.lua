@@ -18,36 +18,36 @@ keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" })
 keymap.set("n", "<C-d>", "<C-d>zz")
 keymap.set("n", "<C-u>", "<C-u>zz")
 
--- -- window management
--- keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
--- keymap.set("n", "<leader>wh", "<C-w>s", { desc = "Split window horizonally" })
--- keymap.set("n", "<leader>we", "<C-w>=", { desc = "Make splits equal size" })
--- keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "close split" })
+-- window management
+keymap.set("n", "<leader>wv", "<C-w>v", { desc = "Split window vertically" })
+keymap.set("n", "<leader>ws", "<C-w>s", { desc = "Split window horizonally" })
+keymap.set("n", "<leader>we", "<C-w>=", { desc = "Make splits equal size" })
+keymap.set("n", "<leader>wq", "<cmd>close<CR>", { desc = "close split" })
 
 -- buffer navigation
-keymap.set("n", "<Tab>", "<cmd>bnext<CR>", { desc = "Next buffer" })
-keymap.set("n", "<S-Tab>", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Next buffer" })
+keymap.set("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 keymap.set("n", "<leader>bi", "<cmd>ls<CR>", { desc = "List buffers interactively" })
 keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
 
 -- tab navigation
 keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" })
 keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" })
-keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" })
-keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to next tab" })
+keymap.set("n", "<Tab>", "<cmd>tabn<CR>", { desc = "Go to next tab" })
+keymap.set("n", "<S-Tab>", "<cmd>tabp<CR>", { desc = "Go to next tab" })
 -- keymap.set("n", "<leader>tn", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
 
 -- Better window navigation
-keymap.set("n", "<leader>h", "<C-w>h", { desc = "window left" })
-keymap.set("n", "<leader>j", "<C-w>j", { desc = "window down" })
-keymap.set("n", "<leader>k", "<C-w>k", { desc = "window up" })
-keymap.set("n", "<leader>l", "<C-w>l", { desc = "window right" })
+keymap.set("n", "<leader>wh", "<C-w>h", { desc = "window left" })
+keymap.set("n", "<leader>wj", "<C-w>j", { desc = "window down" })
+keymap.set("n", "<leader>wk", "<C-w>k", { desc = "window up" })
+keymap.set("n", "<leader>wl", "<C-w>l", { desc = "window right" })
 
 -- Easy align columns of text
 keymap.set("n", "ga", "<Plug>(EasyAlign)")
 
 -- Exit terminal mode with ESC 
--- keymap.set("t", "<ESC>", "<C-\\><C-n>", { desc = "exit terminal" })
+keymap.set("t", "<C-ESC>", "<C-\\><C-n>", { desc = "exit terminal" })
 
 -- toggle zen mode
 keymap.set("n", "<leader>z", "<cmd>ZenMode<CR>", {desc = "Toggle Zen Mode"})
