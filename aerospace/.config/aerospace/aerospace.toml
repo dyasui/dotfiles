@@ -176,6 +176,14 @@ run = "move-node-to-workspace Z"
 if.app-id = 'net.whatsapp.WhatsApp'
 run = "move-node-to-workspace 5"
 
+[[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = ['layout floating']
+
 # [[on-window-detected]]
 # if.app-id = 'net.kovidgoyal.kitty'
 # run = "move-node-to-workspace 2"
