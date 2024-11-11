@@ -110,3 +110,5 @@ path=('/Users/dante/.juliaup/bin' $path)
 export PATH
 
 # <<< juliaup initialize <<<
+
+source ~/.chatGPT_APIKEY
