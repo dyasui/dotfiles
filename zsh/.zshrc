@@ -85,6 +85,7 @@ alias ssh="kitten ssh"
 alias ddgr="BROWSER=w3m ddgr"
 alias qvim="NVIM_APPNAME=quarto-nvim-kickstarter nvim"
 alias tvim="NVIM_APPNAME=neotex/nvim nvim"
+alias rg="rg --hyperlink-format=kitty"
 
 # Shell integrations
 
