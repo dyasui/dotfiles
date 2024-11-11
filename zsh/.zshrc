@@ -78,6 +78,7 @@ alias c='clear'
 alias skim='/Applications/Skim.app/Contents/MacOS/Skim'
 alias icat='kitten icat'
 alias diff='kitten diff'
+alias gitdiff='git difftool --no-symlinks --dir-diff'
 alias wordlelist="curl -s https://raw.githubusercontent.com/tabatkins/wordle-list/main/words"
 alias cat="bat"
 alias ssh="kitten ssh"
