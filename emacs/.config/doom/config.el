@@ -1,5 +1,5 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
-(setq doom-font (font-spec :family "Noto Nerd Font" :size 16 ))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 16 ))
 (setq load-theme 'kanagawa-wave)
 
 (setq display-line-numbers-type t)
@@ -16,8 +16,6 @@
                  "/Entered on/ %U"))))
 (define-key global-map (kbd "C-c c") 'org-capture)
 
-(map! :leader
-      :desc "Open neotree (E)xplorer" "e" #'neotree)
 
 ;; Elfeed feeds
 (setq elfeed-feeds (quote
