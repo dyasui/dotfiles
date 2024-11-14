@@ -82,7 +82,7 @@ alias gitdiff='git difftool --no-symlinks --dir-diff'
 alias wordlelist="curl -s https://raw.githubusercontent.com/tabatkins/wordle-list/main/words"
 alias cat="bat"
 alias ssh="kitten ssh"
-alias ddgr="BROWSER=w3m ddgr"
+alias ddgr="BROWSER=w3m ddgr -n 5"
 alias qvim="NVIM_APPNAME=quarto-nvim-kickstarter nvim"
 alias tvim="NVIM_APPNAME=neotex/nvim nvim"
 alias rg="rg --hyperlink-format=kitty"
