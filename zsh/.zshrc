@@ -71,8 +71,8 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # Aliases
-alias ls='ls --color'
-alias la='ls -a --color'
+alias ls='gls --color --hyperlin=auto'
+alias la='gls -a --color --hyperlink=auto'
 alias lt='eza -Tl'
 alias c='clear'
 alias skim='/Applications/Skim.app/Contents/MacOS/Skim'
