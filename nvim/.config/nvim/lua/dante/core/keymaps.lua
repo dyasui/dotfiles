@@ -26,12 +26,12 @@ keymap.set("n", "<leader>we", "<C-w>=", { desc = "Make splits equal size" })
 -- buffer navigation
 keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Next buffer" })
 keymap.set("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
-keymap.set("n", "<leader>bi", "<cmd>ls<CR>", { desc = "List buffers interactively" })
+keymap.set("n", "<leader>bi", "<cmd>FzfLua buffers<CR>", { desc = "List buffers interactively" })
 keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
 
 -- tab navigation
-keymap.set("n", "<leader><Tab>", "<cmd>tabnew<CR>", { desc = "Open new tab" })
-keymap.set("n", "<leader><Tab>d", "<cmd>tabclose<CR>", { desc = "Close current tab" })
+keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" })
+keymap.set("n", "<leader>tq", "<cmd>tabclose<CR>", { desc = "Close current tab" })
 keymap.set("n", "<Tab>", "<cmd>tabn<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<S-Tab>", "<cmd>tabp<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>tn", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
@@ -60,12 +60,23 @@ keymap.set("n", "<leader>ss", "<cmd>SessionSave<CR>", { desc = "Save session for
 
 -- fzf 
 keymap.set("n", "<leader>ff", "<cmd>FzfLua files<CR>", { desc = "(f)ind (f)iles" }) -- open fzf
-keymap.set("n", "<leader>fh", "<cmd>FzfLua files cwd=~<CR>", { desc = "(f)ind in (h)ome"}) -- open fzf
+keymap.set("n", "<leader>fc", "<cmd>FzfLua files cwd=~/.config<CR>", { desc = "(f)ind (c)onfig"}) -- open fzf
 keymap.set("n", "<leader>fr", "<cmd>FzfLua oldfiles<CR>", { desc = "(f)ind (r)ecent" }) 
 keymap.set("n", "<leader>fs", "<cmd>FzfLua live_grep<CR>", { desc = "(f)ind (s)tring" }) 
+keymap.set("n", "<leader>fl", "<cmd>FzfLua blines<CR>", { desc = "(f)ind (l)ines in current buffer" }) 
+keymap.set("n", "<leader>fm", "<cmd>FzfLua marks<CR>", { desc = "(f)ind (m)arks" }) 
+keymap.set("n", "<leader>fh", "<cmd>FzfLua helptags<CR>", { desc = "(f)ind (h)elp" }) 
+keymap.set("n", "<leader>fmp", "<cmd>FzfLua manpages<CR>", { desc = "(f)ind (m)an (p)ages" }) 
+keymap.set("n", "<leader>fc", "<cmd>FzfLua commands<CR>", { desc = "(f)ind (c)ommands" }) 
+keymap.set("n", "<leader>fk", "<cmd>FzfLua keymaps<CR>", { desc = "(f)ind (k)eyamps" }) 
+
+-- insert-mode completion with <C-x><C-f>
+vim.keymap.set({ "n", "v", "i" }, "<C-x><C-f>",
+  function() require("fzf-lua").complete_path() end,
+  { silent = true, desc = "Fuzzy complete path" })
 
 -- terminal
-keymap.set("n", "<leader>tt", "<cmd>FloatermToggle<CR>", { desc = "(t)oggle (t)erminal" })
+keymap.set("n", "<leader>tf", "<cmd>FloatermToggle<CR>", { desc = "(t)oggle (t)erminal" })
 
 -- w3m browser
 keymap.set("n", "<leader>e", "<cmd>W3m ", { desc = "(e)xplore web" })
