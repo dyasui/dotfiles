@@ -61,7 +61,7 @@ keymap.set("n", "<leader>ss", "<cmd>SessionSave<CR>", { desc = "Save session for
 -- fzf 
 keymap.set("n", "<leader>ff", "<cmd>FzfLua files<CR>", { desc = "(f)ind (f)iles" }) -- open fzf
 keymap.set("n", "<leader>fc", "<cmd>FzfLua files cwd=~/.config<CR>", { desc = "(f)ind (c)onfig"}) -- open fzf
-keymap.set("n", "<leader>fr", "<cmd>FzfLua oldfiles<CR>", { desc = "(f)ind (r)ecent" }) 
+keymap.set("n", "<leader>fr", "<cmd>FzfLua resume<CR>", { desc = "(f)ind (r)esume" }) 
 keymap.set("n", "<leader>fs", "<cmd>FzfLua live_grep<CR>", { desc = "(f)ind (s)tring" }) 
 keymap.set("n", "<leader>fl", "<cmd>FzfLua blines<CR>", { desc = "(f)ind (l)ines in current buffer" }) 
 keymap.set("n", "<leader>fm", "<cmd>FzfLua marks<CR>", { desc = "(f)ind (m)arks" }) 
@@ -79,11 +79,11 @@ vim.keymap.set({ "n", "v", "i" }, "<C-x><C-f>",
 keymap.set("n", "<leader>tf", "<cmd>FloatermToggle<CR>", { desc = "(t)oggle (t)erminal" })
 
 -- w3m browser
-keymap.set("n", "<leader>e", "<cmd>W3m ", { desc = "(e)xplore web" })
-keymap.set("n", "<leader>et", "<cmd>W3mTab ", { desc = "(e)xplore in new (t)ab" })
-keymap.set("n", "<leader>es", "<cmd>W3mSplit ", { desc = "(e)xplore (s)plit" })
-keymap.set("n", "<leader>ev", "<cmd>W3mVsplit ", { desc = "(e)xplore (v)split" })
-keymap.set("n", "<leader>ey", "<cmd>W3mCopyUrl", { desc = "copy url from w3m" })
-keymap.set("n", "<leader>er", "<cmd>W3mReload", { desc = "(r)eload W3m page" })
-keymap.set("n", "<leader>eh", "<cmd>W3mHistory", { desc = "w3m (h)istory" })
-keymap.set("n", "<leader>ec", "<cmd>W3mHistory", { desc = "w3m (h)istory (c)lear" })
+-- keymap.set("n", "<leader>e", "<cmd>W3m ", { desc = "(e)xplore web" })
+-- keymap.set("n", "<leader>et", "<cmd>W3mTab ", { desc = "(e)xplore in new (t)ab" })
+-- keymap.set("n", "<leader>es", "<cmd>W3mSplit ", { desc = "(e)xplore (s)plit" })
+-- keymap.set("n", "<leader>ev", "<cmd>W3mVsplit ", { desc = "(e)xplore (v)split" })
+-- keymap.set("n", "<leader>ey", "<cmd>W3mCopyUrl", { desc = "copy url from w3m" })
+-- keymap.set("n", "<leader>er", "<cmd>W3mReload", { desc = "(r)eload W3m page" })
+-- keymap.set("n", "<leader>eh", "<cmd>W3mHistory", { desc = "w3m (h)istory" })
+-- keymap.set("n", "<leader>ec", "<cmd>W3mHistory", { desc = "w3m (h)istory (c)lear" })
