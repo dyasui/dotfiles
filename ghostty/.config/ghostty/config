@@ -1,0 +1,32 @@
+# APPEARANCE
+font-family = JetBrains Mono
+font-size = 14
+theme = kanagawabones
+macos-titlebar-style = tabs
+
+# prevent option key from doing alt characters
+macos-option-as-alt = true
+
+# KEYBINDS
+# split terminal windows
+keybind = ctrl+shift+h=new_split:left
+keybind = ctrl+shift+j=new_split:down
+keybind = ctrl+shift+k=new_split:up
+keybind = ctrl+shift+l=new_split:right
+# move between splits
+keybind = cmd+alt+h=goto_split:left
+keybind = cmd+alt+j=goto_split:bottom
+keybind = cmd+alt+k=goto_split:top
+keybind = cmd+alt+l=goto_split:right
+# open quick terminal
+keybind = ctrl+space=toggle_quick_terminal
+# scroll through terminal lines
+keybind = ctrl+up=scroll_page_lines:-1
+keybind = ctrl+down=scroll_page_lines:1
+keybind = ctrl+shift+up=scroll_page_up
+keybind = ctrl+shift+down=scroll_page_down
+keybind = ctrl+shift+0=scroll_to_top
+keybind = ctrl+shift+g=scroll_to_bottom
+# jump to prev/next prompt
+keybind = ctrl+p=jump_to_prompt:-1
+keybind = ctrl+n=jump_to_prompt:1
