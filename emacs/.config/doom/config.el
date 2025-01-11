@@ -16,6 +16,14 @@
                  "/Entered on/ %U"))))
 (define-key global-map (kbd "C-c c") 'org-capture)
 
+;; Org-roam zettelkasten dailies
+(setq org-roam-dailies-directory "daily/")
+
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         "* %?"
+         :target (file+head "%<%Y%m%d>.org"
+                            "#+title: %<%Y%m%d>\n"))))
 
 ;; Elfeed feeds
 (setq elfeed-feeds (quote
