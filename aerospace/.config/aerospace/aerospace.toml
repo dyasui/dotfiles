@@ -16,9 +16,9 @@ after-login-command = [
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  'exec-and-forget /opt/homebrew/opt/sketchybar/bin/sketchybar',
+  # 'exec-and-forget /opt/homebrew/opt/sketchybar/bin/sketchybar',
   'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0',
-  'exec-and-forget kitty --session ~/.config/kitty/startup.conf',
+  # 'exec-and-forget kitty --session ~/.config/kitty/startup.conf',
   'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
 ]
 
@@ -139,6 +139,7 @@ alt-9 = 'workspace 9'
 alt-0 = 'workspace 10'
 alt-z = 'workspace Z' # zotero
 alt-c = 'workspace C' # calendar
+alt-t = 'workspace T' # terminal
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
@@ -151,6 +152,7 @@ alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
 alt-shift-0 = ['move-node-to-workspace 10', 'workspace 10']
+alt-shift-t = ['move-node-to-workspace T', 'workspace T']
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
@@ -212,6 +214,6 @@ run = ['layout floating']
 7 = 'built-in'
 8 = 'built-in'
 9 = 'built-in'
-10 = 'crestron'
+10 = ['crestron', 'built-in']
 Z = 'built-in'
 C = 'built-in'
