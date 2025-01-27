@@ -16,7 +16,10 @@ after-login-command = [
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  'exec-and-forget /opt/homebrew/opt/sketchybar/bin/sketchybar',
+  # 'exec-and-forget /opt/homebrew/opt/sketchybar/bin/sketchybar',
+  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0',
+  # 'exec-and-forget kitty --session ~/.config/kitty/startup.conf',
+  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
 ]
 
 exec-on-workspace-change = [
@@ -95,7 +98,7 @@ PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 
 # You can uncomment this line to open up terminal with alt + enter shortcut
 # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-alt-enter = 'exec-and-forget kitty --single-instance'
+alt-enter = 'exec-and-forget kitty --single-instance ~'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-slash = 'layout tiles horizontal vertical'
@@ -136,6 +139,7 @@ alt-9 = 'workspace 9'
 alt-0 = 'workspace 10'
 alt-z = 'workspace Z' # zotero
 alt-c = 'workspace C' # calendar
+alt-t = 'workspace T' # terminal
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
@@ -148,6 +152,7 @@ alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
 alt-shift-0 = ['move-node-to-workspace 10', 'workspace 10']
+alt-shift-t = ['move-node-to-workspace T', 'workspace T']
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
@@ -173,6 +178,17 @@ if.app-id = 'org.zotero.zotero'
 run = "move-node-to-workspace Z"
 
 [[on-window-detected]]
+if.app-id = "com.mitchellh.ghostty"
+run = [
+  # FIX: this is a workaround for https://github.com/nikitabobko/AeroSpace/issues/68
+  # this was also observed in:
+  # - https://github.com/ghostty-org/ghostty/issues/1840
+  # - https://github.com/ghostty-org/ghostty/issues/2006
+  "layout floating",
+  "move-node-to-workspace T",
+]
+
+[[on-window-detected]]
 if.app-id = 'net.whatsapp.WhatsApp'
 run = "move-node-to-workspace 5"
 
@@ -189,14 +205,15 @@ run = ['layout floating']
 # run = "move-node-to-workspace 2"
 
 [workspace-to-monitor-force-assignment]
-1 = 'built-in'
-2 = 'built-in'
-3 = 'built-in'
-4 = 'built-in'
-5 = 'built-in'
-6 = 'dell'
-7 = 'dell'
-8 = 'dell'
-9 = 'dell'
-10 = 'airplay'
+1 = ['airplay', 'msi']
+2 = ['dell', 'msi']
+3 = ['dell', 'msi']
+4 = ['dell', 'msi']
+5 = ['dell', 'msi']
+6 = 'built-in'
+7 = 'built-in'
+8 = 'built-in'
+9 = 'built-in'
+10 = ['crestron', 'built-in']
 Z = 'built-in'
+C = 'built-in'

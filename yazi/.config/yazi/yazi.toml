@@ -14,3 +14,15 @@ prepend_rules = [
 
 [manager]
 linemode = "size"
+ratio = [0, 5, 5]
+
+[[manager.prepend_keymap]]
+on   = "!"
+run  = 'shell "$SHELL" --block --confirm'
+desc = "Open shell here"
+
+[preview]
+tab_size        = 20
+max_width       = 2400
+max_height      = 3600
+image_quality   = 75

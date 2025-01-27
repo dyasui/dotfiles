@@ -71,8 +71,8 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # Aliases
-alias ls='ls --color'
-alias la='ls -a --color'
+alias ls='gls --color --hyperlin=auto'
+alias la='gls -a --color --hyperlink=auto'
 alias lt='eza -Tl'
 alias c='clear'
 alias skim='/Applications/Skim.app/Contents/MacOS/Skim'
@@ -82,7 +82,7 @@ alias gitdiff='git difftool --no-symlinks --dir-diff'
 alias wordlelist="curl -s https://raw.githubusercontent.com/tabatkins/wordle-list/main/words"
 alias cat="bat"
 alias ssh="kitten ssh"
-alias ddgr="BROWSER=w3m ddgr"
+alias ddgr="BROWSER=w3m ddgr -n 5"
 alias qvim="NVIM_APPNAME=quarto-nvim-kickstarter nvim"
 alias tvim="NVIM_APPNAME=neotex/nvim nvim"
 alias rg="rg --hyperlink-format=kitty"
@@ -112,3 +112,5 @@ export PATH
 # <<< juliaup initialize <<<
 
 source ~/.chatGPT_APIKEY
+export GOPATH=$HOME/go
+export PATH=/Users/dante/.juliaup/bin:/Users/dante/Library/Python/3.9/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/TeX/texbin:/Applications/quarto/bin:/Users/dante/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/dante/.juliaup/bin:/Users/dante/Library/Python/3.9/bin:/Users/dante/.local/share/zinit/polaris/bin:/Applications/kitty.app/Contents/MacOS:/bin:$GOPATH/bin
