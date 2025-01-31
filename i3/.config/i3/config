@@ -98,9 +98,9 @@ bindsym $mod+minus split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+. layout stacking
-bindsym $mod+, layout tabbed
-bindsym $mod+/ layout toggle split
+bindsym $mod+period layout stacking
+bindsym $mod+comma layout tabbed
+bindsym $mod+slash layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -244,21 +244,21 @@ client.placeholder      #000000 #0C0C0C #ffffff #000000   #0c0c0c
 client.background       #ffffff
 
 # bar
-# bar {
-#   status_command i3blocks -c ~/.config/i3blocks/config
-#   output DisplayPort-0
-# 	position top
-# 	font pango:System San Francisco Display 24
-# 	colors {
-# 		background $bg-color
-# 	 	separator #54546d
-# 		#                  border             background         text
-# 		focused_workspace  $bg-color          $bg-color          $text-color
-# 		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-# 		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
-# 	}
-#   strip_workspace_numbers yes
-# }
+bar {
+  status_command i3blocks -c ~/.config/i3blocks/config
+  output DisplayPort-0
+	position top
+	font pango:System San Francisco Display 24
+	colors {
+		background $bg-color
+	 	separator #54546d
+		#                  border             background         text
+		focused_workspace  $bg-color          $bg-color          $text-color
+		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+	}
+  strip_workspace_numbers yes
+}
 
 # activate lockscreen
 bindsym $mod+Shift+x exec i3lock-fancy
