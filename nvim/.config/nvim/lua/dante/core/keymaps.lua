@@ -5,8 +5,8 @@ local keymap = vim.keymap -- for conciseness
 -- escape insert mode w/ jk
 keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode w/ jk" })
 -- leader for common functions
-keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save buffer"})
-keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Close buffer"})
+keymap.set("n", "<D-s>", "<cmd>w<CR>", { desc = "Save buffer"})
+keymap.set("n", "qq", "<cmd>qa<CR>", { desc = "Quit all buffers"})
 
 keymap.set("n", "<ESC>", "<cmd>nohl<CR>", { desc = "clear search highlights" })
 
@@ -49,7 +49,7 @@ keymap.set("n", "ga", "<Plug>(EasyAlign)")
 keymap.set("t", "<C-ESC>", "<C-\\><C-n>", { desc = "exit terminal" })
 
 -- toggle zen mode
-keymap.set("n", "<leader>z", "<cmd>ZenMode<CR>", {desc = "(z)en mode"})
+keymap.set("n", "<leader>tz", "<cmd>ZenMode<CR>", {desc = "(t)oggle (z)en mode"})
 
 -- tree view
 keymap.set("n", "<leader>te", "<cmd>NvimTreeToggle<CR>", { desc = "(t)oggle file (e)xplorer" }) -- toggle file explorer
