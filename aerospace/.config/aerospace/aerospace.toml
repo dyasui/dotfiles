@@ -170,6 +170,34 @@ cmd-shift-t = 'layout floating tiling'
 alt-shift-c = 'reload-config'
 
 [[on-window-detected]]
+if.app-id = 'com.apple.systempreferences'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.firefox'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if.app-id = 'net.kovidgoyal.kitty'
+run = "move-node-to-workspace 2"
+
+[[on-window-detected]]
+if.app-id = 'com.electron.logseq'
+run = 'move-node-to-workspace 3'
+
+[[on-window-detected]]
+if.app-id = 'org.gnu.Emacs'
+run = 'move-node-to-workspace 4'
+
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+run = "move-node-to-workspace 5"
+
+[[on-window-detected]]
 if.app-id = 'com.apple.iCal'
 run = "move-node-to-workspace C"
 
@@ -187,22 +215,6 @@ run = [
   "layout floating",
   "move-node-to-workspace T",
 ]
-
-[[on-window-detected]]
-if.app-id = 'net.whatsapp.WhatsApp'
-run = "move-node-to-workspace 5"
-
-[[on-window-detected]]
-if.app-id = 'com.apple.systempreferences'
-run = ['layout floating']
-
-[[on-window-detected]]
-if.app-id = 'com.apple.finder'
-run = ['layout floating']
-
-# [[on-window-detected]]
-# if.app-id = 'net.kovidgoyal.kitty'
-# run = "move-node-to-workspace 2"
 
 [workspace-to-monitor-force-assignment]
 1 = ['airplay', 'msi']
