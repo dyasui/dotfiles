@@ -1,0 +1,1 @@
+/home/dante/.config/emacs/elpaca/repos/kanagawa-emacs/kanagawa-dragon-theme.el

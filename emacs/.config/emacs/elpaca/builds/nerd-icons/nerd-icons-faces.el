@@ -1,0 +1,1 @@
+/home/dante/.config/emacs/elpaca/repos/nerd-icons/nerd-icons-faces.el

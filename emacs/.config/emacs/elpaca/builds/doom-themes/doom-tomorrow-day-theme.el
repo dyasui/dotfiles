@@ -1,0 +1,1 @@
+/home/dante/.config/emacs/elpaca/repos/themes/themes/doom-tomorrow-day-theme.el
