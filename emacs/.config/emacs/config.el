@@ -100,32 +100,59 @@
   :config
   (general-evil-setup)
   ;; set space bar as global leader key
-  (general-create-definer my-leader-def
+  (general-create-definer dy/leader-keys
     :states '(normal insert visual emacs)
     :keymaps 'override
     :prefix "SPC" ;; set leader
     :global-prefix "C-SPC") ;; access leader in insert mode
-  (my-leader-def
+
+  (dy/leader-keys
+    "." '(find-file :wk "Find file")
+    "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+    "TAB TAB" '(comment-line :wk "Comment lines"))
+
+  (dy/leader-keys
     "b" '(:ignore t :wk "buffer")
-    "bs" '(switch-to-buffer :wk "Switch buffer")
-    "bq" '(kill-this-buffer :wk "Kill buffer")
-    "bn" '(next-buffer :wk "Next buffer")
-    "bp" '(previous-buffer :wk "Previous buffer")
-    "br" '(revert-buffer :wk "Reload buffer")
-    "bi" '(ibuffer :wk "Buffer Index"))
+    "b s" '(switch-to-buffer :wk "Switch buffer")
+    "b q" '(kill-this-buffer :wk "Kill buffer")
+    "b n" '(next-buffer :wk "Next buffer")
+    "b p" '(previous-buffer :wk "Previous buffer")
+    "b r" '(revert-buffer :wk "Reload buffer")
+    "b i" '(ibuffer :wk "Buffer Index"))
+
+  (dy/leader-keys
+    "e" '(:ignore t :wk "Evaluate")
+    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+    "e e" '(eval-expression :wk "Evaluate an elisp expression")
+    "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+    "e r" '(eval-region :wk "Evaluate elisp in region"))
+
+  (dy/leader-keys
+    "h" '(:ignore t :wk "Help")
+    "h f" '(describe-function :wk "Describe function")
+    "h v " '(describe-variable :wk "Describe variable")
+    "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
+
+  (dy/leader-keys
+   "t" '(:ignore t :wk "Toggle")
+   "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+   "t t" '(visual-line-mode :wk "Toggle truncated lines"))
+
+
 )
 
 (set-face-attribute 'default nil
 		    :font "JetBrainsMono Nerd Font"
-		    :height 180
+		    :height 200
 		    :weight 'medium)
 (set-face-attribute 'variable-pitch nil
 		    :font "Noto Sans"
-		    :height 180
+		    :height 200
 		    :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
 		    :font "JetBrainsMono Nerd Font"
-		    :height 180
+		    :height 200
 		    :weight 'medium)
 ;; italicizes commented text and keywords
 (set-face-attribute 'font-lock-comment-face nil
@@ -133,15 +160,52 @@
 (set-face-attribute 'font-lock-keyword-face nil
 		    :slant 'italic)
 ;;sets default font on all graphical frames after restarting emacs
-(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-11"))
+(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
 
 ;;set default line spacing
 (setq-default line-spacing 0.12)
 
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
 (use-package ess
   :ensure t
   :config
-  (load "ess-autoloads"))
+  (load "ess-autoloads")
+  (load-library "ob-R")
+  (load-library "ob-julia")
+  (setq org-confirm-babel-evaluate nil))
+
+(setq treesit-language-source-alist
+      '((julia "https://github.com/tree-sitter/tree-sitter-julia")))
+(setq treesit-auto-install 'prompt)
+
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-language-id-configuration
+    '(julia-ts-mode . "julia")))
+(setq lsp-julia-package-dir nil)
+(after! lsp-julia
+  (setq lsp-julia-default-environment "~/.julia/environments/v1.10")
+  (setq-hook! 'julia-ts-mode-hook +format-with-lsp nil))
+
+(after! julia-ts-mode
+  (add-hook! 'julia-ts-mode-hook
+    (setq-local lsp-enable-folding t
+                lsp-folding-range-limit 100)))
+;;
+;;
+;; Julia REPL
+(defun open-popup-new-frame (buffer &optional alist) (+popup-display-buffer-fullframe-fn buffer alist))
+(use-package! julia-repl
+  :hook (julia-ts-mode . julia-repl-mode)
+  :config
+  (setq julia-repl-executable-records '((default "julia" :basedir "/Users/foo/applications/julia10/usr/share/julia/base/")
+                                        (dev "julia11" :basedir    "/Users/foo/applications/julia11/usr/share/julia/base/")))
+  (setq julia-repl-executable-key 'default)
+  (setq julia-repl-switches "-q -t 4,1")
+  (set-popup-rule! "^\\*julia\\:.*\\*$" :actions '(display-buffer-pop-up-frame . inhibit-switch-frame)))
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -196,3 +260,7 @@
 (use-package org-bullets
   :ensure t)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+(electric-indent-mode -1)
+
+(require 'org-tempo)
