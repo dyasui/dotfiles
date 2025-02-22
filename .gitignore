@@ -3,3 +3,7 @@
 tmp/
 
 zsh/.zshrc
+
+emacs/.config/emacs/elpaca/
+emacs/.config/auto-save-list/
+emacs/.config/eln-cache/
