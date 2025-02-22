@@ -276,12 +276,13 @@ one, an error is signaled."
     "b i" '(ibuffer :wk "Buffer Index"))
 
   (dy/leader-keys
-    "e" '(:ignore t :wk "Evaluate")
+    "e" '(:ignore t :wk "Eshell/Evaluate")
     "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
     "e d" '(eval-defun :wk "Evaluate defun containing or after point")
     "e e" '(eval-expression :wk "Evaluate an elisp expression")
     "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-    "e r" '(eval-region :wk "Evaluate elisp in region"))
+    "e r" '(eval-region :wk "Evaluate elisp in region")
+    "e s" '(eshell :wk "Eshell"))
 
   (dy/leader-keys
     "h" '(:ignore t :wk "Help")
@@ -292,7 +293,8 @@ one, an error is signaled."
   (dy/leader-keys
    "t" '(:ignore t :wk "Toggle")
    "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-   "t t" '(visual-line-mode :wk "Toggle truncated lines"))
+   "t t" '(visual-line-mode :wk "Toggle truncated lines")
+   "t v" '(vterm-toggle :wk "Toggle vterm"))
 
   (dy/leader-keys
    "w" '(:ignore t :wk "Windows")
@@ -338,9 +340,39 @@ one, an error is signaled."
 
 (require 'org-tempo)
 
+(use-package rainbow-mode
+  :hook org-mode prog-mode)
+
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
+
+(use-package vterm
+  :ensure t)
+
+(use-package vterm-toggle
+  :ensure t
+  :after vterm
+  :config
+  (setq vterm-toggle-fullscreen-p nil)
+  (setq vterm-toggle-scope 'project)
+  (add-to-list 'display-buffer-alist
+     '((lambda (buffer-or-name _)
+     (let ((buffer (get-buffer buffer-or-name)))
+       (with-current-buffer buffer
+	 (or (equal major-mode 'vterm-mode)
+	     (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+  (display-buffer-reuse-window display-buffer-at-bottom)
+  ;;(display-buffer-reuse-window display-buffer-in-direction)
+  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+  ;;(direction . bottom)
+  ;;(dedicated . t) ;dedicated is supported in emacs27
+  (reusable-frames . visible)
+  (window-height . 0.3)))
+  )
+
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+(load-theme 'kanagawa t)
 
 (use-package which-key
 :init
