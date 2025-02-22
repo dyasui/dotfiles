@@ -186,19 +186,19 @@
   (add-to-list 'lsp-language-id-configuration
     '(julia-ts-mode . "julia")))
 (setq lsp-julia-package-dir nil)
-(after! lsp-julia
-  (setq lsp-julia-default-environment "~/.julia/environments/v1.10")
-  (setq-hook! 'julia-ts-mode-hook +format-with-lsp nil))
-
-(after! julia-ts-mode
-  (add-hook! 'julia-ts-mode-hook
-    (setq-local lsp-enable-folding t
-                lsp-folding-range-limit 100)))
+;; (after! lsp-julia
+;;   (setq lsp-julia-default-environment "~/.julia/environments/v1.10")
+;;   (setq-hook! 'julia-ts-mode-hook +format-with-lsp nil))
+;; 
+;; (after! julia-ts-mode
+;;   (add-hook! 'julia-ts-mode-hook
+;;     (setq-local lsp-enable-folding t
+;;                 lsp-folding-range-limit 100)))
 ;;
 ;;
 ;; Julia REPL
 (defun open-popup-new-frame (buffer &optional alist) (+popup-display-buffer-fullframe-fn buffer alist))
-(use-package! julia-repl
+(use-package julia-repl
   :hook (julia-ts-mode . julia-repl-mode)
   :config
   (setq julia-repl-executable-records '((default "julia" :basedir "/Users/foo/applications/julia10/usr/share/julia/base/")
