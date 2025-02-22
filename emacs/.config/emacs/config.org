@@ -7,22 +7,30 @@
 - [[#load-these-things-first][Load these things first]]
   - [[#elpaca-package-manager][Elpaca Package Manager]]
   - [[#evil-mode][Evil Mode]]
-- [[#general-keybindings][General Keybindings]]
+- [[#buffer-move][BUFFER-MOVE]]
+- [[#doom-color-themes][DOOM color themes]]
+  - [[#further-customization][Further customization]]
+- [[#ess---r-and-julia-code-integration][ESS - R and julia code integration]]
 - [[#fonts][FONTS]]
   - [[#setting-the-font-face][Setting the font face]]
   - [[#zooming-inout][Zooming In/Out]]
-- [[#ess---r-and-julia-code-integration][ESS - R and julia code integration]]
+- [[#general-keybindings][General Keybindings]]
 - [[#gui-tweaks][GUI tweaks]]
   - [[#disable-menubar-toolbars-scrollbars][Disable Menubar, toolbars, scrollbars]]
   - [[#show-line-numbers-and-truncated-lines][Show Line numbers and truncated lines]]
-- [[#which-key][WHICH-KEY]]
-- [[#doom-color-themes][DOOM color themes]]
-  - [[#further-customization][Further customization]]
+- [[#ivy-counsel][IVY (COUNSEL)]]
+- [[#icomplete][ICOMPLETE]]
 - [[#org-mode][ORG MODE]]
   - [[#enabling-table-of-contents][Enabling Table of Contents]]
   - [[#enabling-org-bullets][Enabling Org Bullets]]
   - [[#disable-electric-indent][Disable Electric Indent]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
+- [[#recentf][RECENTF]]
+- [[#shells-and-terminals][SHELLS AND TERMINALS]]
+  - [[#eshell][Eshell]]
+  - [[#vterm][Vterm]]
+  - [[#vterm-toggle][Vterm-Toggle]]
+- [[#which-key][WHICH-KEY]]
 
 * Load these things first
   Some things (like package manager) need to load first in emacs startup.
@@ -133,91 +141,106 @@ To get the vim bindings to work in other types of buffers (like dired and ibuffe
   (setq org-return-follows-link  t)
 #+end_src
 
-* General Keybindings
+* BUFFER-MOVE
+Taken from the EmacsWiki: https://www.emacswiki.org/emacs/buffer-move.el
 #+begin_src emacs-lisp
-  (use-package general
+(require 'windmove)
+
+;;;###autoload
+(defun buf-move-up ()
+  "Swap the current buffer and the buffer above the split.
+If there is no split, ie now window above the current one, an
+error is signaled."
+;;  "Switches between the current buffer, and the buffer above the
+;;  split, if possible."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'up))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No window above this one")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+;;;###autoload
+(defun buf-move-down ()
+"Swap the current buffer and the buffer under the split.
+If there is no split, ie now window under the current one, an
+error is signaled."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'down))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (or (null other-win) 
+            (string-match "^ \\*Minibuf" (buffer-name (window-buffer other-win))))
+        (error "No window under this one")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+;;;###autoload
+(defun buf-move-left ()
+"Swap the current buffer and the buffer on the left of the split.
+If there is no split, ie now window on the left of the current
+one, an error is signaled."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'left))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No left split")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+;;;###autoload
+(defun buf-move-right ()
+"Swap the current buffer and the buffer on the right of the split.
+If there is no split, ie now window on the right of the current
+one, an error is signaled."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'right))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No right split")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+#+end_src
+* DOOM color themes
+#+begin_src emacs-lisp
+  (use-package doom-themes
     :ensure t
     :config
-    (general-evil-setup)
-    ;; set space bar as global leader key
-    (general-create-definer dy/leader-keys
-      :states '(normal insert visual emacs)
-      :keymaps 'override
-      :prefix "SPC" ;; set leader
-      :global-prefix "C-SPC") ;; access leader in insert mode
-
-    (dy/leader-keys
-      "." '(find-file :wk "Find file")
-      "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-      "TAB TAB" '(comment-line :wk "Comment lines"))
-
-    (dy/leader-keys
-      "b" '(:ignore t :wk "buffer")
-      "b s" '(switch-to-buffer :wk "Switch buffer")
-      "b q" '(kill-this-buffer :wk "Kill buffer")
-      "b n" '(next-buffer :wk "Next buffer")
-      "b p" '(previous-buffer :wk "Previous buffer")
-      "b r" '(revert-buffer :wk "Reload buffer")
-      "b i" '(ibuffer :wk "Buffer Index"))
-
-    (dy/leader-keys
-      "e" '(:ignore t :wk "Evaluate")
-      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-      "e d" '(eval-defun :wk "Evaluate defun containing or after point")
-      "e e" '(eval-expression :wk "Evaluate an elisp expression")
-      "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-      "e r" '(eval-region :wk "Evaluate elisp in region"))
-
-    (dy/leader-keys
-      "h" '(:ignore t :wk "Help")
-      "h f" '(describe-function :wk "Describe function")
-      "h v " '(describe-variable :wk "Describe variable")
-      "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
-
-    (dy/leader-keys
-     "t" '(:ignore t :wk "Toggle")
-     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-     "t t" '(visual-line-mode :wk "Toggle truncated lines"))
-
-
-  )
+    (load-theme 'doom-one t)
+    (doom-themes-org-config))
+  ;; solaire darkens non-standard buffers' backgrounds
+  (use-package solaire-mode
+    :ensure t
+    :config
+    (solaire-global-mode +1))
+  ;; doom's fancy modeline
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
 #+end_src
 
-* FONTS
-Emacs uses various fonts and font styles in different places.
-** Setting the font face
-#+begin_src emacs-lisp
-  (set-face-attribute 'default nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 200
-		      :weight 'medium)
-  (set-face-attribute 'variable-pitch nil
-		      :font "Noto Sans"
-		      :height 200
-		      :weight 'medium)
-  (set-face-attribute 'fixed-pitch nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 200
-		      :weight 'medium)
-  ;; italicizes commented text and keywords
-  (set-face-attribute 'font-lock-comment-face nil
-		      :slant 'italic)
-  (set-face-attribute 'font-lock-keyword-face nil
-		      :slant 'italic)
-  ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
-
-  ;;set default line spacing
-  (setq-default line-spacing 0.12)
+** Further customization
+At some point, I want to adjust the way that source code blocks in org-mode get highlighted
+which is done using the =custom-set-faces= macro in =doom-themes=.
+#+begin_src emacs-lisp :eval no
+;; Must be used *after* the theme is loaded
+;; (custom-set-faces
+;;   `(org-block ((t (:background , #16161D))))
+;; )
 #+end_src
 
-** Zooming In/Out
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-=") 'text-scale-increase)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
-#+end_src
 * ESS - R and julia code integration
 The Emacs Speaks Statistics (ESS) package has lots of functionality for working with statistical and scientific languages in Emacs.
 They seem to be heralding a switch to [[https://github.com/polymode/poly-org][polymode]], but I think org's babel function is enough for me right now.
@@ -264,6 +287,109 @@ it seems like DOOM uses =julia-mode= and some other stuff besides ESS
   (setq julia-repl-switches "-q -t 4,1")
   (set-popup-rule! "^\\*julia\\:.*\\*$" :actions '(display-buffer-pop-up-frame . inhibit-switch-frame)))
 #+end_src
+* FONTS
+Emacs uses various fonts and font styles in different places.
+** Setting the font face
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil
+		      :font "JetBrainsMono Nerd Font"
+		      :height 200
+		      :weight 'medium)
+  (set-face-attribute 'variable-pitch nil
+		      :font "Noto Sans"
+		      :height 200
+		      :weight 'medium)
+  (set-face-attribute 'fixed-pitch nil
+		      :font "JetBrainsMono Nerd Font"
+		      :height 200
+		      :weight 'medium)
+  ;; italicizes commented text and keywords
+  (set-face-attribute 'font-lock-comment-face nil
+		      :slant 'italic)
+  (set-face-attribute 'font-lock-keyword-face nil
+		      :slant 'italic)
+  ;;sets default font on all graphical frames after restarting emacs
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
+
+  ;;set default line spacing
+  (setq-default line-spacing 0.12)
+#+end_src
+
+** Zooming In/Out
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-=") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+#+end_src
+* General Keybindings
+#+begin_src emacs-lisp
+  (use-package general
+    :ensure t
+    :config
+    (general-evil-setup)
+    ;; set space bar as global leader key
+    (general-create-definer dy/leader-keys
+      :states '(normal insert visual emacs)
+      :keymaps 'override
+      :prefix "SPC" ;; set leader
+      :global-prefix "C-SPC") ;; access leader in insert mode
+
+    (dy/leader-keys
+      "." '(find-file :wk "Find file")
+      "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+      "f r" '(recentf-open-files :wk "Find recent files")
+      "TAB TAB" '(comment-line :wk "Comment lines"))
+
+    (dy/leader-keys
+      "b" '(:ignore t :wk "buffer")
+      "b s" '(switch-to-buffer :wk "Switch buffer")
+      "b q" '(kill-this-buffer :wk "Kill buffer")
+      "b n" '(next-buffer :wk "Next buffer")
+      "b p" '(previous-buffer :wk "Previous buffer")
+      "b r" '(revert-buffer :wk "Reload buffer")
+      "b i" '(ibuffer :wk "Buffer Index"))
+
+    (dy/leader-keys
+      "e" '(:ignore t :wk "Evaluate")
+      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+      "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+      "e e" '(eval-expression :wk "Evaluate an elisp expression")
+      "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+      "e r" '(eval-region :wk "Evaluate elisp in region"))
+
+    (dy/leader-keys
+      "h" '(:ignore t :wk "Help")
+      "h f" '(describe-function :wk "Describe function")
+      "h v " '(describe-variable :wk "Describe variable")
+      "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
+
+    (dy/leader-keys
+     "t" '(:ignore t :wk "Toggle")
+     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+     "t t" '(visual-line-mode :wk "Toggle truncated lines"))
+
+    (dy/leader-keys
+     "w" '(:ignore t :wk "Windows")
+     ;; Window splits
+     "w q" '(evil-window-delete :wk "Close window")
+     "w n" '(evil-window-new :wk "New window")
+     "w s" '(evil-window-split :wk "Horizontal split window")
+     "w v" '(evil-window-vsplit :wk "Vertical split window")
+     ;; Window motions
+     "w h" '(evil-window-left :wk "Window left")
+     "w j" '(evil-window-down :wk "Window down")
+     "w k" '(evil-window-up :wk "Window up")
+     "w l" '(evil-window-right :wk "Window right")
+     "w w" '(evil-window-next :wk "Goto next window")
+     ;; Move Windows
+     "w H" '(buf-move-left :wk "Buffer move left")
+     "w J" '(buf-move-down :wk "Buffer move down")
+     "w K" '(buf-move-up :wk "Buffer move up")
+     "w L" '(buf-move-right :wk "Buffer move right"))
+  )
+#+end_src
+
 * GUI tweaks
 ** Disable Menubar, toolbars, scrollbars
 #+begin_src emacs-lisp
@@ -277,54 +403,16 @@ it seems like DOOM uses =julia-mode= and some other stuff besides ESS
   (global-visual-line-mode t)
 #+end_src
 
-* WHICH-KEY
+* IVY (COUNSEL)
+[[https://github.com/abo-abo/swiper][Ivy]] is a generic completion mechanism for Emacs
+Counsel is a collection of Ivy-enhanced versions of common Emacs commands
+[[https://github.com/Yevgnen/ivy-rich][Ivy-rich]] allows us to add descriptions alonside the M-x menu commands
+* ICOMPLETE
+This is the vanilla Emacs way of doing some of what =ido= and similar minibuffer completion packages do.
 #+begin_src emacs-lisp
-  (use-package which-key
-  :init
-  (which-key-mode 1)
-  :config
-  (setq which-key-side-window-location 'bottom
-	which-key-sort-order #'which-key-key-order-alpha
-	which-key-sort-uppercase-first nil
-	which-key-add-column-padding 1
-	which-key-max-display-columns nil
-	which-key-min-display-lines 6
-	which-key-side-window-slot -10
-	which-key-side-window-max-height 0.25
-	which-key-idle-delay 0.8
-	which-key-max-description-length 25
-	which-key-allow-imprecise-window-fit t
-	which-key-separator "  " ))
+  (fido-vertical-mode t)
+;; (icomplete-vertical-mode t)
 #+end_src
-
-* DOOM color themes
-#+begin_src emacs-lisp
-  (use-package doom-themes
-    :ensure t
-    :config
-    (load-theme 'doom-one t)
-    (doom-themes-org-config))
-  ;; solaire darkens non-standard buffers' backgrounds
-  (use-package solaire-mode
-    :ensure t
-    :config
-    (solaire-global-mode +1))
-  ;; doom's fancy modeline
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1))
-#+end_src
-
-** Further customization
-At some point, I want to adjust the way that source code blocks in org-mode get highlighted
-which is done using the =custom-set-faces= macro in =doom-themes=.
-#+begin_src emacs-lisp :eval no
-;; Must be used *after* the theme is loaded
-;; (custom-set-faces
-;;   `(org-block ((t (:background , #16161D))))
-;; )
-#+end_src
-
 * ORG MODE
 ** Enabling Table of Contents
 #+begin_src emacs-lisp
@@ -361,4 +449,35 @@ org-tempo is not enabled by default, but is an extension to org-mode which allow
 #+end_src
 
 
+
+* RECENTF
+Use =recentf-open-files= to see a list of recently opened files
+#+begin_src emacs-lisp
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+#+end_src
+* SHELLS AND TERMINALS
+** Eshell
+** Vterm
+** Vterm-Toggle
+* WHICH-KEY
+#+begin_src emacs-lisp
+  (use-package which-key
+  :init
+  (which-key-mode 1)
+  :config
+  (setq which-key-side-window-location 'bottom
+	which-key-sort-order #'which-key-key-order-alpha
+	which-key-sort-uppercase-first nil
+	which-key-add-column-padding 1
+	which-key-max-display-columns nil
+	which-key-min-display-lines 6
+	which-key-side-window-slot -10
+	which-key-side-window-max-height 0.25
+	which-key-idle-delay 0.8
+	which-key-max-description-length 25
+	which-key-allow-imprecise-window-fit t
+	which-key-separator "  " ))
+#+end_src
 

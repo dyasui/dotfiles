@@ -95,80 +95,94 @@
 ;; Setting RETURN key in org-mode to follow links
   (setq org-return-follows-link  t)
 
-(use-package general
+(require 'windmove)
+
+;;;###autoload
+(defun buf-move-up ()
+  "Swap the current buffer and the buffer above the split.
+If there is no split, ie now window above the current one, an
+error is signaled."
+;;  "Switches between the current buffer, and the buffer above the
+;;  split, if possible."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'up))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No window above this one")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+;;;###autoload
+(defun buf-move-down ()
+"Swap the current buffer and the buffer under the split.
+If there is no split, ie now window under the current one, an
+error is signaled."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'down))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (or (null other-win) 
+            (string-match "^ \\*Minibuf" (buffer-name (window-buffer other-win))))
+        (error "No window under this one")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+;;;###autoload
+(defun buf-move-left ()
+"Swap the current buffer and the buffer on the left of the split.
+If there is no split, ie now window on the left of the current
+one, an error is signaled."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'left))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No left split")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+;;;###autoload
+(defun buf-move-right ()
+"Swap the current buffer and the buffer on the right of the split.
+If there is no split, ie now window on the right of the current
+one, an error is signaled."
+  (interactive)
+  (let* ((other-win (windmove-find-other-window 'right))
+	 (buf-this-buf (window-buffer (selected-window))))
+    (if (null other-win)
+        (error "No right split")
+      ;; swap top with this one
+      (set-window-buffer (selected-window) (window-buffer other-win))
+      ;; move this one to top
+      (set-window-buffer other-win buf-this-buf)
+      (select-window other-win))))
+
+(use-package doom-themes
   :ensure t
   :config
-  (general-evil-setup)
-  ;; set space bar as global leader key
-  (general-create-definer dy/leader-keys
-    :states '(normal insert visual emacs)
-    :keymaps 'override
-    :prefix "SPC" ;; set leader
-    :global-prefix "C-SPC") ;; access leader in insert mode
+  (load-theme 'doom-one t)
+  (doom-themes-org-config))
+;; solaire darkens non-standard buffers' backgrounds
+(use-package solaire-mode
+  :ensure t
+  :config
+  (solaire-global-mode +1))
+;; doom's fancy modeline
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
 
-  (dy/leader-keys
-    "." '(find-file :wk "Find file")
-    "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-    "TAB TAB" '(comment-line :wk "Comment lines"))
-
-  (dy/leader-keys
-    "b" '(:ignore t :wk "buffer")
-    "b s" '(switch-to-buffer :wk "Switch buffer")
-    "b q" '(kill-this-buffer :wk "Kill buffer")
-    "b n" '(next-buffer :wk "Next buffer")
-    "b p" '(previous-buffer :wk "Previous buffer")
-    "b r" '(revert-buffer :wk "Reload buffer")
-    "b i" '(ibuffer :wk "Buffer Index"))
-
-  (dy/leader-keys
-    "e" '(:ignore t :wk "Evaluate")
-    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
-    "e e" '(eval-expression :wk "Evaluate an elisp expression")
-    "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-    "e r" '(eval-region :wk "Evaluate elisp in region"))
-
-  (dy/leader-keys
-    "h" '(:ignore t :wk "Help")
-    "h f" '(describe-function :wk "Describe function")
-    "h v " '(describe-variable :wk "Describe variable")
-    "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
-
-  (dy/leader-keys
-   "t" '(:ignore t :wk "Toggle")
-   "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-   "t t" '(visual-line-mode :wk "Toggle truncated lines"))
-
-
-)
-
-(set-face-attribute 'default nil
-		    :font "JetBrainsMono Nerd Font"
-		    :height 200
-		    :weight 'medium)
-(set-face-attribute 'variable-pitch nil
-		    :font "Noto Sans"
-		    :height 200
-		    :weight 'medium)
-(set-face-attribute 'fixed-pitch nil
-		    :font "JetBrainsMono Nerd Font"
-		    :height 200
-		    :weight 'medium)
-;; italicizes commented text and keywords
-(set-face-attribute 'font-lock-comment-face nil
-		    :slant 'italic)
-(set-face-attribute 'font-lock-keyword-face nil
-		    :slant 'italic)
-;;sets default font on all graphical frames after restarting emacs
-(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
-
-;;set default line spacing
-(setq-default line-spacing 0.12)
-
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+;; Must be used *after* the theme is loaded
+;; (custom-set-faces
+;;   `(org-block ((t (:background , #16161D))))
+;; )
 
 (use-package ess
   :ensure t
@@ -207,12 +221,126 @@
   (setq julia-repl-switches "-q -t 4,1")
   (set-popup-rule! "^\\*julia\\:.*\\*$" :actions '(display-buffer-pop-up-frame . inhibit-switch-frame)))
 
+(set-face-attribute 'default nil
+		    :font "JetBrainsMono Nerd Font"
+		    :height 200
+		    :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+		    :font "Noto Sans"
+		    :height 200
+		    :weight 'medium)
+(set-face-attribute 'fixed-pitch nil
+		    :font "JetBrainsMono Nerd Font"
+		    :height 200
+		    :weight 'medium)
+;; italicizes commented text and keywords
+(set-face-attribute 'font-lock-comment-face nil
+		    :slant 'italic)
+(set-face-attribute 'font-lock-keyword-face nil
+		    :slant 'italic)
+;;sets default font on all graphical frames after restarting emacs
+(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
+
+;;set default line spacing
+(setq-default line-spacing 0.12)
+
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
+(use-package general
+  :ensure t
+  :config
+  (general-evil-setup)
+  ;; set space bar as global leader key
+  (general-create-definer dy/leader-keys
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+    :prefix "SPC" ;; set leader
+    :global-prefix "C-SPC") ;; access leader in insert mode
+
+  (dy/leader-keys
+    "." '(find-file :wk "Find file")
+    "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+    "f r" '(recentf-open-files :wk "Find recent files")
+    "TAB TAB" '(comment-line :wk "Comment lines"))
+
+  (dy/leader-keys
+    "b" '(:ignore t :wk "buffer")
+    "b s" '(switch-to-buffer :wk "Switch buffer")
+    "b q" '(kill-this-buffer :wk "Kill buffer")
+    "b n" '(next-buffer :wk "Next buffer")
+    "b p" '(previous-buffer :wk "Previous buffer")
+    "b r" '(revert-buffer :wk "Reload buffer")
+    "b i" '(ibuffer :wk "Buffer Index"))
+
+  (dy/leader-keys
+    "e" '(:ignore t :wk "Evaluate")
+    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+    "e e" '(eval-expression :wk "Evaluate an elisp expression")
+    "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+    "e r" '(eval-region :wk "Evaluate elisp in region"))
+
+  (dy/leader-keys
+    "h" '(:ignore t :wk "Help")
+    "h f" '(describe-function :wk "Describe function")
+    "h v " '(describe-variable :wk "Describe variable")
+    "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
+
+  (dy/leader-keys
+   "t" '(:ignore t :wk "Toggle")
+   "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+   "t t" '(visual-line-mode :wk "Toggle truncated lines"))
+
+  (dy/leader-keys
+   "w" '(:ignore t :wk "Windows")
+   ;; Window splits
+   "w q" '(evil-window-delete :wk "Close window")
+   "w n" '(evil-window-new :wk "New window")
+   "w s" '(evil-window-split :wk "Horizontal split window")
+   "w v" '(evil-window-vsplit :wk "Vertical split window")
+   ;; Window motions
+   "w h" '(evil-window-left :wk "Window left")
+   "w j" '(evil-window-down :wk "Window down")
+   "w k" '(evil-window-up :wk "Window up")
+   "w l" '(evil-window-right :wk "Window right")
+   "w w" '(evil-window-next :wk "Goto next window")
+   ;; Move Windows
+   "w H" '(buf-move-left :wk "Buffer move left")
+   "w J" '(buf-move-down :wk "Buffer move down")
+   "w K" '(buf-move-up :wk "Buffer move up")
+   "w L" '(buf-move-right :wk "Buffer move right"))
+)
+
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
 (global-display-line-numbers-mode 1)
 (global-visual-line-mode t)
+
+(fido-vertical-mode t)
+;; (icomplete-vertical-mode t)
+
+(use-package toc-org
+:ensure t
+:commands toc-org-enable
+:init (add-hook 'org-mode-hook 'toc-org-enable))
+
+(add-hook 'org-mode-hook 'org-indent-mode)
+(use-package org-bullets
+  :ensure t)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+(electric-indent-mode -1)
+
+(require 'org-tempo)
+
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
 
 (use-package which-key
 :init
@@ -230,37 +358,3 @@
       which-key-max-description-length 25
       which-key-allow-imprecise-window-fit t
       which-key-separator "  " ))
-
-(use-package doom-themes
-  :ensure t
-  :config
-  (load-theme 'doom-one t)
-  (doom-themes-org-config))
-;; solaire darkens non-standard buffers' backgrounds
-(use-package solaire-mode
-  :ensure t
-  :config
-  (solaire-global-mode +1))
-;; doom's fancy modeline
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1))
-
-;; Must be used *after* the theme is loaded
-;; (custom-set-faces
-;;   `(org-block ((t (:background , #16161D))))
-;; )
-
-(use-package toc-org
-:ensure t
-:commands toc-org-enable
-:init (add-hook 'org-mode-hook 'toc-org-enable))
-
-(add-hook 'org-mode-hook 'org-indent-mode)
-(use-package org-bullets
-  :ensure t)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-(electric-indent-mode -1)
-
-(require 'org-tempo)
