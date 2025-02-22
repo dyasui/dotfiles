@@ -1,0 +1,10 @@
+ls
+cat config.oef
+cat config.org
+ls
+la
+ls -a
+ls -ac
+ls -al
+1 + 2
+(add 1 2)

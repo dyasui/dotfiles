@@ -164,6 +164,25 @@ one, an error is signaled."
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
 
+(use-package dashboard
+:ensure t
+:init
+(setq initial-buffer-choice 'dashboard-open)
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-banner-logo-title "Welcome to Emacs")
+(setq dashboard-startup-banner 'logo)
+(setq dashboard-center-content t)
+(setq dashboard-items '((recents . 5)
+                      (agenda . 5)
+                      (bookmarks . 3)
+                      (projects . 3)
+                      (registers . 3)))
+;; (dashboard-modify-heading-icons '((recents . "file-text")
+;;                                  (bookmarks . "book")))
+:config
+(dashboard-setup-startup-hook))
+
 (use-package doom-themes
   :ensure t
   :config
@@ -341,6 +360,7 @@ one, an error is signaled."
 (require 'org-tempo)
 
 (use-package rainbow-mode
+  :ensure t
   :hook org-mode prog-mode)
 
 (require 'recentf)

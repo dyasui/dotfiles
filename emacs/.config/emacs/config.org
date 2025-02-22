@@ -8,6 +8,7 @@
   - [[#elpaca-package-manager][Elpaca Package Manager]]
   - [[#evil-mode][Evil Mode]]
 - [[#buffer-move][BUFFER-MOVE]]
+- [[#dashboard][DASHBOARD]]
 - [[#doom-color-themes][DOOM color themes]]
   - [[#further-customization][Further customization]]
 - [[#ess---r-and-julia-code-integration][ESS - R and julia code integration]]
@@ -214,6 +215,28 @@ one, an error is signaled."
       ;; move this one to top
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
+#+end_src
+* DASHBOARD
+Extensible dashboard to show recent files, bookmarks, agenda items, etc on startup
+#+begin_src emacs-lisp
+  (use-package dashboard
+  :ensure t
+  :init
+  (setq initial-buffer-choice 'dashboard-open)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "Welcome to Emacs")
+  (setq dashboard-startup-banner 'logo)
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents . 5)
+                        (agenda . 5)
+                        (bookmarks . 3)
+                        (projects . 3)
+                        (registers . 3)))
+  ;; (dashboard-modify-heading-icons '((recents . "file-text")
+  ;;                                  (bookmarks . "book")))
+  :config
+  (dashboard-setup-startup-hook))
 #+end_src
 * DOOM color themes
 #+begin_src emacs-lisp
@@ -452,14 +475,13 @@ org-tempo is not enabled by default, but is an extension to org-mode which allow
 
 #+end_src
 
-
-
 * RAINBOW MODE
 Display the actual color as a background for any hex color value (ex. #ffffff).
 This code enables rainbow-mode in all programming nodes as well as org-mode.
 #+begin_src emacs-lisp
-(use-package rainbow-mode
-  :hook org-mode prog-mode)
+  (use-package rainbow-mode
+    :ensure t
+    :hook org-mode prog-mode)
 #+end_src
 * RECENTF
 Use =recentf-open-files= to see a list of recently opened files
@@ -501,8 +523,8 @@ Use =recentf-open-files= to see a list of recently opened files
 * THEME
 Working on a variation of the kanagawa color theme.
 #+begin_src emacs-lisp
-(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-(load-theme 'kanagawa t)
+  (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+  (load-theme 'kanagawa t)
 #+end_src
 * WHICH-KEY
 #+begin_src emacs-lisp
