@@ -1,0 +1,16 @@
+/home/dante/.dotfiles/.gitignore
+/home/dante/.dotfiles/#.gitignore#
+/home/dante/.dotfiles/emacs/.config/emacs/config.org
+/home/dante/.dotfiles/emacs/.config/emacs/#config.org#
+/home/dante/.dotfiles/emacs/.config/emacs/themes/kanagawa-theme.el
+/home/dante/.dotfiles/emacs/.config/emacs/themes/#kanagawa-theme.el#
+/home/dante/Logseq/pages/kanagawa-theme.org
+/home/dante/Logseq/pages/#kanagawa-theme.org#
+/home/dante/.dotfiles/emacs/.config/emacs/config.el
+/home/dante/.dotfiles/emacs/.config/emacs/#config.el#
+/home/dante/.dotfiles/README.md
+/home/dante/.dotfiles/#README.md#
+/home/dante/Logseq/pages/julia.org
+/home/dante/Logseq/pages/#julia.org#
+/usr/local/share/emacs/29.2/lisp/icomplete.el.gz
+/usr/local/share/emacs/29.2/lisp/#icomplete.el.gz#
