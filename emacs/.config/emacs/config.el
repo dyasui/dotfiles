@@ -359,6 +359,10 @@ one, an error is signaled."
 
 (require 'org-tempo)
 
+(use-package projectile
+:config
+(projectile-mode 1))
+
 (use-package rainbow-mode
   :ensure t
   :hook org-mode prog-mode)
