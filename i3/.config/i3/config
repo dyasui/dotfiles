@@ -9,7 +9,7 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod1
+set $mod Mod4
 default_border pixel 4
 hide_edge_borders smart
 smart_borders on
@@ -20,8 +20,8 @@ focus_follows_mouse no
 focus_wrapping no
 
 # gaps between windows
-gaps inner 4px
-gaps outer 4px
+gaps inner 8px
+gaps outer 8px
 # smart_gaps inverse_outer
 
 # Font for window titles. Will also be used by the bar unless a different font
