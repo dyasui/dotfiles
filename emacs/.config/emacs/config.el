@@ -1,4 +1,4 @@
-  (defvar elpaca-installer-version 0.9)
+(defvar elpaca-installer-version 0.9)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -73,6 +73,7 @@
           evil-want-keybinding nil
           evil-vsplit-window-right t
           evil-split-window-below t
+	      evil-want-C-u-scroll t ;; override emacs-like use of C-u to repeat
           evil-undo-system 'undo-redo)  ;; Adds vim-like C-r redo functionality
     (evil-mode))
 
@@ -164,52 +165,66 @@ one, an error is signaled."
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
 
-  (use-package dashboard
-  :ensure t
-  :init
-  (setq initial-buffer-choice 'dashboard-open)
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "Welcome to Emacs")
-  (setq dashboard-startup-banner 'logo)
-  (setq dashboard-center-content t)
-  (setq dashboard-items '((recents . 5)
-                        (agenda . 5)
-                        (bookmarks . 3)
-                        (projects . 3)
-                        (registers . 3)))
-  ;; (dashboard-modify-heading-icons '((recents . "file-text")
-  ;;                                  (bookmarks . "book")))
-  :config
-  (dashboard-setup-startup-hook))
+(use-package company
+  :defer 2
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .a)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
 
-  (use-package doom-themes
-    :ensure t
-    :config
-    (load-theme 'doom-one t)
-    (doom-themes-org-config))
-  ;; solaire darkens non-standard buffers' backgrounds
-  (use-package solaire-mode
-    :ensure t
-    :config
-    (solaire-global-mode +1))
-  ;; doom's fancy modeline
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1))
+(use-package company-box
+  :after company
+  :hook (company-mode . company-box-mode))
+
+(use-package dashboard
+:ensure t
+:init
+(setq initial-buffer-choice 'dashboard-open)
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-banner-logo-title "Welcome to Emacs")
+(setq dashboard-startup-banner 'logo)
+(setq dashboard-center-content t)
+(setq dashboard-items '((recents . 5)
+                      (agenda . 5)
+                      (bookmarks . 3)
+                      (projects . 3)
+                      (registers . 3)))
+;; (dashboard-modify-heading-icons '((recents . "file-text")
+;;                                  (bookmarks . "book")))
+:config
+(dashboard-setup-startup-hook))
+
+(use-package doom-themes
+  :ensure t
+  :config
+  (load-theme 'doom-one t)
+  (doom-themes-org-config))
+;; solaire darkens non-standard buffers' backgrounds
+(use-package solaire-mode
+  :ensure t
+  :config
+  (solaire-global-mode +1))
+;; doom's fancy modeline
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
 
 ;; Must be used *after* the theme is loaded
 ;; (custom-set-faces
 ;;   `(org-block ((t (:background , #16161D))))
 ;; )
 
-  (use-package ess
-    :ensure t
-    :config
-    (load "ess-autoloads")
-    (load-library "ob-R")
-    (load-library "ob-julia")
-    (setq org-confirm-babel-evaluate nil))
+(use-package ess
+  :ensure t
+  :config
+  (load "ess-autoloads")
+  (load-library "ob-R")
+  (load-library "ob-julia")
+  (setq org-confirm-babel-evaluate nil))
 
 (setq treesit-language-source-alist
       '((julia "https://github.com/tree-sitter/tree-sitter-julia")))
@@ -240,132 +255,133 @@ one, an error is signaled."
   (setq julia-repl-switches "-q -t 4,1")
   (set-popup-rule! "^\\*julia\\:.*\\*$" :actions '(display-buffer-pop-up-frame . inhibit-switch-frame)))
 
-  (set-face-attribute 'default nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 200
-		      :weight 'medium)
-  (set-face-attribute 'variable-pitch nil
-		      :font "Noto Sans"
-		      :height 200
-		      :weight 'medium)
-  (set-face-attribute 'fixed-pitch nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 200
-		      :weight 'medium)
-  ;; italicizes commented text and keywords
-  (set-face-attribute 'font-lock-comment-face nil
-		      :slant 'italic)
-  (set-face-attribute 'font-lock-keyword-face nil
-		      :slant 'italic)
-  ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
+(set-face-attribute 'default nil
+		    :font "JetBrainsMono Nerd Font"
+		    :height 200
+		    :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+		    :font "Noto Sans"
+		    :height 200
+		    :weight 'medium)
+(set-face-attribute 'fixed-pitch nil
+		    :font "JetBrainsMono Nerd Font"
+		    :height 200
+		    :weight 'medium)
+;; italicizes commented text and keywords
+(set-face-attribute 'font-lock-comment-face nil
+		    :slant 'italic)
+(set-face-attribute 'font-lock-keyword-face nil
+		    :slant 'italic)
+;;sets default font on all graphical frames after restarting emacs
+(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
 
-  ;;set default line spacing
-  (setq-default line-spacing 0.12)
+;;set default line spacing
+(setq-default line-spacing 0.12)
 
-  (global-set-key (kbd "C-=") 'text-scale-increase)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
-  (use-package general
-    :ensure t
-    :config
-    (general-evil-setup)
-    ;; set space bar as global leader key
-    (general-create-definer dy/leader-keys
-      :states '(normal insert visual emacs)
-      :keymaps 'override
-      :prefix "SPC" ;; set leader
-      :global-prefix "C-SPC") ;; access leader in insert mode
+(use-package general
+  :ensure t
+  :config
+  (general-evil-setup)
+  ;; set space bar as global leader key
+  (general-create-definer dy/leader-keys
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+    :prefix "SPC" ;; set leader
+    :global-prefix "C-SPC") ;; access leader in insert mode
 
-    (dy/leader-keys
-      "." '(find-file :wk "Find file")
-      "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-      "f r" '(recentf-open-files :wk "Find recent files")
-      "c c" '(comment-line :wk "Comment lines"))
+  (dy/leader-keys
+    "SPC" '(execute-extended-command :wk "M-x")
+    "f f" '(find-file :wk "Find file")
+    "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+    "f r" '(recentf-open-files :wk "Find recent files")
+    "c c" '(comment-line :wk "Comment lines"))
 
-    (dy/leader-keys
-      "b" '(:ignore t :wk "buffer")
-      "b s" '(switch-to-buffer :wk "Switch buffer")
-      "b q" '(kill-this-buffer :wk "Kill buffer")
-      "b n" '(next-buffer :wk "Next buffer")
-      "b p" '(previous-buffer :wk "Previous buffer")
-      "b r" '(revert-buffer :wk "Reload buffer")
-      "b i" '(ibuffer :wk "Buffer Index"))
+  (dy/leader-keys
+    "b" '(:ignore t :wk "buffer")
+    "b s" '(switch-to-buffer :wk "Switch buffer")
+    "b q" '(kill-this-buffer :wk "Kill buffer")
+    "b n" '(next-buffer :wk "Next buffer")
+    "b p" '(previous-buffer :wk "Previous buffer")
+    "b r" '(revert-buffer :wk "Reload buffer")
+    "b i" '(ibuffer :wk "Buffer Index"))
 
-    (dy/leader-keys
-      "e" '(:ignore t :wk "Eshell/Evaluate")
-      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-      "e d" '(eval-defun :wk "Evaluate defun containing or after point")
-      "e e" '(eval-expression :wk "Evaluate an elisp expression")
-      "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-      "e r" '(eval-region :wk "Evaluate elisp in region")
-      "e s" '(eshell :wk "Eshell"))
+  (dy/leader-keys
+    "e" '(:ignore t :wk "Eshell/Evaluate")
+    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+    "e e" '(eval-expression :wk "Evaluate an elisp expression")
+    "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+    "e r" '(eval-region :wk "Evaluate elisp in region")
+    "e s" '(eshell :wk "Eshell"))
 
-    (dy/leader-keys
-      "h" '(:ignore t :wk "Help")
-      "h f" '(describe-function :wk "Describe function")
-      "h v " '(describe-variable :wk "Describe variable")
-      "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
+  (dy/leader-keys
+    "h" '(:ignore t :wk "Help")
+    "h f" '(describe-function :wk "Describe function")
+    "h v " '(describe-variable :wk "Describe variable")
+    "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
 
-    (dy/leader-keys
-      "o" '(:ignore t :wk "Org")
-      "o a" '(org-agenda :wk "Org agenda")
-      "o e" '(org-export-dispatch :wk "Org export dispatch")
-      "o i" '(org-toggle-item :wk "Org toggle item")
-      "o t" '(org-todo :wk "Org todo")
-      "o b t" '(org-babel-tangle :wk "Org babel tangle")
-      "o T" '(org-todo-list :wk "Org todo list"))
+  (dy/leader-keys
+    "o" '(:ignore t :wk "Org")
+    "o a" '(org-agenda :wk "Org agenda")
+    "o e" '(org-export-dispatch :wk "Org export dispatch")
+    "o i" '(org-toggle-item :wk "Org toggle item")
+    "o t" '(org-todo :wk "Org todo")
+    "o b t" '(org-babel-tangle :wk "Org babel tangle")
+    "o T" '(org-todo-list :wk "Org todo list"))
 
-    (dy/leader-keys
-      "o d" '(:ignore t :wk "Dates/times")
-      "o d t" '(org-time-stamp :wk "Org time stamp"))
-      
-    (dy/leader-keys
-     "t" '(:ignore t :wk "Toggle")
-     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-     "t t" '(visual-line-mode :wk "Toggle truncated lines")
-     "t v" '(vterm-toggle :wk "Toggle vterm"))
+  (dy/leader-keys
+    "o d" '(:ignore t :wk "Dates/times")
+    "o d t" '(org-time-stamp :wk "Org time stamp"))
 
-    (dy/leader-keys
-     "w" '(:ignore t :wk "Windows")
-     ;; Window splits
-     "w q" '(evil-window-delete :wk "Close window")
-     "w n" '(evil-window-new :wk "New window")
-     "w s" '(evil-window-split :wk "Horizontal split window")
-     "w v" '(evil-window-vsplit :wk "Vertical split window")
-     ;; Window motions
-     "w h" '(evil-window-left :wk "Window left")
-     "w j" '(evil-window-down :wk "Window down")
-     "w k" '(evil-window-up :wk "Window up")
-     "w l" '(evil-window-right :wk "Window right")
-     "w w" '(evil-window-next :wk "Goto next window")
-     ;; Move Windows
-     "w H" '(buf-move-left :wk "Buffer move left")
-     "w J" '(buf-move-down :wk "Buffer move down")
-     "w K" '(buf-move-up :wk "Buffer move up")
-     "w L" '(buf-move-right :wk "Buffer move right"))
+  (dy/leader-keys
+   "t" '(:ignore t :wk "Toggle")
+   "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+   "t t" '(visual-line-mode :wk "Toggle truncated lines")
+   "t v" '(vterm-toggle :wk "Toggle vterm"))
 
-    (dy/leader-keys
-      "TAB" '(:ignore t :wk "Tabs")
-      "TAB o" '(tab-new :wk "Open new tab")
-      "TAB c" '(tab-close :wk "Close tab")
-      "TAB n" '(tab-next :wk "Next tab")
-      "TAB p" '(tab-previous :wk "Previous tab"))
-  )
+  (dy/leader-keys
+   "w" '(:ignore t :wk "Windows")
+   ;; Window splits
+   "w q" '(evil-window-delete :wk "Close window")
+   "w n" '(evil-window-new :wk "New window")
+   "w s" '(evil-window-split :wk "Horizontal split window")
+   "w v" '(evil-window-vsplit :wk "Vertical split window")
+   ;; Window motions
+   "w h" '(evil-window-left :wk "Window left")
+   "w j" '(evil-window-down :wk "Window down")
+   "w k" '(evil-window-up :wk "Window up")
+   "w l" '(evil-window-right :wk "Window right")
+   "w w" '(evil-window-next :wk "Goto next window")
+   ;; Move Windows
+   "w H" '(buf-move-left :wk "Buffer move left")
+   "w J" '(buf-move-down :wk "Buffer move down")
+   "w K" '(buf-move-up :wk "Buffer move up")
+   "w L" '(buf-move-right :wk "Buffer move right"))
+
+  (dy/leader-keys
+    "TAB" '(:ignore t :wk "Tabs")
+    "TAB o" '(tab-new :wk "Open new tab")
+    "TAB c" '(tab-close :wk "Close tab")
+    "TAB n" '(tab-next :wk "Next tab")
+    "TAB p" '(tab-previous :wk "Previous tab"))
+)
 
 (use-package gptel
   :ensure t)
 
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 
-  (global-display-line-numbers-mode 1)
-  (global-visual-line-mode t)
+(global-display-line-numbers-mode 1)
+(global-visual-line-mode t)
 
-  (fido-vertical-mode t)
+(fido-vertical-mode t)
 ;; (icomplete-vertical-mode t)
 
 (use-package toc-org
@@ -378,63 +394,64 @@ one, an error is signaled."
   :ensure t)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-  (setq electric-indent-mode -1)
-  (setq org-src-preserve-indentation t)
+(setq electric-indent-mode -1)
+(setq org-src-preserve-indentation t)
+(setq org-edit-src-content-indentation 0)
 
-  (require 'org-tempo)
+(require 'org-tempo)
 
-  (use-package projectile
+(use-package projectile
   :config
   (projectile-mode 1))
 
-  (use-package rainbow-mode
-    :ensure t
-    :hook org-mode prog-mode)
+(use-package rainbow-mode
+  :ensure t
+  :hook org-mode prog-mode)
 
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 
-  (use-package vterm
-    :ensure t)
+(use-package vterm
+  :ensure t)
 
-  (use-package vterm-toggle
-    :ensure t
-    :after vterm
-    :config
-    (setq vterm-toggle-fullscreen-p nil)
-    (setq vterm-toggle-scope 'project)
-    (add-to-list 'display-buffer-alist
-       '((lambda (buffer-or-name _)
-       (let ((buffer (get-buffer buffer-or-name)))
-	 (with-current-buffer buffer
-	   (or (equal major-mode 'vterm-mode)
-	       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-    (display-buffer-reuse-window display-buffer-at-bottom)
-    ;;(display-buffer-reuse-window display-buffer-in-direction)
-    ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-    ;;(direction . bottom)
-    ;;(dedicated . t) ;dedicated is supported in emacs27
-    (reusable-frames . visible)
-    (window-height . 0.3)))
-    )
-
-  (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-  (load-theme 'kanagawa t)
-
-  (use-package which-key
-  :init
-  (which-key-mode 1)
+(use-package vterm-toggle
+  :ensure t
+  :after vterm
   :config
-  (setq which-key-side-window-location 'bottom
-	which-key-sort-order #'which-key-key-order-alpha
-	which-key-sort-uppercase-first nil
-	which-key-add-column-padding 1
-	which-key-max-display-columns nil
-	which-key-min-display-lines 6
-	which-key-side-window-slot -10
-	which-key-side-window-max-height 0.25
-	which-key-idle-delay 0.8
-	which-key-max-description-length 25
-	which-key-allow-imprecise-window-fit nil
-	which-key-separator "  " ))
+  (setq vterm-toggle-fullscreen-p nil)
+  (setq vterm-toggle-scope 'project)
+  (add-to-list 'display-buffer-alist
+     '((lambda (buffer-or-name _)
+     (let ((buffer (get-buffer buffer-or-name)))
+ (with-current-buffer buffer
+   (or (equal major-mode 'vterm-mode)
+       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+  (display-buffer-reuse-window display-buffer-at-bottom)
+  ;;(display-buffer-reuse-window display-buffer-in-direction)
+  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+  ;;(direction . bottom)
+  ;;(dedicated . t) ;dedicated is supported in emacs27
+  (reusable-frames . visible)
+  (window-height . 0.3)))
+  )
+
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+(load-theme 'kanagawa t)
+
+(use-package which-key
+:init
+(which-key-mode 1)
+:config
+(setq which-key-side-window-location 'bottom
+      which-key-sort-order #'which-key-key-order-alpha
+      which-key-sort-uppercase-first nil
+      which-key-add-column-padding 1
+      which-key-max-display-columns nil
+      which-key-min-display-lines 6
+      which-key-side-window-slot -10
+      which-key-side-window-max-height 0.25
+      which-key-idle-delay 0.8
+      which-key-max-description-length 25
+      which-key-allow-imprecise-window-fit nil
+      which-key-separator "  " ))

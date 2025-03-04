@@ -8,6 +8,7 @@
   - [[#elpaca-package-manager][Elpaca Package Manager]]
   - [[#evil-mode][Evil Mode]]
 - [[#buffer-move][BUFFER-MOVE]]
+- [[#company][COMPANY]]
 - [[#dashboard][DASHBOARD]]
 - [[#doom-color-themes][DOOM color themes]]
   - [[#further-customization][Further customization]]
@@ -123,6 +124,7 @@ To get the vim bindings to work in other types of buffers (like dired and ibuffe
           evil-want-keybinding nil
           evil-vsplit-window-right t
           evil-split-window-below t
+	      evil-want-C-u-scroll t ;; override emacs-like use of C-u to repeat
           evil-undo-system 'undo-redo)  ;; Adds vim-like C-r redo functionality
     (evil-mode))
 
@@ -217,6 +219,26 @@ one, an error is signaled."
       ;; move this one to top
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
+#+end_src
+* COMPANY
+[[https://company-mode.github.io/manual/][Company manual]]
+Text completion framework to "/complete anything/" in Emacs.
+Completion starts after typing a few letters in any text buffer. Use M-n and M-p to select, <return> to complete, or <tab> to complete the common part.
+=company-box= makes the completion window look nicer.
+#+begin_src emacs-lisp
+(use-package company
+  :defer 2
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .a)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
+
+(use-package company-box
+  :after company
+  :hook (company-mode . company-box-mode))
 #+end_src
 * DASHBOARD
 Extensible dashboard to show recent files, bookmarks, agenda items, etc on startup
@@ -363,7 +385,8 @@ Emacs uses various fonts and font styles in different places.
       :global-prefix "C-SPC") ;; access leader in insert mode
 
     (dy/leader-keys
-      "." '(find-file :wk "Find file")
+      "SPC" '(execute-extended-command :wk "M-x")
+      "f f" '(find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
       "f r" '(recentf-open-files :wk "Find recent files")
       "c c" '(comment-line :wk "Comment lines"))
@@ -489,20 +512,21 @@ Org-bullets look nicer than asterisks
 Whenever I would add a new line inside a source block in org-mode, everything inside would automatically get indented which was really annoying.
 By default =electric-indent-mode= is turned on in Emacs, so we have to turn it off.
 #+begin_src emacs-lisp
-  (setq electric-indent-mode -1)
-  (setq org-src-preserve-indentation t)
+(setq electric-indent-mode -1)
+(setq org-src-preserve-indentation t)
+(setq org-edit-src-content-indentation 0)
 #+end_src
 
 ** Org-tempo source blocks
 org-tempo is not enabled by default, but is an extension to org-mode which allows a quick way to add source blocks.
 #+begin_src emacs-lisp
-  (require 'org-tempo)
+(require 'org-tempo)
 #+end_src
 
 * PROJECTILE
 Project interaction library.
 #+begin_src emacs-lisp
-  (use-package projectile
+(use-package projectile
   :config
   (projectile-mode 1))
 #+end_src
@@ -510,9 +534,9 @@ Project interaction library.
 Display the actual color as a background for any hex color value (ex. #ffffff).
 This code enables rainbow-mode in all programming nodes as well as org-mode.
 #+begin_src emacs-lisp
-  (use-package rainbow-mode
-    :ensure t
-    :hook org-mode prog-mode)
+(use-package rainbow-mode
+  :ensure t
+  :hook org-mode prog-mode)
 #+end_src
 * RECENTF
 Use =recentf-open-files= to see a list of recently opened files
@@ -525,31 +549,31 @@ Use =recentf-open-files= to see a list of recently opened files
 ** Eshell
 ** Vterm
 #+begin_src emacs-lisp
-  (use-package vterm
-    :ensure t)
+(use-package vterm
+  :ensure t)
 #+end_src
 ** Vterm-Toggle
 #+begin_src emacs-lisp
-  (use-package vterm-toggle
-    :ensure t
-    :after vterm
-    :config
-    (setq vterm-toggle-fullscreen-p nil)
-    (setq vterm-toggle-scope 'project)
-    (add-to-list 'display-buffer-alist
-       '((lambda (buffer-or-name _)
-       (let ((buffer (get-buffer buffer-or-name)))
-	 (with-current-buffer buffer
-	   (or (equal major-mode 'vterm-mode)
-	       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-    (display-buffer-reuse-window display-buffer-at-bottom)
-    ;;(display-buffer-reuse-window display-buffer-in-direction)
-    ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-    ;;(direction . bottom)
-    ;;(dedicated . t) ;dedicated is supported in emacs27
-    (reusable-frames . visible)
-    (window-height . 0.3)))
-    )
+(use-package vterm-toggle
+  :ensure t
+  :after vterm
+  :config
+  (setq vterm-toggle-fullscreen-p nil)
+  (setq vterm-toggle-scope 'project)
+  (add-to-list 'display-buffer-alist
+     '((lambda (buffer-or-name _)
+     (let ((buffer (get-buffer buffer-or-name)))
+ (with-current-buffer buffer
+   (or (equal major-mode 'vterm-mode)
+       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+  (display-buffer-reuse-window display-buffer-at-bottom)
+  ;;(display-buffer-reuse-window display-buffer-in-direction)
+  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+  ;;(direction . bottom)
+  ;;(dedicated . t) ;dedicated is supported in emacs27
+  (reusable-frames . visible)
+  (window-height . 0.3)))
+  )
 #+end_src
 * THEME
 Working on a variation of the kanagawa color theme.
