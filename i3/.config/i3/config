@@ -10,7 +10,7 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
-default_border pixel 4
+default_border pixel 8
 hide_edge_borders smart
 smart_borders on
 default_orientation horizontal
@@ -61,7 +61,7 @@ bindsym Mod1+e exec emacs
 bindsym $mod+m exec --no-startup-id MultiMC
 
 # kill focused window
-bindsym Mod1+q kill
+bindsym $mod+q kill
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec --no-startup-id dmenu_run
@@ -124,9 +124,9 @@ set $ws3 "3: 󰗚 "
 set $ws4 "4:  " 
 set $ws5 "5:  " 
 set $ws6 "6:  " 
-set $ws7 "7:  " 
-set $ws8 "8:  " 
-set $ws9 "9:  " 
+set $ws7 "7: 󱉟 " 
+set $ws8 "8:  " 
+set $ws9 "9:  " 
 set $ws10 "10:  "
 
 workspace $ws1 output DisplayPort-0
