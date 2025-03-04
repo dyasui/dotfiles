@@ -7,3 +7,4 @@ zsh/.zshrc
 emacs/.config/emacs/elpaca/
 emacs/.config/emacs/auto-save-list/
 emacs/.config/emacs/eln-cache/
+emacs/.config/emacs/elpa/

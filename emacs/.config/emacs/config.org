@@ -16,6 +16,7 @@
   - [[#setting-the-font-face][Setting the font face]]
   - [[#zooming-inout][Zooming In/Out]]
 - [[#general-keybindings][General Keybindings]]
+- [[#gptel][GPTEL]]
 - [[#gui-tweaks][GUI tweaks]]
   - [[#disable-menubar-toolbars-scrollbars][Disable Menubar, toolbars, scrollbars]]
   - [[#show-line-numbers-and-truncated-lines][Show Line numbers and truncated lines]]
@@ -365,7 +366,7 @@ Emacs uses various fonts and font styles in different places.
       "." '(find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
       "f r" '(recentf-open-files :wk "Find recent files")
-      "TAB TAB" '(comment-line :wk "Comment lines"))
+      "c c" '(comment-line :wk "Comment lines"))
 
     (dy/leader-keys
       "b" '(:ignore t :wk "buffer")
@@ -392,6 +393,19 @@ Emacs uses various fonts and font styles in different places.
       "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
 
     (dy/leader-keys
+      "o" '(:ignore t :wk "Org")
+      "o a" '(org-agenda :wk "Org agenda")
+      "o e" '(org-export-dispatch :wk "Org export dispatch")
+      "o i" '(org-toggle-item :wk "Org toggle item")
+      "o t" '(org-todo :wk "Org todo")
+      "o b t" '(org-babel-tangle :wk "Org babel tangle")
+      "o T" '(org-todo-list :wk "Org todo list"))
+
+    (dy/leader-keys
+      "o d" '(:ignore t :wk "Dates/times")
+      "o d t" '(org-time-stamp :wk "Org time stamp"))
+      
+    (dy/leader-keys
      "t" '(:ignore t :wk "Toggle")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
      "t t" '(visual-line-mode :wk "Toggle truncated lines")
@@ -415,9 +429,21 @@ Emacs uses various fonts and font styles in different places.
      "w J" '(buf-move-down :wk "Buffer move down")
      "w K" '(buf-move-up :wk "Buffer move up")
      "w L" '(buf-move-right :wk "Buffer move right"))
+
+    (dy/leader-keys
+      "TAB" '(:ignore t :wk "Tabs")
+      "TAB o" '(tab-new :wk "Open new tab")
+      "TAB c" '(tab-close :wk "Close tab")
+      "TAB n" '(tab-next :wk "Next tab")
+      "TAB p" '(tab-previous :wk "Previous tab"))
   )
 #+end_src
 
+* GPTEL
+#+begin_src emacs-lisp
+(use-package gptel
+  :ensure t)
+#+end_src
 * GUI tweaks
 ** Disable Menubar, toolbars, scrollbars
 #+begin_src emacs-lisp
@@ -463,7 +489,8 @@ Org-bullets look nicer than asterisks
 Whenever I would add a new line inside a source block in org-mode, everything inside would automatically get indented which was really annoying.
 By default =electric-indent-mode= is turned on in Emacs, so we have to turn it off.
 #+begin_src emacs-lisp
-(electric-indent-mode -1)
+  (setq electric-indent-mode -1)
+  (setq org-src-preserve-indentation t)
 #+end_src
 
 ** Org-tempo source blocks
@@ -546,7 +573,7 @@ Working on a variation of the kanagawa color theme.
 	which-key-side-window-max-height 0.25
 	which-key-idle-delay 0.8
 	which-key-max-description-length 25
-	which-key-allow-imprecise-window-fit t
+	which-key-allow-imprecise-window-fit nil
 	which-key-separator "  " ))
 #+end_src
 
