@@ -305,6 +305,13 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
 *** TODO get julia integration working
 it seems like DOOM uses =julia-mode= and some other stuff besides ESS
 
+#+begin_src emacs-lisp
+(use-package julia-mode
+  :ensure t
+  :config
+  (setq inferior-julia-program-name "/home/linuxbrew/.linuxbrew/bin/julia"))
+#+end_src
+
 **** I took the following from [[https://github.com/George9000/doom_discourse][this repository]] which is meant for DOOM on macOS, and I don't really know which parts are needed
 #+begin_src emacs-lisp
 (setq treesit-language-source-alist
@@ -428,6 +435,10 @@ Emacs uses various fonts and font styles in different places.
       "o d" '(:ignore t :wk "Dates/times")
       "o d t" '(org-time-stamp :wk "Org time stamp"))
       
+    (dy/leader-keys
+      "r" '(:ignore :wk "R")
+      "r d" '(ess-rdired  :wk "open R object directory"))
+    
     (dy/leader-keys
      "t" '(:ignore t :wk "Toggle")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
