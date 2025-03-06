@@ -114,9 +114,3 @@ export PATH
 source ~/.chatGPT_APIKEY
 export GOPATH=$HOME/go
 export PATH=/Users/dante/.juliaup/bin:/Users/dante/Library/Python/3.9/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/TeX/texbin:/Applications/quarto/bin:/Users/dante/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/dante/.juliaup/bin:/Users/dante/Library/Python/3.9/bin:/Users/dante/.local/share/zinit/polaris/bin:/Applications/kitty.app/Contents/MacOS:/bin:$GOPATH/bin
-
-# Add the following to the ~/.bash_profile or ~/.zshrc file:
-source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
-
-# To enable auto-switching of Rubies specified by .ruby-version files, add the following to ~/.bash_profile or ~/.zshrc:
-source /opt/homebrew/opt/chruby/share/chruby/auto.sh
