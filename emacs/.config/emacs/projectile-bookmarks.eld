@@ -1,0 +1,1 @@
+("~/.dotfiles/" "~/Research/dustbowl/" "~/Research/EGLP_Crosswalk/" "~/Research/HistoricalImmigration/" "~/Research/HistoricalImmigration/EGLP_Crosswalk/" "~/.dotfiles/emacs/.config/emacs/elpaca/repos/evil/" "~/Research/occupational-mobility/" "~/Logseq/")

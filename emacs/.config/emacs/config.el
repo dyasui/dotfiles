@@ -73,6 +73,7 @@
           evil-want-keybinding nil
           evil-vsplit-window-right t
           evil-split-window-below t
+	      evil-want-C-u-scroll t ;; override emacs-like use of C-u to repeat
           evil-undo-system 'undo-redo)  ;; Adds vim-like C-r redo functionality
     (evil-mode))
 
@@ -163,6 +164,39 @@ one, an error is signaled."
       ;; move this one to top
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
+
+(use-package company
+  :defer 2
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .a)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
+
+(use-package company-box
+  :after company
+  :hook (company-mode . company-box-mode))
+
+(use-package dashboard
+:ensure t
+:init
+(setq initial-buffer-choice 'dashboard-open)
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-banner-logo-title "Welcome to Emacs")
+(setq dashboard-startup-banner 'logo)
+(setq dashboard-center-content t)
+(setq dashboard-items '((recents . 5)
+                      (agenda . 5)
+                      (bookmarks . 3)
+                      (projects . 3)
+                      (registers . 3)))
+;; (dashboard-modify-heading-icons '((recents . "file-text")
+;;                                  (bookmarks . "book")))
+:config
+(dashboard-setup-startup-hook))
 
 (use-package doom-themes
   :ensure t
@@ -261,10 +295,11 @@ one, an error is signaled."
     :global-prefix "C-SPC") ;; access leader in insert mode
 
   (dy/leader-keys
-    "." '(find-file :wk "Find file")
+    "SPC" '(execute-extended-command :wk "M-x")
+    "f f" '(find-file :wk "Find file")
     "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
     "f r" '(recentf-open-files :wk "Find recent files")
-    "TAB TAB" '(comment-line :wk "Comment lines"))
+    "c c" '(comment-line :wk "Comment lines"))
 
   (dy/leader-keys
     "b" '(:ignore t :wk "buffer")
@@ -291,6 +326,19 @@ one, an error is signaled."
     "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
 
   (dy/leader-keys
+    "o" '(:ignore t :wk "Org")
+    "o a" '(org-agenda :wk "Org agenda")
+    "o e" '(org-export-dispatch :wk "Org export dispatch")
+    "o i" '(org-toggle-item :wk "Org toggle item")
+    "o t" '(org-todo :wk "Org todo")
+    "o b t" '(org-babel-tangle :wk "Org babel tangle")
+    "o T" '(org-todo-list :wk "Org todo list"))
+
+  (dy/leader-keys
+    "o d" '(:ignore t :wk "Dates/times")
+    "o d t" '(org-time-stamp :wk "Org time stamp"))
+
+  (dy/leader-keys
    "t" '(:ignore t :wk "Toggle")
    "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
    "t t" '(visual-line-mode :wk "Toggle truncated lines")
@@ -314,7 +362,17 @@ one, an error is signaled."
    "w J" '(buf-move-down :wk "Buffer move down")
    "w K" '(buf-move-up :wk "Buffer move up")
    "w L" '(buf-move-right :wk "Buffer move right"))
+
+  (dy/leader-keys
+    "TAB" '(:ignore t :wk "Tabs")
+    "TAB o" '(tab-new :wk "Open new tab")
+    "TAB c" '(tab-close :wk "Close tab")
+    "TAB n" '(tab-next :wk "Next tab")
+    "TAB p" '(tab-previous :wk "Previous tab"))
 )
+
+(use-package gptel
+  :ensure t)
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -336,11 +394,18 @@ one, an error is signaled."
   :ensure t)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-(electric-indent-mode -1)
+(setq electric-indent-mode -1)
+(setq org-src-preserve-indentation t)
+(setq org-edit-src-content-indentation 0)
 
 (require 'org-tempo)
 
+(use-package projectile
+  :config
+  (projectile-mode 1))
+
 (use-package rainbow-mode
+  :ensure t
   :hook org-mode prog-mode)
 
 (require 'recentf)
@@ -359,9 +424,9 @@ one, an error is signaled."
   (add-to-list 'display-buffer-alist
      '((lambda (buffer-or-name _)
      (let ((buffer (get-buffer buffer-or-name)))
-       (with-current-buffer buffer
-	 (or (equal major-mode 'vterm-mode)
-	     (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+ (with-current-buffer buffer
+   (or (equal major-mode 'vterm-mode)
+       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
   (display-buffer-reuse-window display-buffer-at-bottom)
   ;;(display-buffer-reuse-window display-buffer-in-direction)
   ;;display-buffer-in-direction/direction/dedicated is added in emacs27
@@ -388,5 +453,5 @@ one, an error is signaled."
       which-key-side-window-max-height 0.25
       which-key-idle-delay 0.8
       which-key-max-description-length 25
-      which-key-allow-imprecise-window-fit t
+      which-key-allow-imprecise-window-fit nil
       which-key-separator "  " ))

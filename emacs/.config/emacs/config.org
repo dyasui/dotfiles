@@ -8,6 +8,8 @@
   - [[#elpaca-package-manager][Elpaca Package Manager]]
   - [[#evil-mode][Evil Mode]]
 - [[#buffer-move][BUFFER-MOVE]]
+- [[#company][COMPANY]]
+- [[#dashboard][DASHBOARD]]
 - [[#doom-color-themes][DOOM color themes]]
   - [[#further-customization][Further customization]]
 - [[#ess---r-and-julia-code-integration][ESS - R and julia code integration]]
@@ -15,6 +17,7 @@
   - [[#setting-the-font-face][Setting the font face]]
   - [[#zooming-inout][Zooming In/Out]]
 - [[#general-keybindings][General Keybindings]]
+- [[#gptel][GPTEL]]
 - [[#gui-tweaks][GUI tweaks]]
   - [[#disable-menubar-toolbars-scrollbars][Disable Menubar, toolbars, scrollbars]]
   - [[#show-line-numbers-and-truncated-lines][Show Line numbers and truncated lines]]
@@ -25,6 +28,7 @@
   - [[#enabling-org-bullets][Enabling Org Bullets]]
   - [[#disable-electric-indent][Disable Electric Indent]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
+- [[#projectile][PROJECTILE]]
 - [[#rainbow-mode][RAINBOW MODE]]
 - [[#recentf][RECENTF]]
 - [[#shells-and-terminals][SHELLS AND TERMINALS]]
@@ -120,6 +124,7 @@ To get the vim bindings to work in other types of buffers (like dired and ibuffe
           evil-want-keybinding nil
           evil-vsplit-window-right t
           evil-split-window-below t
+	      evil-want-C-u-scroll t ;; override emacs-like use of C-u to repeat
           evil-undo-system 'undo-redo)  ;; Adds vim-like C-r redo functionality
     (evil-mode))
 
@@ -214,6 +219,48 @@ one, an error is signaled."
       ;; move this one to top
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
+#+end_src
+* COMPANY
+[[https://company-mode.github.io/manual/][Company manual]]
+Text completion framework to "/complete anything/" in Emacs.
+Completion starts after typing a few letters in any text buffer. Use M-n and M-p to select, <return> to complete, or <tab> to complete the common part.
+=company-box= makes the completion window look nicer.
+#+begin_src emacs-lisp
+(use-package company
+  :defer 2
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .a)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
+
+(use-package company-box
+  :after company
+  :hook (company-mode . company-box-mode))
+#+end_src
+* DASHBOARD
+Extensible dashboard to show recent files, bookmarks, agenda items, etc on startup
+#+begin_src emacs-lisp
+  (use-package dashboard
+  :ensure t
+  :init
+  (setq initial-buffer-choice 'dashboard-open)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "Welcome to Emacs")
+  (setq dashboard-startup-banner 'logo)
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents . 5)
+                        (agenda . 5)
+                        (bookmarks . 3)
+                        (projects . 3)
+                        (registers . 3)))
+  ;; (dashboard-modify-heading-icons '((recents . "file-text")
+  ;;                                  (bookmarks . "book")))
+  :config
+  (dashboard-setup-startup-hook))
 #+end_src
 * DOOM color themes
 #+begin_src emacs-lisp
@@ -338,10 +385,11 @@ Emacs uses various fonts and font styles in different places.
       :global-prefix "C-SPC") ;; access leader in insert mode
 
     (dy/leader-keys
-      "." '(find-file :wk "Find file")
+      "SPC" '(execute-extended-command :wk "M-x")
+      "f f" '(find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
       "f r" '(recentf-open-files :wk "Find recent files")
-      "TAB TAB" '(comment-line :wk "Comment lines"))
+      "c c" '(comment-line :wk "Comment lines"))
 
     (dy/leader-keys
       "b" '(:ignore t :wk "buffer")
@@ -368,6 +416,19 @@ Emacs uses various fonts and font styles in different places.
       "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
 
     (dy/leader-keys
+      "o" '(:ignore t :wk "Org")
+      "o a" '(org-agenda :wk "Org agenda")
+      "o e" '(org-export-dispatch :wk "Org export dispatch")
+      "o i" '(org-toggle-item :wk "Org toggle item")
+      "o t" '(org-todo :wk "Org todo")
+      "o b t" '(org-babel-tangle :wk "Org babel tangle")
+      "o T" '(org-todo-list :wk "Org todo list"))
+
+    (dy/leader-keys
+      "o d" '(:ignore t :wk "Dates/times")
+      "o d t" '(org-time-stamp :wk "Org time stamp"))
+      
+    (dy/leader-keys
      "t" '(:ignore t :wk "Toggle")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
      "t t" '(visual-line-mode :wk "Toggle truncated lines")
@@ -391,9 +452,21 @@ Emacs uses various fonts and font styles in different places.
      "w J" '(buf-move-down :wk "Buffer move down")
      "w K" '(buf-move-up :wk "Buffer move up")
      "w L" '(buf-move-right :wk "Buffer move right"))
+
+    (dy/leader-keys
+      "TAB" '(:ignore t :wk "Tabs")
+      "TAB o" '(tab-new :wk "Open new tab")
+      "TAB c" '(tab-close :wk "Close tab")
+      "TAB n" '(tab-next :wk "Next tab")
+      "TAB p" '(tab-previous :wk "Previous tab"))
   )
 #+end_src
 
+* GPTEL
+#+begin_src emacs-lisp
+(use-package gptel
+  :ensure t)
+#+end_src
 * GUI tweaks
 ** Disable Menubar, toolbars, scrollbars
 #+begin_src emacs-lisp
@@ -439,26 +512,30 @@ Org-bullets look nicer than asterisks
 Whenever I would add a new line inside a source block in org-mode, everything inside would automatically get indented which was really annoying.
 By default =electric-indent-mode= is turned on in Emacs, so we have to turn it off.
 #+begin_src emacs-lisp
-(electric-indent-mode -1)
+(setq electric-indent-mode -1)
+(setq org-src-preserve-indentation t)
+(setq org-edit-src-content-indentation 0)
 #+end_src
 
 ** Org-tempo source blocks
 org-tempo is not enabled by default, but is an extension to org-mode which allows a quick way to add source blocks.
 #+begin_src emacs-lisp
-  (require 'org-tempo)
-#+end_src
-*** DONE figure out why this isn't working?
-#+begin_src 
-
+(require 'org-tempo)
 #+end_src
 
-
-
+* PROJECTILE
+Project interaction library.
+#+begin_src emacs-lisp
+(use-package projectile
+  :config
+  (projectile-mode 1))
+#+end_src
 * RAINBOW MODE
 Display the actual color as a background for any hex color value (ex. #ffffff).
 This code enables rainbow-mode in all programming nodes as well as org-mode.
 #+begin_src emacs-lisp
 (use-package rainbow-mode
+  :ensure t
   :hook org-mode prog-mode)
 #+end_src
 * RECENTF
@@ -472,37 +549,37 @@ Use =recentf-open-files= to see a list of recently opened files
 ** Eshell
 ** Vterm
 #+begin_src emacs-lisp
-  (use-package vterm
-    :ensure t)
+(use-package vterm
+  :ensure t)
 #+end_src
 ** Vterm-Toggle
 #+begin_src emacs-lisp
-  (use-package vterm-toggle
-    :ensure t
-    :after vterm
-    :config
-    (setq vterm-toggle-fullscreen-p nil)
-    (setq vterm-toggle-scope 'project)
-    (add-to-list 'display-buffer-alist
-       '((lambda (buffer-or-name _)
-       (let ((buffer (get-buffer buffer-or-name)))
-	 (with-current-buffer buffer
-	   (or (equal major-mode 'vterm-mode)
-	       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-    (display-buffer-reuse-window display-buffer-at-bottom)
-    ;;(display-buffer-reuse-window display-buffer-in-direction)
-    ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-    ;;(direction . bottom)
-    ;;(dedicated . t) ;dedicated is supported in emacs27
-    (reusable-frames . visible)
-    (window-height . 0.3)))
-    )
+(use-package vterm-toggle
+  :ensure t
+  :after vterm
+  :config
+  (setq vterm-toggle-fullscreen-p nil)
+  (setq vterm-toggle-scope 'project)
+  (add-to-list 'display-buffer-alist
+     '((lambda (buffer-or-name _)
+     (let ((buffer (get-buffer buffer-or-name)))
+ (with-current-buffer buffer
+   (or (equal major-mode 'vterm-mode)
+       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+  (display-buffer-reuse-window display-buffer-at-bottom)
+  ;;(display-buffer-reuse-window display-buffer-in-direction)
+  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+  ;;(direction . bottom)
+  ;;(dedicated . t) ;dedicated is supported in emacs27
+  (reusable-frames . visible)
+  (window-height . 0.3)))
+  )
 #+end_src
 * THEME
 Working on a variation of the kanagawa color theme.
 #+begin_src emacs-lisp
-(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-(load-theme 'kanagawa t)
+  (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+  (load-theme 'kanagawa t)
 #+end_src
 * WHICH-KEY
 #+begin_src emacs-lisp
@@ -520,7 +597,7 @@ Working on a variation of the kanagawa color theme.
 	which-key-side-window-max-height 0.25
 	which-key-idle-delay 0.8
 	which-key-max-description-length 25
-	which-key-allow-imprecise-window-fit t
+	which-key-allow-imprecise-window-fit nil
 	which-key-separator "  " ))
 #+end_src
 
