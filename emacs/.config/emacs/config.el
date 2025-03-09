@@ -198,10 +198,20 @@ one, an error is signaled."
   :config
   (dashboard-setup-startup-hook))
 
+(use-package dired-open
+  :config
+  (setq dired-open-extensions '(("gif" . "sxiv")
+				("jpg" . "sxiv")
+				("png" . "sxiv")
+				("mkv" . "mpv")
+				("mp4" . "mpv"))))
+
   (use-package doom-themes
     :ensure t
     :config
-    (load-theme 'doom-one t)
+    ;; (load-theme 'doom-one t)
+    (setq doom-themes-enable-bold t
+	  doom-themes-enable-italic t)
     (doom-themes-org-config))
   ;; solaire darkens non-standard buffers' backgrounds
   (use-package solaire-mode

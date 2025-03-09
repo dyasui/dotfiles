@@ -10,6 +10,7 @@
 - [[#buffer-move][BUFFER-MOVE]]
 - [[#company][COMPANY]]
 - [[#dashboard][DASHBOARD]]
+- [[#dired][DIRED]]
 - [[#doom-color-themes][DOOM color themes]]
   - [[#further-customization][Further customization]]
 - [[#ess---r-and-julia-code-integration][ESS - R and julia code integration]]
@@ -262,12 +263,25 @@ Extensible dashboard to show recent files, bookmarks, agenda items, etc on start
   :config
   (dashboard-setup-startup-hook))
 #+end_src
+* DIRED
+#+begin_src emacs-lisp
+(use-package dired-open
+  :config
+  (setq dired-open-extensions '(("gif" . "sxiv")
+				("jpg" . "sxiv")
+				("png" . "sxiv")
+				("mkv" . "mpv")
+				("mp4" . "mpv"))))
+				
+#+end_src
 * DOOM color themes
 #+begin_src emacs-lisp
   (use-package doom-themes
     :ensure t
     :config
-    (load-theme 'doom-one t)
+    ;; (load-theme 'doom-one t)
+    (setq doom-themes-enable-bold t
+	  doom-themes-enable-italic t)
     (doom-themes-org-config))
   ;; solaire darkens non-standard buffers' backgrounds
   (use-package solaire-mode
