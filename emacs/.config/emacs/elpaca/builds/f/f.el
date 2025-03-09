@@ -1,1 +1,0 @@
-/home/dante/.config/emacs/elpaca/repos/f/f.el

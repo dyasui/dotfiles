@@ -213,7 +213,7 @@ run = [
   # - https://github.com/ghostty-org/ghostty/issues/1840
   # - https://github.com/ghostty-org/ghostty/issues/2006
   "layout floating",
-  "move-node-to-workspace T",
+  "move-node-to-workspace 2",
 ]
 
 [workspace-to-monitor-force-assignment]

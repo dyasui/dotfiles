@@ -1,1 +1,0 @@
-/home/dante/.config/emacs/elpaca/repos/annalist/annalist.el
