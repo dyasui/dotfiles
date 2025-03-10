@@ -29,11 +29,11 @@ return {
         "lua",
         "markdown_inline",
         -- "norg",
-        "org",
         "r",
         "vim",
         "vimdoc",
-      }
+      },
+      ignore_installed = { 'org' }
     })
 
   end,
