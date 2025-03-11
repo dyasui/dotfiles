@@ -27,14 +27,14 @@ keymap.set("n", "<leader>we", "<C-w>=", { desc = "Make splits equal size" })
 keymap.set("n", "<leader>bn", "<cmd>bnext<CR>", { desc = "Next buffer" })
 keymap.set("n", "<leader>bp", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
 keymap.set("n", "<leader>bi", "<cmd>FzfLua buffers<CR>", { desc = "List buffers interactively" })
-keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
+keymap.set("n", "<leader>bq", "<cmd>bdelete<CR>", { desc = "Delete buffer" })
 
 -- tab navigation
-keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" })
-keymap.set("n", "<leader>tq", "<cmd>tabclose<CR>", { desc = "Close current tab" })
-keymap.set("n", "<Tab>", "<cmd>tabn<CR>", { desc = "Go to next tab" })
-keymap.set("n", "<S-Tab>", "<cmd>tabp<CR>", { desc = "Go to next tab" })
-keymap.set("n", "<leader>tn", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
+keymap.set("n", "<leader><Tab>o", "<cmd>tabnew<CR>", { desc = "Open new tab" })
+keymap.set("n", "<leader><Tab>q", "<cmd>tabclose<CR>", { desc = "Close current tab" })
+keymap.set("n", "<leader><Tab>n", "<cmd>tabn<CR>", { desc = "Go to next tab" })
+keymap.set("n", "<leader><Tab>p", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
+keymap.set("n", "<leader><Tab>c", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
 
 -- Better window navigation
 keymap.set("n", "<leader>wh", "<C-w>h", { desc = "window left" })
@@ -46,7 +46,7 @@ keymap.set("n", "<leader>wl", "<C-w>l", { desc = "window right" })
 keymap.set("n", "ga", "<Plug>(EasyAlign)")
 
 -- Exit terminal mode with ESC 
-keymap.set("t", "<C-ESC>", "<C-\\><C-n>", { desc = "exit terminal" })
+keymap.set("t", "<ESC><ESC><ESC>", "<C-\\><C-n>", { desc = "exit terminal" })
 
 -- toggle zen mode
 keymap.set("n", "<leader>tz", "<cmd>ZenMode<CR>", {desc = "(t)oggle (z)en mode"})
@@ -76,7 +76,7 @@ vim.keymap.set({ "n", "v", "i" }, "<C-x><C-f>",
   { silent = true, desc = "Fuzzy complete path" })
 
 -- terminal
-keymap.set("n", "<leader>tf", "<cmd>FloatermToggle<CR>", { desc = "(t)oggle (t)erminal" })
+keymap.set("n", "<leader>tv", "<cmd>FloatermToggle<CR>", { desc = "(t)oggle terminal" })
 
 -- w3m browser
 -- keymap.set("n", "<leader>e", "<cmd>W3m ", { desc = "(e)xplore web" })

@@ -417,6 +417,11 @@ one, an error is signaled."
 (setq org-src-preserve-indentation t)
 (setq org-edit-src-content-indentation 0)
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((julia . t)
+   (R . t)))
+
 (require 'org-tempo)
 
 (use-package projectile
