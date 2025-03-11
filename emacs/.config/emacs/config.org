@@ -13,6 +13,7 @@
 - [[#doom-color-themes][DOOM color themes]]
   - [[#further-customization][Further customization]]
 - [[#ess---r-and-julia-code-integration][ESS - R and julia code integration]]
+- [[#fuzzy-finding][FUZZY FINDING]]
 - [[#fonts][FONTS]]
   - [[#setting-the-font-face][Setting the font face]]
   - [[#zooming-inout][Zooming In/Out]]
@@ -27,6 +28,7 @@
   - [[#enabling-table-of-contents][Enabling Table of Contents]]
   - [[#enabling-org-bullets][Enabling Org Bullets]]
   - [[#disable-electric-indent][Disable Electric Indent]]
+  - [[#language-support][Language Support]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
 - [[#projectile][PROJECTILE]]
 - [[#rainbow-mode][RAINBOW MODE]]
@@ -35,6 +37,7 @@
   - [[#eshell][Eshell]]
   - [[#vterm][Vterm]]
   - [[#vterm-toggle][Vterm-Toggle]]
+- [[#temporary-files-location][TEMPORARY FILES LOCATION]]
 - [[#theme][THEME]]
 - [[#which-key][WHICH-KEY]]
 
@@ -43,7 +46,7 @@
   So we'll start with them.
 ** Elpaca Package Manager
 #+begin_src emacs-lisp
-  (defvar elpaca-installer-version 0.9)
+  (defvar elpaca-installer-version 0.10)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -115,7 +118,8 @@
 
 ** Evil Mode
 Evil-mode adds vim bindings to text editing buffers when =evil-mode= is active.
-To get the vim bindings to work in other types of buffers (like dired and ibuffer), we also need the =evil-collection=.
+To get the vim bindings to work in other types of buffers
+(like dired and ibuffer), we also need the =evil-collection=.
 #+begin_src emacs-lisp
 ;; Expands to: (elpaca evil (use-package evil :demand t))
 (use-package evil
@@ -264,20 +268,25 @@ Extensible dashboard to show recent files, bookmarks, agenda items, etc on start
 #+end_src
 * DOOM color themes
 #+begin_src emacs-lisp
-  (use-package doom-themes
-    :ensure t
-    :config
-    (load-theme 'doom-one t)
-    (doom-themes-org-config))
-  ;; solaire darkens non-standard buffers' backgrounds
-  (use-package solaire-mode
-    :ensure t
-    :config
-    (solaire-global-mode +1))
-  ;; doom's fancy modeline
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1))
+(use-package doom-themes
+  :ensure t
+  :config
+;; (load-theme 'doom-one t)
+  (doom-themes-org-config))
+;; solaire darkens non-standard buffers' backgrounds
+(use-package solaire-mode
+  :ensure t
+  :config
+  (solaire-global-mode +1))
+;; nerd-font icons to be used by doom-modeline
+(use-package nerd-icons)
+;; doom's fancy modeline
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-bar-width 4)
+  (setq doom-modeline-height 14))
 #+end_src
 
 ** Further customization
@@ -294,19 +303,33 @@ which is done using the =custom-set-faces= macro in =doom-themes=.
 The Emacs Speaks Statistics (ESS) package has lots of functionality for working with statistical and scientific languages in Emacs.
 They seem to be heralding a switch to [[https://github.com/polymode/poly-org][polymode]], but I think org's babel function is enough for me right now.
 #+begin_src emacs-lisp
-  (use-package ess
-    :ensure t
-    :config
-    (load "ess-autoloads")
-    (load-library "ob-R")
-    (load-library "ob-julia")
-    (setq org-confirm-babel-evaluate nil))
+(use-package ess
+  :ensure t
+  :config
+  (load "ess-autoloads")
+  (load-library "ob-R")
+  (setq org-confirm-babel-evaluate nil))
+(use-package julia-mode
+  :ensure t
+  :mode "\\.jl\\'"
+  :init
+  (setenv "JULIA_NUM_THREADS" "6")
+  (with-eval-after-load 'julia-repl
+    (julia-repl-set-terminal-backend 'vterm)))
+(use-package julia-vterm
+  :ensure t
+  :hook (julia-mode-hook . julia-vterm-mode))
+(use-package ob-julia-vterm
+  :ensure t
+  :config
+  (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+  (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm))
 #+end_src
 *** TODO get julia integration working
 it seems like DOOM uses =julia-mode= and some other stuff besides ESS
 
 **** I took the following from [[https://github.com/George9000/doom_discourse][this repository]] which is meant for DOOM on macOS, and I don't really know which parts are needed
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no :eval no
 (setq treesit-language-source-alist
       '((julia "https://github.com/tree-sitter/tree-sitter-julia")))
 (setq treesit-auto-install 'prompt)
@@ -330,11 +353,17 @@ it seems like DOOM uses =julia-mode= and some other stuff besides ESS
 (use-package julia-repl
   :hook (julia-ts-mode . julia-repl-mode)
   :config
-  (setq julia-repl-executable-records '((default "julia" :basedir "/Users/foo/applications/julia10/usr/share/julia/base/")
-                                        (dev "julia11" :basedir    "/Users/foo/applications/julia11/usr/share/julia/base/")))
+  (setq julia-repl-executable-records '((default "julia" :basedir "/Users/foo/applications/julia10/usr/share/julia/base/")))
   (setq julia-repl-executable-key 'default)
   (setq julia-repl-switches "-q -t 4,1")
   (set-popup-rule! "^\\*julia\\:.*\\*$" :actions '(display-buffer-pop-up-frame . inhibit-switch-frame)))
+#+end_src
+* FUZZY FINDING
+#+begin_src emacs-lisp
+(use-package affe
+  :config
+  ;; Manual preview key for `affe-grep'
+  (consult-customize affe-grep :preview-key "M-."))
 #+end_src
 * FONTS
 Emacs uses various fonts and font styles in different places.
@@ -342,15 +371,15 @@ Emacs uses various fonts and font styles in different places.
 #+begin_src emacs-lisp
   (set-face-attribute 'default nil
 		      :font "JetBrainsMono Nerd Font"
-		      :height 200
+		      :height 180
 		      :weight 'medium)
   (set-face-attribute 'variable-pitch nil
-		      :font "Noto Sans"
-		      :height 200
+		      :font "Menlo"
+		      :height 120
 		      :weight 'medium)
   (set-face-attribute 'fixed-pitch nil
 		      :font "JetBrainsMono Nerd Font"
-		      :height 200
+		      :height 120
 		      :weight 'medium)
   ;; italicizes commented text and keywords
   (set-face-attribute 'font-lock-comment-face nil
@@ -358,7 +387,7 @@ Emacs uses various fonts and font styles in different places.
   (set-face-attribute 'font-lock-keyword-face nil
 		      :slant 'italic)
   ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-8"))
 
   ;;set default line spacing
   (setq-default line-spacing 0.12)
@@ -517,6 +546,14 @@ By default =electric-indent-mode= is turned on in Emacs, so we have to turn it o
 (setq org-edit-src-content-indentation 0)
 #+end_src
 
+** Language Support
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((julia . t)
+   (R . t)))
+#+end_src
+
 ** Org-tempo source blocks
 org-tempo is not enabled by default, but is an extension to org-mode which allows a quick way to add source blocks.
 #+begin_src emacs-lisp
@@ -575,6 +612,13 @@ Use =recentf-open-files= to see a list of recently opened files
   (window-height . 0.3)))
   )
 #+end_src
+* TEMPORARY FILES LOCATION
+#+begin_src 
+;; save temp files to ~/.config/emacs/auto-save
+(setq auto-save-file-name-transforms
+          `((".*" ,(concat user-emacs-directory "auto-save/") t))) 
+#+end_src
+
 * THEME
 Working on a variation of the kanagawa color theme.
 #+begin_src emacs-lisp
