@@ -1,10 +1,3 @@
-
-# Place a copy of this config to ~/.aerospace.toml
-# After that, you can edit ~/.aerospace.toml to your liking
-
-# It's not necessary to copy all keys to your config.
-# If the key is missing in your config, "default-config.toml" will serve as a fallback
-
 # You can use it to add commands that run after login to macOS user session.
 # 'start-at-login' needs to be 'true' for 'after-login-command' to work
 # Available commands: https://nikitabobko.github.io/AeroSpace/commands
@@ -52,10 +45,7 @@ default-root-container-orientation = 'auto'
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 key-mapping.preset = 'qwerty'
 
-# on-focus-changed = ['move-mouse window-lazy-center']
-# on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-
-# Gaps between windows (inner-*) and between monitor edges (outer-*).
+# Gaps Between windows (inner-*) and between monitor edges (outer-*).
 # Possible values:
 # - Constant:     gaps.outer.top = 8
 # - Per monitor:  gaps.outer.top = [{ monitor.main = 16 }, { monitor."some-pattern" = 32 }, 24]
@@ -98,29 +88,29 @@ PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 
 # You can uncomment this line to open up terminal with alt + enter shortcut
 # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-alt-enter = 'exec-and-forget kitty --single-instance ~'
+# alt-enter = 'exec-and-forget kitty --single-instance ~'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-alt-slash = 'layout tiles horizontal vertical'
-alt-comma = 'layout accordion horizontal vertical'
+alt-t = 'layout tiles horizontal vertical'
+alt-a = 'layout accordion horizontal vertical'
 
 alt-shift-space = 'layout floating tiling'
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-alt-h = 'focus left --boundaries all-monitors-outer-frame'
-alt-j = 'focus down --boundaries all-monitors-outer-frame'
-alt-k = 'focus up --boundaries all-monitors-outer-frame'
-alt-l = 'focus right --boundaries all-monitors-outer-frame'
+alt-left = 'focus left --boundaries all-monitors-outer-frame'
+alt-down = 'focus down --boundaries all-monitors-outer-frame'
+alt-up   = 'focus up --boundaries all-monitors-outer-frame'
+alt-right = 'focus right --boundaries all-monitors-outer-frame'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
-alt-shift-h = 'move left'
-alt-shift-j = 'move down'
-alt-shift-k = 'move up'
-alt-shift-l = 'move right'
+alt-shift-left = 'move left'
+alt-shift-down = 'move down'
+alt-shift-up = 'move up'
+alt-shift-right = 'move right'
 
-cmd-shift-h = ['join-with left', 'mode main']
-cmd-shift-j = ['join-with down', 'mode main']
-cmd-shift-k = ['join-with up', 'mode main']
-cmd-shift-l = ['join-with right', 'mode main']
+cmd-shift-left = ['join-with left', 'mode main']
+cmd-shift-down = ['join-with down', 'mode main']
+cmd-shift-up   = ['join-with up', 'mode main']
+cmd-shift-right = ['join-with right', 'mode main']
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#resize
 alt-minus = 'resize smart -50'
@@ -136,10 +126,10 @@ alt-6 = 'workspace 6'
 alt-7 = 'workspace 7'
 alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
-alt-0 = 'workspace 10'
+alt-0 = 'workspace 0'
 alt-z = 'workspace Z' # zotero
 alt-c = 'workspace C' # calendar
-alt-t = 'workspace T' # terminal
+# alt-t = 'workspace T' # terminal
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
@@ -151,20 +141,18 @@ alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
 alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
-alt-shift-0 = ['move-node-to-workspace 10', 'workspace 10']
-alt-shift-t = ['move-node-to-workspace T', 'workspace T']
+alt-shift-0 = ['move-node-to-workspace 0', 'workspace 0']
+# alt-shift-t = ['move-node-to-workspace T', 'workspace T']
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+# alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-alt-right = 'workspace next'
-alt-left = 'workspace prev'
+alt-n = 'workspace next'
+alt-p = 'workspace prev'
 
 alt-f = 'fullscreen'
-
-cmd-shift-t = 'layout floating tiling'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-shift-c = 'reload-config'
@@ -212,20 +200,20 @@ run = [
   # this was also observed in:
   # - https://github.com/ghostty-org/ghostty/issues/1840
   # - https://github.com/ghostty-org/ghostty/issues/2006
-  "layout floating",
+  # "layout floating",
   "move-node-to-workspace 2",
 ]
 
 [workspace-to-monitor-force-assignment]
-1 = ['airplay', 'msi']
-2 = ['dell', 'msi']
-3 = ['dell', 'msi']
-4 = ['dell', 'msi']
-5 = ['dell', 'msi']
-6 = 'built-in'
-7 = 'built-in'
-8 = 'built-in'
-9 = 'built-in'
-10 = ['crestron', 'built-in']
+1 = ['built-in', 'Dell']
+2 = ['built-in', 'Dell']
+3 = ['built-in', 'Dell']
+4 = ['built-in', 'Dell']
+5 = ['built-in', 'Dell']
+6 = ['msi', 'built-in']
+7 = ['msi', 'built-in']
+8 = ['msi', 'built-in']
+9 = ['msi', 'built-in']
+0 = ['crestron', 'built-in']
 Z = 'built-in'
 C = 'built-in'
