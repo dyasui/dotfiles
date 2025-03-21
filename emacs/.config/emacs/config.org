@@ -10,6 +10,7 @@
 - [[#buffer-move][BUFFER-MOVE]]
 - [[#company][COMPANY]]
 - [[#dashboard][DASHBOARD]]
+- [[#dired][DIRED]]
 - [[#doom-color-themes][DOOM color themes]]
   - [[#further-customization][Further customization]]
 - [[#ess---r-and-julia-code-integration][ESS - R and julia code integration]]
@@ -266,27 +267,35 @@ Extensible dashboard to show recent files, bookmarks, agenda items, etc on start
   :config
   (dashboard-setup-startup-hook))
 #+end_src
+* DIRED
+#+begin_src emacs-lisp
+(use-package dired-open
+  :config
+  (setq dired-open-extensions '(("gif" . "sxiv")
+				("jpg" . "sxiv")
+				("png" . "sxiv")
+				("mkv" . "mpv")
+				("mp4" . "mpv"))))
+				
+#+end_src
 * DOOM color themes
 #+begin_src emacs-lisp
-(use-package doom-themes
-  :ensure t
-  :config
-;; (load-theme 'doom-one t)
-  (doom-themes-org-config))
-;; solaire darkens non-standard buffers' backgrounds
-(use-package solaire-mode
-  :ensure t
-  :config
-  (solaire-global-mode +1))
-;; nerd-font icons to be used by doom-modeline
-(use-package nerd-icons)
-;; doom's fancy modeline
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :config
-  (setq doom-modeline-bar-width 4)
-  (setq doom-modeline-height 14))
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; (load-theme 'doom-one t)
+    (setq doom-themes-enable-bold t
+	  doom-themes-enable-italic t)
+    (doom-themes-org-config))
+  ;; solaire darkens non-standard buffers' backgrounds
+  (use-package solaire-mode
+    :ensure t
+    :config
+    (solaire-global-mode +1))
+  ;; doom's fancy modeline
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
 #+end_src
 
 ** Further customization
@@ -327,6 +336,13 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
 #+end_src
 *** TODO get julia integration working
 it seems like DOOM uses =julia-mode= and some other stuff besides ESS
+
+#+begin_src emacs-lisp
+(use-package julia-mode
+  :ensure t
+  :config
+  (setq inferior-julia-program-name "/home/linuxbrew/.linuxbrew/bin/julia"))
+#+end_src
 
 **** I took the following from [[https://github.com/George9000/doom_discourse][this repository]] which is meant for DOOM on macOS, and I don't really know which parts are needed
 #+begin_src emacs-lisp :tangle no :eval no
@@ -457,6 +473,10 @@ Emacs uses various fonts and font styles in different places.
       "o d" '(:ignore t :wk "Dates/times")
       "o d t" '(org-time-stamp :wk "Org time stamp"))
       
+    (dy/leader-keys
+      "r" '(:ignore :wk "R")
+      "r d" '(ess-rdired  :wk "open R object directory"))
+    
     (dy/leader-keys
      "t" '(:ignore t :wk "Toggle")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")

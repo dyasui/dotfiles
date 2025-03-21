@@ -8,3 +8,10 @@ emacs/.config/emacs/elpaca/
 emacs/.config/emacs/auto-save-list/
 emacs/.config/emacs/eln-cache/
 emacs/.config/emacs/elpa/
+emacs/.config/emacs/projectile-bookmarks.eld
+emacs/.config/emacs/projectile-bookmarks.eld
+emacs/.config/emacs/init.el
+emacs/.config/emacs/#bookmarks#
+emacs/.config/emacs/recentf
+git/.gitconfig
+nvim/.config/nvim/lazy-lock.json

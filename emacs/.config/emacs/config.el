@@ -1,4 +1,4 @@
-  (defvar elpaca-installer-version 0.10)
+  (defvar elpaca-installer-version 0.9)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -198,69 +198,89 @@ one, an error is signaled."
   :config
   (dashboard-setup-startup-hook))
 
-(use-package doom-themes
-  :ensure t
+(use-package dired-open
   :config
-;; (load-theme 'doom-one t)
-  (doom-themes-org-config))
-;; solaire darkens non-standard buffers' backgrounds
-(use-package solaire-mode
-  :ensure t
-  :config
-  (solaire-global-mode +1))
-;; nerd-font icons to be used by doom-modeline
-(use-package nerd-icons)
-;; doom's fancy modeline
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :config
-  (setq doom-modeline-bar-width 4)
-  (setq doom-modeline-height 14))
+  (setq dired-open-extensions '(("gif" . "sxiv")
+				("jpg" . "sxiv")
+				("png" . "sxiv")
+				("mkv" . "mpv")
+				("mp4" . "mpv"))))
+
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; (load-theme 'doom-one t)
+    (setq doom-themes-enable-bold t
+	  doom-themes-enable-italic t)
+    (doom-themes-org-config))
+  ;; solaire darkens non-standard buffers' backgrounds
+  (use-package solaire-mode
+    :ensure t
+    :config
+    (solaire-global-mode +1))
+  ;; doom's fancy modeline
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
 
 ;; Must be used *after* the theme is loaded
 ;; (custom-set-faces
 ;;   `(org-block ((t (:background , #16161D))))
 ;; )
 
-(use-package ess
-  :ensure t
-  :config
-  (load "ess-autoloads")
-  (load-library "ob-R")
-  (setq org-confirm-babel-evaluate nil))
+  (use-package ess
+    :ensure t
+    :config
+    (load "ess-autoloads")
+    (load-library "ob-R")
+    (load-library "ob-julia")
+    (setq org-confirm-babel-evaluate nil))
+
 (use-package julia-mode
   :ensure t
-  :mode "\\.jl\\'"
-  :init
-  (setenv "JULIA_NUM_THREADS" "6")
-  (with-eval-after-load 'julia-repl
-    (julia-repl-set-terminal-backend 'vterm)))
-(use-package julia-vterm
-  :ensure t
-  :hook (julia-mode-hook . julia-vterm-mode))
-(use-package ob-julia-vterm
-  :ensure t
   :config
-  (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
-  (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm))
+  (setq inferior-julia-program-name "/home/linuxbrew/.linuxbrew/bin/julia"))
 
-(use-package affe
+(setq treesit-language-source-alist
+      '((julia "https://github.com/tree-sitter/tree-sitter-julia")))
+(setq treesit-auto-install 'prompt)
+
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-language-id-configuration
+    '(julia-ts-mode . "julia")))
+(setq lsp-julia-package-dir nil)
+;; (after! lsp-julia
+;;   (setq lsp-julia-default-environment "~/.julia/environments/v1.10")
+;;   (setq-hook! 'julia-ts-mode-hook +format-with-lsp nil))
+;; 
+;; (after! julia-ts-mode
+;;   (add-hook! 'julia-ts-mode-hook
+;;     (setq-local lsp-enable-folding t
+;;                 lsp-folding-range-limit 100)))
+;;
+;;
+;; Julia REPL
+(defun open-popup-new-frame (buffer &optional alist) (+popup-display-buffer-fullframe-fn buffer alist))
+(use-package julia-repl
+  :hook (julia-ts-mode . julia-repl-mode)
   :config
-  ;; Manual preview key for `affe-grep'
-  (consult-customize affe-grep :preview-key "M-."))
+  (setq julia-repl-executable-records '((default "julia" :basedir "/Users/foo/applications/julia10/usr/share/julia/base/")
+                                        (dev "julia11" :basedir    "/Users/foo/applications/julia11/usr/share/julia/base/")))
+  (setq julia-repl-executable-key 'default)
+  (setq julia-repl-switches "-q -t 4,1")
+  (set-popup-rule! "^\\*julia\\:.*\\*$" :actions '(display-buffer-pop-up-frame . inhibit-switch-frame)))
 
   (set-face-attribute 'default nil
 		      :font "JetBrainsMono Nerd Font"
-		      :height 180
+		      :height 200
 		      :weight 'medium)
   (set-face-attribute 'variable-pitch nil
-		      :font "Menlo"
-		      :height 120
+		      :font "Noto Sans"
+		      :height 200
 		      :weight 'medium)
   (set-face-attribute 'fixed-pitch nil
 		      :font "JetBrainsMono Nerd Font"
-		      :height 120
+		      :height 200
 		      :weight 'medium)
   ;; italicizes commented text and keywords
   (set-face-attribute 'font-lock-comment-face nil
@@ -268,7 +288,7 @@ one, an error is signaled."
   (set-face-attribute 'font-lock-keyword-face nil
 		      :slant 'italic)
   ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-8"))
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
 
   ;;set default line spacing
   (setq-default line-spacing 0.12)
@@ -333,6 +353,10 @@ one, an error is signaled."
       "o d" '(:ignore t :wk "Dates/times")
       "o d t" '(org-time-stamp :wk "Org time stamp"))
       
+    (dy/leader-keys
+      "r" '(:ignore :wk "R")
+      "r d" '(ess-rdired  :wk "open R object directory"))
+    
     (dy/leader-keys
      "t" '(:ignore t :wk "Toggle")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
