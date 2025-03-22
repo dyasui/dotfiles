@@ -7,6 +7,7 @@
 - [[#load-these-things-first][Load these things first]]
   - [[#elpaca-package-manager][Elpaca Package Manager]]
   - [[#evil-mode][Evil Mode]]
+- [[#basic-settings][BASIC SETTINGS]]
 - [[#buffer-move][BUFFER-MOVE]]
 - [[#company][COMPANY]]
 - [[#dashboard][DASHBOARD]]
@@ -151,6 +152,11 @@ To get the vim bindings to work in other types of buffers
   (define-key evil-motion-state-map (kbd "TAB") nil))
 ;; Setting RETURN key in org-mode to follow links
   (setq org-return-follows-link  t)
+#+end_src
+
+* BASIC SETTINGS
+#+begin_src emacs-lisp
+(setq ring-bell-function 'ignore)
 #+end_src
 
 * BUFFER-MOVE
