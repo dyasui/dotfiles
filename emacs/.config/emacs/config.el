@@ -1,4 +1,4 @@
-  (defvar elpaca-installer-version 0.9)
+  (defvar elpaca-installer-version 0.10)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -228,59 +228,49 @@ one, an error is signaled."
 ;;   `(org-block ((t (:background , #16161D))))
 ;; )
 
-  (use-package ess
-    :ensure t
-    :config
-    (load "ess-autoloads")
-    (load-library "ob-R")
-    (load-library "ob-julia")
-    (setq org-confirm-babel-evaluate nil))
+(use-package ess
+  :ensure t
+  :config
+  (load "ess-autoloads")
+  (load-library "ob-R")
+  (setq org-confirm-babel-evaluate nil))
+(use-package julia-mode
+  :ensure t
+  :mode "\\.jl\\'"
+  :init
+  (setenv "JULIA_NUM_THREADS" "6")
+  (with-eval-after-load 'julia-repl
+    (julia-repl-set-terminal-backend 'vterm)))
+(use-package julia-vterm
+  :ensure t
+  :hook (julia-mode-hook . julia-vterm-mode))
+(use-package ob-julia-vterm
+  :ensure t
+  :config
+  (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+  (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm))
 
 (use-package julia-mode
   :ensure t
   :config
   (setq inferior-julia-program-name "/home/linuxbrew/.linuxbrew/bin/julia"))
 
-(setq treesit-language-source-alist
-      '((julia "https://github.com/tree-sitter/tree-sitter-julia")))
-(setq treesit-auto-install 'prompt)
-
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-language-id-configuration
-    '(julia-ts-mode . "julia")))
-(setq lsp-julia-package-dir nil)
-;; (after! lsp-julia
-;;   (setq lsp-julia-default-environment "~/.julia/environments/v1.10")
-;;   (setq-hook! 'julia-ts-mode-hook +format-with-lsp nil))
-;; 
-;; (after! julia-ts-mode
-;;   (add-hook! 'julia-ts-mode-hook
-;;     (setq-local lsp-enable-folding t
-;;                 lsp-folding-range-limit 100)))
-;;
-;;
-;; Julia REPL
-(defun open-popup-new-frame (buffer &optional alist) (+popup-display-buffer-fullframe-fn buffer alist))
-(use-package julia-repl
-  :hook (julia-ts-mode . julia-repl-mode)
+(use-package affe
   :config
-  (setq julia-repl-executable-records '((default "julia" :basedir "/Users/foo/applications/julia10/usr/share/julia/base/")
-                                        (dev "julia11" :basedir    "/Users/foo/applications/julia11/usr/share/julia/base/")))
-  (setq julia-repl-executable-key 'default)
-  (setq julia-repl-switches "-q -t 4,1")
-  (set-popup-rule! "^\\*julia\\:.*\\*$" :actions '(display-buffer-pop-up-frame . inhibit-switch-frame)))
+  ;; Manual preview key for `affe-grep'
+  (consult-customize affe-grep :preview-key "M-."))
 
   (set-face-attribute 'default nil
 		      :font "JetBrainsMono Nerd Font"
-		      :height 200
+		      :height 180
 		      :weight 'medium)
   (set-face-attribute 'variable-pitch nil
-		      :font "Noto Sans"
-		      :height 200
+		      :font "Menlo"
+		      :height 180
 		      :weight 'medium)
   (set-face-attribute 'fixed-pitch nil
 		      :font "JetBrainsMono Nerd Font"
-		      :height 200
+		      :height 180
 		      :weight 'medium)
   ;; italicizes commented text and keywords
   (set-face-attribute 'font-lock-comment-face nil
