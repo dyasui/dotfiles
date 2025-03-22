@@ -136,8 +136,7 @@ alt-6 = 'workspace 6'
 alt-7 = 'workspace 7'
 alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
-alt-0 = 'workspace 10'
-alt-z = 'workspace Z' # zotero
+alt-0 = 'workspace 0'
 alt-c = 'workspace C' # calendar
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
@@ -150,7 +149,7 @@ alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
 alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
-alt-shift-0 = ['move-node-to-workspace 10', 'workspace 10']
+alt-shift-0 = ['move-node-to-workspace 0', 'workspace 0']
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
@@ -165,13 +164,26 @@ alt-f = 'fullscreen'
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-shift-c = 'reload-config'
 
+[workspace-to-monitor-force-assignment]
+1 = ['msi',      'built-in', 'built-in']
+2 = ['built-in', 'built-in','built-in']
+3 = ['built-in', 'built-in','built-in']
+4 = ['msi',      'Dell','built-in']
+5 = ['built-in', 'built-in','built-in']
+6 = ['msi',      'built-in','built-in']
+7 = ['built-in', 'Dell','built-in']
+8 = ['msi',      'Dell','built-in']
+9 = ['msi',      'Dell','built-in']
+0 = ['msi',      'built-in', 'crestron']
+C = 'built-in'
+
 [[on-window-detected]]
 if.app-id = 'com.apple.systempreferences'
 run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
-run = ['layout floating']
+run = ['layout floating', 'move-node-to-workspace 2']
 
 [[on-window-detected]]
 if.app-id = 'org.mozilla.firefox'
@@ -194,34 +206,25 @@ if.app-id = 'net.whatsapp.WhatsApp'
 run = "move-node-to-workspace 5"
 
 [[on-window-detected]]
-if.app-id = 'com.apple.iCal'
-run = "move-node-to-workspace C"
+if.app-id = 'com.valvesoftware.steam'
+run = "move-node-to-workspace 6"
 
 [[on-window-detected]]
 if.app-id = 'org.zotero.zotero'
-run = "move-node-to-workspace Z"
+run = "move-node-to-workspace 7"
 
 [[on-window-detected]]
-if.app-id = "com.mitchellh.ghostty"
-run = [
-  # FIX: this is a workaround for https://github.com/nikitabobko/AeroSpace/issues/68
-  # this was also observed in:
-  # - https://github.com/ghostty-org/ghostty/issues/1840
-  # - https://github.com/ghostty-org/ghostty/issues/2006
-  # "layout floating",
-  "move-node-to-workspace 2",
-]
+if.app-id = 'com.vscodium'
+run = "move-node-to-workspace 8"
 
-[workspace-to-monitor-force-assignment]
-1 = ['built-in', 'Dell']
-2 = ['built-in', 'Dell']
-3 = ['built-in', 'Dell']
-4 = ['built-in', 'Dell']
-5 = ['built-in', 'Dell']
-6 = ['msi', 'built-in']
-7 = ['msi', 'built-in']
-8 = ['msi', 'built-in']
-9 = ['msi', 'built-in']
-10 = ['crestron', 'built-in']
-Z = 'built-in'
-C = 'built-in'
+[[on-window-detected]]
+if.app-id = 'org.qgis.qgis3'
+run = "move-node-to-workspace 8"
+
+[[on-window-detected]]
+if.app-id = 'us.zoom.xos'
+run = "move-node-to-workspace 9"
+
+[[on-window-detected]]
+if.app-id = 'com.apple.iCal'
+run = "move-node-to-workspace C"
