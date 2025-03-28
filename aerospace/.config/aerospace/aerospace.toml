@@ -1,67 +1,28 @@
+# ~/.aerospace.toml
+# DOCS: https://nikitabobko.github.io/AeroSpace/commands
 
-# Place a copy of this config to ~/.aerospace.toml
-# After that, you can edit ~/.aerospace.toml to your liking
-
-# It's not necessary to copy all keys to your config.
-# If the key is missing in your config, "default-config.toml" will serve as a fallback
-
-# You can use it to add commands that run after login to macOS user session.
-# 'start-at-login' needs to be 'true' for 'after-login-command' to work
-# Available commands: https://nikitabobko.github.io/AeroSpace/commands
+# STARTUP COMMANDS
+start-at-login = true
 after-login-command = [
   'exec-and-forget syncthing'
 ]
-
-# You can use it to add commands that run after AeroSpace startup.
-# 'after-startup-command' is run after 'after-login-command'
-# Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = [
-  # 'exec-and-forget /opt/homebrew/opt/sketchybar/bin/sketchybar',
+after-startup-command = [ # 'after-startup-command' is run after 'after-login-command'
   'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0',
   'exec-and-forget kitty --session ~/.config/kitty/startup.conf',
   'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
 ]
+[exec]                   # Again, you don't need to copy all config sections to your config.
+inherit-env-vars = true  # If you don't touch "exec" section,
+[exec.env-vars]          # it will fallback to "default-config.toml"
+PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 
-exec-on-workspace-change = [
-    '/bin/bash',
-    '-c',
-    'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE AEROSPACE_PREV_WORKSPACE',
-]
-
-# Start AeroSpace at login
-start-at-login = true
-
-# Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
-enable-normalization-flatten-containers = true
-enable-normalization-opposite-orientation-for-nested-containers = true
-
-# See: https://nikitabobko.github.io/AeroSpace/guide#layouts
-# The 'accordion-padding' specifies the size of accordion padding
-# You can set 0 to disable the padding feature
+# SETTINGS
 accordion-padding = 30
 
-# Possible values: tiles|accordion
+# Layout
 default-root-container-layout = 'tiles'
 
-# Possible values: horizontal|vertical|auto
-# 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
-#               tall monitor (anything higher than wide) gets vertical orientation
-default-root-container-orientation = 'auto'
-
-# Possible values: (qwerty|dvorak)
-# See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
-key-mapping.preset = 'qwerty'
-
-# on-focus-changed = ['move-mouse window-lazy-center']
-# on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
-
-# Gaps between windows (inner-*) and between monitor edges (outer-*).
-# Possible values:
-# - Constant:     gaps.outer.top = 8
-# - Per monitor:  gaps.outer.top = [{ monitor.main = 16 }, { monitor."some-pattern" = 32 }, 24]
-#                 In this example, 24 is a default value when there is no match.
-#                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
-#                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
+# Gaps
 [gaps]
 inner.horizontal = 0
 inner.vertical =   0
@@ -70,19 +31,8 @@ outer.bottom =     0
 outer.top =        0
 outer.right =      0
 
-# See https://nikitabobko.github.io/AeroSpace/guide#exec-env-vars
-[exec]                   # Again, you don't need to copy all config sections to your config.
-inherit-env-vars = true  # If you don't touch "exec" section,
-[exec.env-vars]          # it will fallback to "default-config.toml"
-PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
-
-# 'main' binding mode declaration
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
-# 'main' binding mode must be always presented
-[mode.main.binding]
-
-alt-shift-c = 'reload-config'
-
+# KEYBINDINGS
+# All possible modifiers: cmd, alt, ctrl, shift
 # All possible keys:
 # - Letters.        a, b, c, ..., z
 # - Numbers.        0, 1, 2, ..., 9
@@ -106,14 +56,21 @@ alt-enter = 'exec-and-forget kitty --single-instance ~'
 alt-t = 'layout tiles horizontal vertical'
 alt-a = 'layout accordion horizontal vertical'
 
+alt-tab = 'workspace-back-and-forth'
+alt-n = 'workspace next'
+alt-p = 'workspace prev'
+alt-f = 'fullscreen'
 alt-space = 'layout floating tiling'
-# See: https://nikitabobko.github.io/AeroSpace/commands#focus
+
+# Layout Orientation
+alt-s = 'layout tiles horizontal vertical'
+alt-t = 'layout accordion horizontal'
+
+# Window Navigation
 alt-left  = 'focus left --boundaries all-monitors-outer-frame'
 alt-down  = 'focus down --boundaries all-monitors-outer-frame'
 alt-up    = 'focus up --boundaries all-monitors-outer-frame'
 alt-right = 'focus right --boundaries all-monitors-outer-frame'
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#move
 alt-shift-left  = 'move left'
 alt-shift-down  = 'move down'
 alt-shift-up    = 'move up'
@@ -124,11 +81,17 @@ cmd-shift-down  = ['join-with down', 'mode main']
 cmd-shift-up    = ['join-with up', 'mode main']
 cmd-shift-right = ['join-with right', 'mode main']
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#resize
+# Resize Window
 alt-minus = 'resize smart -50'
 alt-equal = 'resize smart +50'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
+# App Launchers
+alt-enter = 'exec-and-forget kitty --single-instance ~'
+alt-b = 'exec-and-forget firefox'
+alt-n = 'exec-and-forget Logseq'
+alt-e = 'exec-and-forget emacs'
+
+# WORKSPACES
 alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
@@ -140,8 +103,6 @@ alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
 alt-0 = 'workspace 0'
 alt-c = 'workspace C' # calendar
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
 alt-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
 alt-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
@@ -153,18 +114,7 @@ alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
 alt-shift-0 = ['move-node-to-workspace 0', 'workspace 0']
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-alt-tab = 'workspace-back-and-forth'
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-# alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
-
-alt-n = 'workspace next'
-alt-p = 'workspace prev'
-
-alt-f = 'fullscreen'
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#mode
-
+# Assign Workspaces to Each Display
 [workspace-to-monitor-force-assignment]
 0 = ['msi',      'built-in', 'crestron']
 1 = ['msi',      'built-in', 'built-in']
@@ -178,6 +128,7 @@ alt-f = 'fullscreen'
 9 = ['msi',      'Dell',     'built-in']
 C = ['built-in', 'built-in', 'built-in']
 
+# Float these App Windows by Default
 [[on-window-detected]]
 if.app-id = 'com.apple.systempreferences'
 run = ['layout floating']
@@ -189,6 +140,8 @@ run = ['layout floating']
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
 run = ['layout floating', 'move-node-to-workspace 2']
+
+# Assign App Windows by Workspace
 
 [[on-window-detected]]
 if.app-id = 'org.mozilla.firefox'
@@ -233,3 +186,4 @@ run = "move-node-to-workspace 9"
 [[on-window-detected]]
 if.app-id = 'com.apple.iCal'
 run = "move-node-to-workspace C"
+

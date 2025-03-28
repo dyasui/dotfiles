@@ -397,11 +397,11 @@ Emacs uses various fonts and font styles in different places.
 		      :weight 'medium)
   (set-face-attribute 'variable-pitch nil
 		      :font "Menlo"
-		      :height 120
+		      :height 180
 		      :weight 'medium)
   (set-face-attribute 'fixed-pitch nil
 		      :font "JetBrainsMono Nerd Font"
-		      :height 120
+		      :height 180
 		      :weight 'medium)
   ;; italicizes commented text and keywords
   (set-face-attribute 'font-lock-comment-face nil
@@ -409,7 +409,7 @@ Emacs uses various fonts and font styles in different places.
   (set-face-attribute 'font-lock-keyword-face nil
 		      :slant 'italic)
   ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-8"))
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
 
   ;;set default line spacing
   (setq-default line-spacing 0.12)
