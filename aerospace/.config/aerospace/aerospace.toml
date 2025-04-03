@@ -24,12 +24,12 @@ default-root-container-layout = 'tiles'
 
 # Gaps
 [gaps]
-inner.horizontal = 0
-inner.vertical =   0
-outer.left =       0
-outer.bottom =     0
-outer.top =        0
-outer.right =      0
+inner.horizontal = 4
+inner.vertical   = 4
+outer.left       = 4
+outer.bottom     = 4
+outer.top        = 4
+outer.right      = 4
 
 [mode.main.binding]
 # KEYBINDINGS
@@ -109,8 +109,8 @@ alt-shift-0 = ['move-node-to-workspace 0', 'workspace 0']
 
 # Assign Workspaces to Each Display
 [workspace-to-monitor-force-assignment]
-0 = ['msi',      'built-in', 'crestron']
-1 = ['msi',      'built-in', 'built-in']
+0 = ['msi',      'built-in', 'built-in']
+1 = ['msi',      'built-in', 'crestron']
 2 = ['built-in', 'built-in', 'built-in']
 3 = ['built-in', 'built-in', 'built-in']
 4 = ['msi',      'Dell',     'built-in']
@@ -132,29 +132,29 @@ run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
-run = ['layout floating', 'move-node-to-workspace 2']
+run = ['layout floating']
 
 # Assign App Windows by Workspace
 
-[[on-window-detected]]
-if.app-id = 'org.mozilla.firefox'
-run = 'move-node-to-workspace 1'
-
+# [[on-window-detected]]
+# if.app-id = 'org.mozilla.firefox'
+# run = 'move-node-to-workspace 1'
+#
 # [[on-window-detected]]
 # if.app-id = 'net.kovidgoyal.kitty'
 # run = "move-node-to-workspace 2"
-
+#
 [[on-window-detected]]
 if.app-id = 'com.electron.logseq'
 run = 'move-node-to-workspace 3'
 
-[[on-window-detected]]
-if.app-id = 'org.gnu.Emacs'
-run = 'move-node-to-workspace 4'
-
-[[on-window-detected]]
-if.app-id = 'net.whatsapp.WhatsApp'
-run = "move-node-to-workspace 5"
+# [[on-window-detected]]
+# if.app-id = 'org.gnu.Emacs'
+# run = 'move-node-to-workspace 4'
+#
+# [[on-window-detected]]
+# if.app-id = 'net.whatsapp.WhatsApp'
+# run = "move-node-to-workspace 5"
 
 [[on-window-detected]]
 if.app-id = 'com.valvesoftware.steam'
