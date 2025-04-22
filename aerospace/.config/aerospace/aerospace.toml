@@ -17,7 +17,7 @@ inherit-env-vars = true  # If you don't touch "exec" section,
 PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 
 # SETTINGS
-accordion-padding = 30
+# accordion-padding = 30
 
 # Layout
 default-root-container-layout = 'tiles'
@@ -111,12 +111,12 @@ alt-shift-0 = ['move-node-to-workspace 0', 'workspace 0']
 [workspace-to-monitor-force-assignment]
 0 = ['msi',      'built-in', 'built-in']
 1 = ['msi',      'built-in', 'crestron']
-2 = ['built-in', 'built-in', 'built-in']
-3 = ['built-in', 'built-in', 'built-in']
+2 = ['built-in', 'Dell',     'built-in']
+3 = ['built-in', 'Dell',     'built-in']
 4 = ['msi',      'Dell',     'built-in']
 5 = ['built-in', 'built-in', 'built-in']
-6 = ['msi',      'built-in', 'built-in']
-7 = ['built-in', 'Dell',     'built-in']
+6 = ['msi',      'Dell',     'built-in']
+7 = ['built-in', 'built-in', 'built-in']
 8 = ['msi',      'Dell',     'built-in']
 9 = ['msi',      'Dell',     'built-in']
 C = ['built-in', 'built-in', 'built-in']
@@ -152,9 +152,9 @@ run = 'move-node-to-workspace 3'
 # if.app-id = 'org.gnu.Emacs'
 # run = 'move-node-to-workspace 4'
 #
-# [[on-window-detected]]
-# if.app-id = 'net.whatsapp.WhatsApp'
-# run = "move-node-to-workspace 5"
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+run = "move-node-to-workspace 5"
 
 [[on-window-detected]]
 if.app-id = 'com.valvesoftware.steam'
