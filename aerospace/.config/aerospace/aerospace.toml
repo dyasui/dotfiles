@@ -17,20 +17,21 @@ inherit-env-vars = true  # If you don't touch "exec" section,
 PATH = '/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 
 # SETTINGS
-accordion-padding = 30
+# accordion-padding = 30
 
 # Layout
 default-root-container-layout = 'tiles'
 
 # Gaps
 [gaps]
-inner.horizontal = 0
-inner.vertical =   0
-outer.left =       0
-outer.bottom =     0
-outer.top =        0
-outer.right =      0
+inner.horizontal = 4
+inner.vertical   = 4
+outer.left       = 4
+outer.bottom     = 4
+outer.top        = 4
+outer.right      = 4
 
+[mode.main.binding]
 # KEYBINDINGS
 # All possible modifiers: cmd, alt, ctrl, shift
 # All possible keys:
@@ -44,18 +45,19 @@ outer.right =      0
 #                   keypadMinus, keypadMultiply, keypadPlus
 # - Arrows.         left, down, up, right
 
-[mode.main.binding]
-alt-shift-c = 'reload-config'
+# All possible modifiers: cmd, alt, ctrl, shift
+
+# All possible commands: https://nikitabobko.github.io/AeroSpace/commands
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#layout
+alt-shift-t = 'layout tiles horizontal vertical'
+alt-a = 'layout accordion horizontal vertical'
 
 alt-tab = 'workspace-back-and-forth'
 alt-n = 'workspace next'
 alt-p = 'workspace prev'
 alt-f = 'fullscreen'
 alt-space = 'layout floating tiling'
-
-# Layout Orientation
-alt-s = 'layout tiles horizontal vertical'
-alt-t = 'layout accordion horizontal'
 
 # Window Navigation
 alt-left  = 'focus left --boundaries all-monitors-outer-frame'
@@ -79,7 +81,7 @@ alt-equal = 'resize smart +50'
 # App Launchers
 alt-enter = 'exec-and-forget kitty --single-instance ~'
 alt-b = 'exec-and-forget firefox'
-alt-n = 'exec-and-forget Logseq'
+alt-shift-n = 'exec-and-forget Logseq'
 alt-e = 'exec-and-forget emacs'
 
 # WORKSPACES
@@ -107,14 +109,14 @@ alt-shift-0 = ['move-node-to-workspace 0', 'workspace 0']
 
 # Assign Workspaces to Each Display
 [workspace-to-monitor-force-assignment]
-0 = ['msi',      'built-in', 'crestron']
-1 = ['msi',      'built-in', 'built-in']
-2 = ['built-in', 'built-in', 'built-in']
-3 = ['built-in', 'built-in', 'built-in']
+0 = ['msi',      'built-in', 'built-in']
+1 = ['msi',      'built-in', 'crestron']
+2 = ['built-in', 'Dell',     'built-in']
+3 = ['built-in', 'Dell',     'built-in']
 4 = ['msi',      'Dell',     'built-in']
 5 = ['built-in', 'built-in', 'built-in']
-6 = ['msi',      'built-in', 'built-in']
-7 = ['built-in', 'Dell',     'built-in']
+6 = ['msi',      'Dell',     'built-in']
+7 = ['built-in', 'built-in', 'built-in']
 8 = ['msi',      'Dell',     'built-in']
 9 = ['msi',      'Dell',     'built-in']
 C = ['built-in', 'built-in', 'built-in']
@@ -130,26 +132,26 @@ run = ['layout floating']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
-run = ['layout floating', 'move-node-to-workspace 2']
+run = ['layout floating']
 
 # Assign App Windows by Workspace
 
-[[on-window-detected]]
-if.app-id = 'org.mozilla.firefox'
-run = 'move-node-to-workspace 1'
-
-[[on-window-detected]]
-if.app-id = 'net.kovidgoyal.kitty'
-run = "move-node-to-workspace 2"
-
+# [[on-window-detected]]
+# if.app-id = 'org.mozilla.firefox'
+# run = 'move-node-to-workspace 1'
+#
+# [[on-window-detected]]
+# if.app-id = 'net.kovidgoyal.kitty'
+# run = "move-node-to-workspace 2"
+#
 [[on-window-detected]]
 if.app-id = 'com.electron.logseq'
 run = 'move-node-to-workspace 3'
 
-[[on-window-detected]]
-if.app-id = 'org.gnu.Emacs'
-run = 'move-node-to-workspace 4'
-
+# [[on-window-detected]]
+# if.app-id = 'org.gnu.Emacs'
+# run = 'move-node-to-workspace 4'
+#
 [[on-window-detected]]
 if.app-id = 'net.whatsapp.WhatsApp'
 run = "move-node-to-workspace 5"
