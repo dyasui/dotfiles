@@ -16,3 +16,4 @@ emacs/.config/emacs/recentf
 git/.gitconfig
 nvim/.config/nvim/lazy-lock.json
 yazi/.config/yazi/plugins/mediainfo.yazi
+emacs/.config/emacs/transient/history.el
