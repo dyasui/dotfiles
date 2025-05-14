@@ -21,7 +21,7 @@ prepend_rules = [
   { name = "*.jpg", use = "QuickLook" },
   { name = "*.png", use = "QuickLook" },
   { name = "*.qmd", use = "edit" },
-  { name = "*.org", use = "emacs" },
+  { name = "*.org", use = "vim" },
   { name = "*.csv", use = "csv"},
   { mime = "folder", use = "nvim" },
 ]
