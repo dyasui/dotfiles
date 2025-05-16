@@ -8,7 +8,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy
 exec syncthing
 exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
 exec --no-startup-id nm-applet
-exec --no-startup-id feh --randomize --bg-scale --recursive ~/Pictures/Wallpapers
+exec --no-startup-id feh --randomize --bg-fill --recursive ~/Pictures/Wallpapers/Places
 # add side monitor as secondary display
 # exec --no-startup-id xrandr --output DisplayPort-2 --auto --left-of DisplayPort-0
 
@@ -27,7 +27,7 @@ default_orientation horizontal
 focus_follows_mouse no
 
 # Gaps
-default_border pixel 8
+default_border pixel 0
 gaps inner 8px
 gaps outer 8px
 
@@ -208,15 +208,15 @@ for_window [class="dolphin"] floating enable
 for_window [title="Picture-in-Picture"] sticky enable
 
 # Assing Application Windows by Workspace
-assign [class="(?)firefox"] $ws1 
-assign [class="kitty"] $ws2
-assign [class="logseq"] $ws3
-assign [class="Emacs"] $ws4
-assign [class="WhatsApp"] $ws5
-assign [class="steam"] $ws6
-assign [class="zotero"] $ws7
-assign [class="rstudio"] $ws8
-assign [class="vscodium"] $ws8
+# assign [class="(?)firefox"] $ws1 
+# assign [class="kitty"] $ws2
+# assign [class="logseq"] $ws3
+# assign [class="Emacs"] $ws4
+# assign [class="WhatsApp"] $ws5
+# assign [class="steam"] $ws6
+# assign [class="zotero"] $ws7
+# assign [class="rstudio"] $ws8
+# assign [class="vscodium"] $ws8
 
 set $bg-color 	         #1a1a22
 set $inactive-bg-color   #1a1a22
