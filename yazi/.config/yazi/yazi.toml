@@ -1,15 +1,12 @@
 [opener]
 edit = [
-  { run = 'vim "$@"', block = true },
+  { run = 'nvim "$@"', block = true },
 ]
 read = [
   { run = 'fancy-cat "$@"', desc = "Open" }
 ]
 emacs = [
   { run = 'emacs "$@"', orphan = true, desc = "Open in Emacs"}
-]
-nvim = [
-  { run = 'nvim "$@"', block = true, desc = "Open in NeoVim"}
 ]
 csv = [
   { run = 'csvlens "$@"', block = true }
@@ -22,8 +19,9 @@ quicklook = [
 prepend_rules = [
   { name = "*.pdf", use = "read" },
   { name = "*.jpg", use = "QuickLook" },
+  { name = "*.png", use = "QuickLook" },
   { name = "*.qmd", use = "edit" },
-  { name = "*.org", use = "emacs" },
+  { name = "*.org", use = "vim" },
   { name = "*.csv", use = "csv"},
   { mime = "folder", use = "nvim" },
 ]
@@ -42,21 +40,6 @@ tab_size        = 2
 max_width       = 2400
 max_height      = 3600
 image_quality   = 75
-
-[plugin]
-  prepend_preloaders = [
-    # Replace magick, image, video with mediainfo
-    { mime = "{audio,video,image}/*", run = "mediainfo" },
-    { mime = "application/subrip", run = "mediainfo" },
-  ]
-  prepend_previewers = [
-    # Replace magick, image, video with mediainfo
-    { mime = "{audio,video,image}/*", run = "mediainfo"},
-    { mime = "application/subrip", run = "mediainfo" },
-  ]
-  # There are more extensions which are supported by mediainfo.
-  # Just add file's MIME type to `previewers`, `preloaders` above.
-  # https://mediaarea.net/en/MediaInfo/Support/Formats
 
 # open with QuickLook on macos
 [[manager.prepend_keymap]]

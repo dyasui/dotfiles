@@ -20,7 +20,6 @@
   - [[#setting-the-font-face][Setting the font face]]
   - [[#zooming-inout][Zooming In/Out]]
 - [[#general-keybindings][General Keybindings]]
-- [[#gptel][GPTEL]]
 - [[#gui-tweaks][GUI tweaks]]
   - [[#disable-menubar-toolbars-scrollbars][Disable Menubar, toolbars, scrollbars]]
   - [[#show-line-numbers-and-truncated-lines][Show Line numbers and truncated lines]]
@@ -323,62 +322,8 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
   :config
   (load "ess-autoloads")
   (load-library "ob-R")
+  (load-library "ob-julia")
   (setq org-confirm-babel-evaluate nil))
-(use-package julia-mode
-  :ensure t
-  :mode "\\.jl\\'"
-  :init
-  (setenv "JULIA_NUM_THREADS" "6")
-  (with-eval-after-load 'julia-repl
-    (julia-repl-set-terminal-backend 'vterm)))
-(use-package julia-vterm
-  :ensure t
-  :hook (julia-mode-hook . julia-vterm-mode))
-(use-package ob-julia-vterm
-  :ensure t
-  :config
-  (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
-  (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm))
-#+end_src
-*** TODO get julia integration working
-it seems like DOOM uses =julia-mode= and some other stuff besides ESS
-
-#+begin_src emacs-lisp
-(use-package julia-mode
-  :ensure t
-  :config
-  (setq inferior-julia-program-name "/home/linuxbrew/.linuxbrew/bin/julia"))
-#+end_src
-
-**** I took the following from [[https://github.com/George9000/doom_discourse][this repository]] which is meant for DOOM on macOS, and I don't really know which parts are needed
-#+begin_src emacs-lisp :tangle no :eval no
-(setq treesit-language-source-alist
-      '((julia "https://github.com/tree-sitter/tree-sitter-julia")))
-(setq treesit-auto-install 'prompt)
-
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-language-id-configuration
-    '(julia-ts-mode . "julia")))
-(setq lsp-julia-package-dir nil)
-;; (after! lsp-julia
-;;   (setq lsp-julia-default-environment "~/.julia/environments/v1.10")
-;;   (setq-hook! 'julia-ts-mode-hook +format-with-lsp nil))
-;; 
-;; (after! julia-ts-mode
-;;   (add-hook! 'julia-ts-mode-hook
-;;     (setq-local lsp-enable-folding t
-;;                 lsp-folding-range-limit 100)))
-;;
-;;
-;; Julia REPL
-(defun open-popup-new-frame (buffer &optional alist) (+popup-display-buffer-fullframe-fn buffer alist))
-(use-package julia-repl
-  :hook (julia-ts-mode . julia-repl-mode)
-  :config
-  (setq julia-repl-executable-records '((default "julia" :basedir "/Users/foo/applications/julia10/usr/share/julia/base/")))
-  (setq julia-repl-executable-key 'default)
-  (setq julia-repl-switches "-q -t 4,1")
-  (set-popup-rule! "^\\*julia\\:.*\\*$" :actions '(display-buffer-pop-up-frame . inhibit-switch-frame)))
 #+end_src
 * FUZZY FINDING
 #+begin_src emacs-lisp
@@ -517,11 +462,6 @@ Emacs uses various fonts and font styles in different places.
   )
 #+end_src
 
-* GPTEL
-#+begin_src emacs-lisp
-(use-package gptel
-  :ensure t)
-#+end_src
 * GUI tweaks
 ** Disable Menubar, toolbars, scrollbars
 #+begin_src emacs-lisp
