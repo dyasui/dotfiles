@@ -38,6 +38,7 @@
   - [[#eshell][Eshell]]
   - [[#vterm][Vterm]]
   - [[#vterm-toggle][Vterm-Toggle]]
+- [[#tabspaces][TABSPACES]]
 - [[#temporary-files-location][TEMPORARY FILES LOCATION]]
 - [[#theme][THEME]]
 - [[#which-key][WHICH-KEY]]
@@ -156,6 +157,8 @@ To get the vim bindings to work in other types of buffers
 * BASIC SETTINGS
 #+begin_src emacs-lisp
 (setq ring-bell-function 'ignore)
+(setq tab-bar-close-button-show nil)       ;; hide tab close / X button
+(setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
 #+end_src
 
 * BUFFER-MOVE
@@ -338,15 +341,15 @@ Emacs uses various fonts and font styles in different places.
 #+begin_src emacs-lisp
   (set-face-attribute 'default nil
 		      :font "JetBrainsMono Nerd Font"
-		      :height 180
+		      :height 160
 		      :weight 'medium)
   (set-face-attribute 'variable-pitch nil
 		      :font "Menlo"
-		      :height 180
+		      :height 160
 		      :weight 'medium)
   (set-face-attribute 'fixed-pitch nil
 		      :font "JetBrainsMono Nerd Font"
-		      :height 180
+		      :height 160
 		      :weight 'medium)
   ;; italicizes commented text and keywords
   (set-face-attribute 'font-lock-comment-face nil
@@ -354,10 +357,10 @@ Emacs uses various fonts and font styles in different places.
   (set-face-attribute 'font-lock-keyword-face nil
 		      :slant 'italic)
   ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
 
   ;;set default line spacing
-  (setq-default line-spacing 0.12)
+  (setq-default line-spacing 0.08)
 #+end_src
 
 ** Zooming In/Out
@@ -380,12 +383,19 @@ Emacs uses various fonts and font styles in different places.
       :prefix "SPC" ;; set leader
       :global-prefix "C-SPC") ;; access leader in insert mode
 
+    (general-define-key
+     "M-n" '(make-frame :wk "Open new frame")
+     "M-w" '(delete-frame :wk "Close current frame"))
+
+    (dy/leader-keys
+      "c s" '(cheat-sheet :wk "Cheat Sheet"))
+
     (dy/leader-keys
       "SPC" '(execute-extended-command :wk "M-x")
-      "f f" '(find-file :wk "Find file")
+      "f f" '(dired :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-      "f r" '(recentf-open-files :wk "Find recent files")
-      "c c" '(comment-line :wk "Comment lines"))
+      "f r" '(recentf :wk "Find recent files")
+      "f s" '(affe-grep :wk "Find string in current project"))
 
     (dy/leader-keys
       "b" '(:ignore t :wk "buffer")
@@ -425,6 +435,12 @@ Emacs uses various fonts and font styles in different places.
       "o d t" '(org-time-stamp :wk "Org time stamp"))
       
     (dy/leader-keys
+      "p" '(:ignore :wk "Project")
+      "p f" '(project-find-file :wk "Find files in current project")
+      "p s" '(project-switch-project :wk "switch project")
+      )
+      
+    (dy/leader-keys
       "r" '(:ignore :wk "R")
       "r d" '(ess-rdired  :wk "open R object directory"))
     
@@ -454,11 +470,13 @@ Emacs uses various fonts and font styles in different places.
      "w L" '(buf-move-right :wk "Buffer move right"))
 
     (dy/leader-keys
-      "TAB" '(:ignore t :wk "Tabs")
-      "TAB o" '(tab-new :wk "Open new tab")
-      "TAB c" '(tab-close :wk "Close tab")
-      "TAB n" '(tab-next :wk "Next tab")
-      "TAB p" '(tab-previous :wk "Previous tab"))
+      ;; "TAB" '(:ignore t :wk "Tabs")
+      "t n" '(tab-new :wk "Open new tab")
+      "t q" '(tab-close :wk "Close tab")
+      "t r" '(tab-rename :wk "Rename tab")
+      "TAB" '(tab-next :wk "Next tab")
+      "DEL" '(tab-previous :wk "Previous tab")
+      "g c c" '(comment-line :wk "Comment lines"))
   )
 #+end_src
 
@@ -577,6 +595,12 @@ Use =recentf-open-files= to see a list of recently opened files
   (reusable-frames . visible)
   (window-height . 0.3)))
   )
+#+end_src
+
+* TABSPACES
+#+begin_src emacs-lisp
+(add-to-list 'load-path "~/.emacs/")
+(require 'tabspaces)
 #+end_src
 * TEMPORARY FILES LOCATION
 #+begin_src 

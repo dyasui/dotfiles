@@ -176,7 +176,7 @@
 	 `(fringe ((,class (:background ,bg2 :foreground ,fg4))))
 	 `(cursor ((,class (:background ,fg4))))
    `(isearch ((,class (:bold t :foreground ,warning :background ,bg3))))
-   `(mode-line ((,class (:box (:line-width 1 :color nil) :bold t :foreground , "#c7d7e0" :background , "#363646"))))
+   `(mode-line ((,class (:underline nil :overline nil :box (:line-width 1 :color bg1) :bold t :foreground , bg1 :background , "#363646"))))
    `(mode-line-inactive ((,class (:box (:line-width 1 :color nil :style pressed-button) :foreground ,var :background ,bg1 :weight normal))))
    `(mode-line-buffer-id ((,class (:bold t :foreground ,func :background ,unspec))))
 	 `(mode-line-highlight ((,class (:foreground ,keyword :box nil :weight bold))))
@@ -381,7 +381,15 @@
  (when (>= emacs-major-version 28)
     (custom-theme-set-faces
      'kanagawa
-     `(tab-line-tab-modified ((,class (:foreground , "#6e915f" :weight bold))))))
+     `(tab-line-tab-modified ((,class (:foreground , "#6e915f" :weight bold))))
+     `(tab-bar               ((,class (:inherit mode-line :foreground ,bg3
+						   :weight light
+						   :box (:line-width (1 . 1)
+								     :color nil
+								     :style flat-button)))))))
+
+ `(tab-bar-tab-inactive ((,class (:background ,bg2, :foreground ,fg3))))
+
   (when (boundp 'font-lock-regexp-face)
     (custom-theme-set-faces
     'kanagawa
