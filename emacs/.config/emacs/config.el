@@ -96,9 +96,91 @@
 ;; Setting RETURN key in org-mode to follow links
   (setq org-return-follows-link  t)
 
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; (load-theme 'doom-one t)
+    (setq doom-themes-enable-bold t
+	  doom-themes-enable-italic t)
+    (doom-themes-org-config))
+  ;; solaire darkens non-standard buffers' backgrounds
+  (use-package solaire-mode
+    :ensure t
+    :config
+    (solaire-global-mode +1))
+  ;; doom's fancy modeline
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
+
+  (use-package dashboard
+  :ensure t
+  :init
+  (setq initial-buffer-choice 'dashboard-open)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "Welcome to Emacs")
+  (setq dashboard-startup-banner 'logo)
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents . 5)
+                        (agenda . 5)
+                        (bookmarks . 3)
+                        (projects . 3)
+                        (registers . 3)))
+  ;; (dashboard-modify-heading-icons '((recents . "file-text")
+  ;;                                  (bookmarks . "book")))
+  :config
+  (dashboard-setup-startup-hook))
+
+  (set-face-attribute 'default nil
+		      :font "JetBrainsMono Nerd Font"
+		      :height 160
+		      :weight 'medium)
+  (set-face-attribute 'variable-pitch nil
+		      :font "Menlo"
+		      :height 160
+		      :weight 'medium)
+  (set-face-attribute 'fixed-pitch nil
+		      :font "JetBrainsMono Nerd Font"
+		      :height 160
+		      :weight 'medium)
+  ;; italicizes commented text and keywords
+  (set-face-attribute 'font-lock-comment-face nil
+		      :slant 'italic)
+  (set-face-attribute 'font-lock-keyword-face nil
+		      :slant 'italic)
+  ;;sets default font on all graphical frames after restarting emacs
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
+
+  ;;set default line spacing
+  (setq-default line-spacing 0.08)
+
+  (global-set-key (kbd "C-=") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+(load-theme 'kanagawa t)
+
+(use-package rainbow-mode
+  :ensure t
+  :hook org-mode prog-mode)
+
 (setq ring-bell-function 'ignore)
 (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
 (setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
+
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+
+  (global-display-line-numbers-mode 1)
+  (global-visual-line-mode t)
+
+;; save temp files to ~/.config/emacs/auto-save
+(setq auto-save-file-name-transforms
+          `((".*" ,(concat user-emacs-directory "auto-save/") t)))
 
 (require 'windmove)
 
@@ -183,25 +265,6 @@ one, an error is signaled."
   :after company
   :hook (company-mode . company-box-mode))
 
-  (use-package dashboard
-  :ensure t
-  :init
-  (setq initial-buffer-choice 'dashboard-open)
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "Welcome to Emacs")
-  (setq dashboard-startup-banner 'logo)
-  (setq dashboard-center-content t)
-  (setq dashboard-items '((recents . 5)
-                        (agenda . 5)
-                        (bookmarks . 3)
-                        (projects . 3)
-                        (registers . 3)))
-  ;; (dashboard-modify-heading-icons '((recents . "file-text")
-  ;;                                  (bookmarks . "book")))
-  :config
-  (dashboard-setup-startup-hook))
-
 (use-package dired-open
   :config
   (setq dired-open-extensions '(("gif" . "sxiv")
@@ -210,27 +273,60 @@ one, an error is signaled."
 				("mkv" . "mpv")
 				("mp4" . "mpv"))))
 
-  (use-package doom-themes
-    :ensure t
-    :config
-    ;; (load-theme 'doom-one t)
-    (setq doom-themes-enable-bold t
-	  doom-themes-enable-italic t)
-    (doom-themes-org-config))
-  ;; solaire darkens non-standard buffers' backgrounds
-  (use-package solaire-mode
-    :ensure t
-    :config
-    (solaire-global-mode +1))
-  ;; doom's fancy modeline
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1))
+  (fido-vertical-mode t)
+;; (icomplete-vertical-mode t)
 
-;; Must be used *after* the theme is loaded
-;; (custom-set-faces
-;;   `(org-block ((t (:background , #16161D))))
-;; )
+(use-package projectile
+  :config
+  (projectile-mode 1))
+
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+
+(add-to-list 'load-path "~/.emacs/")
+(require 'tabspaces)
+
+(use-package vterm
+  :ensure t)
+
+(use-package vterm-toggle
+  :ensure t
+  :after vterm
+  :config
+  (setq vterm-toggle-fullscreen-p nil)
+  (setq vterm-toggle-scope 'project)
+  (add-to-list 'display-buffer-alist
+     '((lambda (buffer-or-name _)
+     (let ((buffer (get-buffer buffer-or-name)))
+ (with-current-buffer buffer
+   (or (equal major-mode 'vterm-mode)
+       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+  (display-buffer-reuse-window display-buffer-at-bottom)
+  ;;(display-buffer-reuse-window display-buffer-in-direction)
+  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+  ;;(direction . bottom)
+  ;;(dedicated . t) ;dedicated is supported in emacs27
+  (reusable-frames . visible)
+  (window-height . 0.3)))
+  )
+
+(use-package which-key
+  :init
+  (which-key-mode 1)
+  :config
+  (setq which-key-side-window-location 'bottom
+	which-key-sort-order #'which-key-key-order-alpha
+	which-key-sort-uppercase-first nil
+	which-key-add-column-padding 1
+	which-key-max-display-columns nil
+	which-key-min-display-lines 6
+	which-key-side-window-slot -10
+	which-key-side-window-max-height 0.25
+	which-key-idle-delay 0.8
+	which-key-max-description-length 25
+	which-key-allow-imprecise-window-fit nil
+	which-key-separator "  " ))
 
 (use-package ess
   :ensure t
@@ -239,39 +335,6 @@ one, an error is signaled."
   (load-library "ob-R")
   (load-library "ob-julia")
   (setq org-confirm-babel-evaluate nil))
-
-(use-package affe
-  :config
-  ;; Manual preview key for `affe-grep'
-  (consult-customize affe-grep :preview-key "M-."))
-
-  (set-face-attribute 'default nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 160
-		      :weight 'medium)
-  (set-face-attribute 'variable-pitch nil
-		      :font "Menlo"
-		      :height 160
-		      :weight 'medium)
-  (set-face-attribute 'fixed-pitch nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 160
-		      :weight 'medium)
-  ;; italicizes commented text and keywords
-  (set-face-attribute 'font-lock-comment-face nil
-		      :slant 'italic)
-  (set-face-attribute 'font-lock-keyword-face nil
-		      :slant 'italic)
-  ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
-
-  ;;set default line spacing
-  (setq-default line-spacing 0.08)
-
-  (global-set-key (kbd "C-=") 'text-scale-increase)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
   (use-package general
     :ensure t
@@ -380,16 +443,6 @@ one, an error is signaled."
       "g c c" '(comment-line :wk "Comment lines"))
   )
 
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-
-  (global-display-line-numbers-mode 1)
-  (global-visual-line-mode t)
-
-  (fido-vertical-mode t)
-;; (icomplete-vertical-mode t)
-
 (use-package toc-org
 :ensure t
 :commands toc-org-enable
@@ -410,62 +463,3 @@ one, an error is signaled."
    (R . t)))
 
 (require 'org-tempo)
-
-(use-package projectile
-  :config
-  (projectile-mode 1))
-
-(use-package rainbow-mode
-  :ensure t
-  :hook org-mode prog-mode)
-
-(require 'recentf)
-(recentf-mode 1)
-(setq recentf-max-menu-items 25)
-
-(use-package vterm
-  :ensure t)
-
-(use-package vterm-toggle
-  :ensure t
-  :after vterm
-  :config
-  (setq vterm-toggle-fullscreen-p nil)
-  (setq vterm-toggle-scope 'project)
-  (add-to-list 'display-buffer-alist
-     '((lambda (buffer-or-name _)
-     (let ((buffer (get-buffer buffer-or-name)))
- (with-current-buffer buffer
-   (or (equal major-mode 'vterm-mode)
-       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-  (display-buffer-reuse-window display-buffer-at-bottom)
-  ;;(display-buffer-reuse-window display-buffer-in-direction)
-  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-  ;;(direction . bottom)
-  ;;(dedicated . t) ;dedicated is supported in emacs27
-  (reusable-frames . visible)
-  (window-height . 0.3)))
-  )
-
-(add-to-list 'load-path "~/.emacs/")
-(require 'tabspaces)
-
-  (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-  (load-theme 'kanagawa t)
-
-  (use-package which-key
-  :init
-  (which-key-mode 1)
-  :config
-  (setq which-key-side-window-location 'bottom
-	which-key-sort-order #'which-key-key-order-alpha
-	which-key-sort-uppercase-first nil
-	which-key-add-column-padding 1
-	which-key-max-display-columns nil
-	which-key-min-display-lines 6
-	which-key-side-window-slot -10
-	which-key-side-window-max-height 0.25
-	which-key-idle-delay 0.8
-	which-key-max-description-length 25
-	which-key-allow-imprecise-window-fit nil
-	which-key-separator "  " ))
