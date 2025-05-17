@@ -1,29 +1,30 @@
 [opener]
 edit = [
-  { run = 'nvim "$@"', block = true },
+  { run = 'emacsclient "$@"', block = true },
 ]
 read = [
-  { run = 'fancy-cat "$@"', desc = "Open" }
+  { run = 'fancy-cat "$@"', orphan = true, desc = "Open" }
 ]
 emacs = [
-  { run = 'emacs "$@"', orphan = true, desc = "Open in Emacs"}
+  { run = 'emacsclient -c "$@"', orphan = true, desc = "Open in Emacs"}
 ]
 csv = [
   { run = 'csvlens "$@"', block = true }
 ]
-quicklook = [
-  { run = 'shell -- qlmanage -p "$@"', orphan = true, desc = "QuickLook" }
+
+icat = [
+  { run = 'icat "$@"', block = true, desc = "View Image" }
 ]
 
 [open]
 prepend_rules = [
   { name = "*.pdf", use = "read" },
-  { name = "*.jpg", use = "QuickLook" },
-  { name = "*.png", use = "QuickLook" },
+  { name = "*.jpg", use = "icat" },
+  { name = "*.png", use = "icat" },
   { name = "*.qmd", use = "edit" },
-  { name = "*.org", use = "vim" },
+  { name = "*.org", use = "emacs" },
   { name = "*.csv", use = "csv"},
-  { mime = "folder", use = "nvim" },
+  { mime = "folder/*", use = "shell --block --orphan" },
 ]
 
 [manager]
