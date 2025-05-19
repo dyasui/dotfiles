@@ -1,4 +1,4 @@
-  (defvar elpaca-installer-version 0.10)
+(defvar elpaca-installer-version 0.10)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -96,69 +96,69 @@
 ;; Setting RETURN key in org-mode to follow links
   (setq org-return-follows-link  t)
 
-  (use-package doom-themes
-    :ensure t
-    :config
-    ;; (load-theme 'doom-one t)
-    (setq doom-themes-enable-bold t
-	  doom-themes-enable-italic t)
-    (doom-themes-org-config))
-  ;; solaire darkens non-standard buffers' backgrounds
-  (use-package solaire-mode
-    :ensure t
-    :config
-    (solaire-global-mode +1))
-  ;; doom's fancy modeline
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1))
-
-  (use-package dashboard
+(use-package doom-themes
   :ensure t
-  :init
-  (setq initial-buffer-choice 'dashboard-open)
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "Welcome to Emacs")
-  (setq dashboard-startup-banner 'logo)
-  (setq dashboard-center-content t)
-  (setq dashboard-items '((recents . 5)
-                        (agenda . 5)
-                        (bookmarks . 3)
-                        (projects . 3)
-                        (registers . 3)))
-  ;; (dashboard-modify-heading-icons '((recents . "file-text")
-  ;;                                  (bookmarks . "book")))
   :config
-  (dashboard-setup-startup-hook))
+  ;; (load-theme 'doom-one t)
+  (setq doom-themes-enable-bold t
+	doom-themes-enable-italic t)
+  (doom-themes-org-config))
+;; solaire darkens non-standard buffers' backgrounds
+(use-package solaire-mode
+  :ensure t
+  :config
+  (solaire-global-mode +1))
+;; doom's fancy modeline
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
 
-  (set-face-attribute 'default nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 160
-		      :weight 'medium)
-  (set-face-attribute 'variable-pitch nil
-		      :font "Menlo"
-		      :height 160
-		      :weight 'medium)
-  (set-face-attribute 'fixed-pitch nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 160
-		      :weight 'medium)
-  ;; italicizes commented text and keywords
-  (set-face-attribute 'font-lock-comment-face nil
-		      :slant 'italic)
-  (set-face-attribute 'font-lock-keyword-face nil
-		      :slant 'italic)
-  ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
+(use-package dashboard
+:ensure t
+:init
+(setq initial-buffer-choice 'dashboard-open)
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-banner-logo-title "Welcome to Emacs")
+(setq dashboard-startup-banner 'logo)
+(setq dashboard-center-content t)
+(setq dashboard-items '((recents . 5)
+                      (agenda . 5)
+                      (bookmarks . 3)
+                      (projects . 3)
+                      (registers . 3)))
+;; (dashboard-modify-heading-icons '((recents . "file-text")
+;;                                  (bookmarks . "book")))
+:config
+(dashboard-setup-startup-hook))
 
-  ;;set default line spacing
-  (setq-default line-spacing 0.08)
+(set-face-attribute 'default nil
+		    :font "JetBrainsMono Nerd Font"
+		    :height 160
+		    :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+		    :font "Menlo"
+		    :height 160
+		    :weight 'medium)
+(set-face-attribute 'fixed-pitch nil
+		    :font "JetBrainsMono Nerd Font"
+		    :height 160
+		    :weight 'medium)
+;; italicizes commented text and keywords
+(set-face-attribute 'font-lock-comment-face nil
+		    :slant 'italic)
+(set-face-attribute 'font-lock-keyword-face nil
+		    :slant 'italic)
+;;sets default font on all graphical frames after restarting emacs
+(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
 
-  (global-set-key (kbd "C-=") 'text-scale-increase)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+;;set default line spacing
+(setq-default line-spacing 0.08)
+
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 (load-theme 'kanagawa t)
@@ -171,12 +171,12 @@
 (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
 (setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
 
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 
-  (global-display-line-numbers-mode 1)
-  (global-visual-line-mode t)
+(global-display-line-numbers-mode nil)
+(global-visual-line-mode t)
 
 ;; save temp files to ~/.config/emacs/auto-save
 (setq auto-save-file-name-transforms
@@ -273,7 +273,10 @@ one, an error is signaled."
 				("mkv" . "mpv")
 				("mp4" . "mpv"))))
 
-  (fido-vertical-mode t)
+(use-package gptel
+  :load-path "~/.config/emacs/elpa/gptel-0.9.8/")
+
+(fido-vertical-mode t)
 ;; (icomplete-vertical-mode t)
 
 (use-package projectile
@@ -284,8 +287,8 @@ one, an error is signaled."
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 
-(add-to-list 'load-path "~/.emacs/")
-(require 'tabspaces)
+;; (add-to-list 'load-path "~/.emacs/")
+;; (require 'tabspaces)
 
 (use-package vterm
   :ensure t)
@@ -328,120 +331,114 @@ one, an error is signaled."
 	which-key-allow-imprecise-window-fit nil
 	which-key-separator "  " ))
 
-(use-package ess
+(use-package general
   :ensure t
   :config
-  (load "ess-autoloads")
-  (load-library "ob-R")
-  (load-library "ob-julia")
-  (setq org-confirm-babel-evaluate nil))
+  (general-evil-setup)
+  ;; set space bar as global leader key
+  (general-create-definer dy/leader-keys
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+    :prefix "SPC" ;; set leader
+    :global-prefix "C-SPC") ;; access leader in insert mode
 
-  (use-package general
-    :ensure t
-    :config
-    (general-evil-setup)
-    ;; set space bar as global leader key
-    (general-create-definer dy/leader-keys
-      :states '(normal insert visual emacs)
-      :keymaps 'override
-      :prefix "SPC" ;; set leader
-      :global-prefix "C-SPC") ;; access leader in insert mode
+  (general-define-key
+   "M-n" '(make-frame :wk "Open new frame")
+   "M-w" '(delete-frame :wk "Close current frame"))
 
-    (general-define-key
-     "M-n" '(make-frame :wk "Open new frame")
-     "M-w" '(delete-frame :wk "Close current frame"))
+  (dy/leader-keys
+    "c s" '(cheat-sheet :wk "Cheat Sheet"))
 
-    (dy/leader-keys
-      "c s" '(cheat-sheet :wk "Cheat Sheet"))
+  (dy/leader-keys
+    "SPC" '(execute-extended-command :wk "M-x")
+    "f f" '(dired :wk "Find file")
+    "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+    "f r" '(recentf :wk "Find recent files")
+    "f s" '(affe-grep :wk "Find string in current project"))
 
-    (dy/leader-keys
-      "SPC" '(execute-extended-command :wk "M-x")
-      "f f" '(dired :wk "Find file")
-      "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-      "f r" '(recentf :wk "Find recent files")
-      "f s" '(affe-grep :wk "Find string in current project"))
+  (dy/leader-keys
+    "b" '(:ignore t :wk "buffer")
+    "b s" '(switch-to-buffer :wk "Switch buffer")
+    "b q" '(kill-this-buffer :wk "Kill buffer")
+    "b n" '(next-buffer :wk "Next buffer")
+    "b p" '(previous-buffer :wk "Previous buffer")
+    "b r" '(revert-buffer :wk "Reload buffer")
+    "b i" '(ibuffer :wk "Buffer Index"))
 
-    (dy/leader-keys
-      "b" '(:ignore t :wk "buffer")
-      "b s" '(switch-to-buffer :wk "Switch buffer")
-      "b q" '(kill-this-buffer :wk "Kill buffer")
-      "b n" '(next-buffer :wk "Next buffer")
-      "b p" '(previous-buffer :wk "Previous buffer")
-      "b r" '(revert-buffer :wk "Reload buffer")
-      "b i" '(ibuffer :wk "Buffer Index"))
+  (dy/leader-keys
+    "e" '(:ignore t :wk "Eshell/Evaluate")
+    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+    "e e" '(eval-expression :wk "Evaluate an elisp expression")
+    "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+    "e r" '(eval-region :wk "Evaluate elisp in region")
+    "e s" '(eshell :wk "Eshell"))
 
-    (dy/leader-keys
-      "e" '(:ignore t :wk "Eshell/Evaluate")
-      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-      "e d" '(eval-defun :wk "Evaluate defun containing or after point")
-      "e e" '(eval-expression :wk "Evaluate an elisp expression")
-      "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-      "e r" '(eval-region :wk "Evaluate elisp in region")
-      "e s" '(eshell :wk "Eshell"))
+  (dy/leader-keys
+    "h" '(:ignore t :wk "Help")
+    "h f" '(describe-function :wk "Describe function")
+    "h v " '(describe-variable :wk "Describe variable")
+    "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
 
-    (dy/leader-keys
-      "h" '(:ignore t :wk "Help")
-      "h f" '(describe-function :wk "Describe function")
-      "h v " '(describe-variable :wk "Describe variable")
-      "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
+  (dy/leader-keys
+    "o" '(:ignore t :wk "Org")
+    "o a" '(org-agenda :wk "Org agenda")
+    "o e" '(org-export-dispatch :wk "Org export dispatch")
+    "o i" '(org-toggle-item :wk "Org toggle item")
+    "o t" '(org-todo :wk "Org todo")
+    "o b t" '(org-babel-tangle :wk "Org babel tangle")
+    "o T" '(org-todo-list :wk "Org todo list"))
 
-    (dy/leader-keys
-      "o" '(:ignore t :wk "Org")
-      "o a" '(org-agenda :wk "Org agenda")
-      "o e" '(org-export-dispatch :wk "Org export dispatch")
-      "o i" '(org-toggle-item :wk "Org toggle item")
-      "o t" '(org-todo :wk "Org todo")
-      "o b t" '(org-babel-tangle :wk "Org babel tangle")
-      "o T" '(org-todo-list :wk "Org todo list"))
+  (dy/leader-keys
+    "o d" '(:ignore t :wk "Dates/times")
+    "o d t" '(org-time-stamp :wk "Org time stamp"))
 
-    (dy/leader-keys
-      "o d" '(:ignore t :wk "Dates/times")
-      "o d t" '(org-time-stamp :wk "Org time stamp"))
-      
-    (dy/leader-keys
-      "p" '(:ignore :wk "Project")
-      "p f" '(project-find-file :wk "Find files in current project")
-      "p s" '(project-switch-project :wk "switch project")
-      )
-      
-    (dy/leader-keys
-      "r" '(:ignore :wk "R")
-      "r d" '(ess-rdired  :wk "open R object directory"))
-    
-    (dy/leader-keys
-     "t" '(:ignore t :wk "Toggle")
-     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-     "t t" '(visual-line-mode :wk "Toggle truncated lines")
-     "t v" '(vterm-toggle :wk "Toggle vterm"))
+  (dy/leader-keys
+    "p" '(:ignore :wk "Project")
+    "p f" '(project-find-file :wk "Find files in current project")
+    "p s" '(project-switch-project :wk "switch project")
+    "p b" '(project-list-buffers :wk "List project buffers")
+    "p k" '(project-kill-buffers :wk "Close all project buffers")
+    )
 
-    (dy/leader-keys
-     "w" '(:ignore t :wk "Windows")
-     ;; Window splits
-     "w q" '(evil-window-delete :wk "Close window")
-     "w n" '(evil-window-new :wk "New window")
-     "w s" '(evil-window-split :wk "Horizontal split window")
-     "w v" '(evil-window-vsplit :wk "Vertical split window")
-     ;; Window motions
-     "w h" '(evil-window-left :wk "Window left")
-     "w j" '(evil-window-down :wk "Window down")
-     "w k" '(evil-window-up :wk "Window up")
-     "w l" '(evil-window-right :wk "Window right")
-     "w w" '(evil-window-next :wk "Goto next window")
-     ;; Move Windows
-     "w H" '(buf-move-left :wk "Buffer move left")
-     "w J" '(buf-move-down :wk "Buffer move down")
-     "w K" '(buf-move-up :wk "Buffer move up")
-     "w L" '(buf-move-right :wk "Buffer move right"))
+  (dy/leader-keys
+    "r" '(:ignore :wk "R")
+    "r d" '(ess-rdired  :wk "open R object directory"))
 
-    (dy/leader-keys
-      ;; "TAB" '(:ignore t :wk "Tabs")
-      "t n" '(tab-new :wk "Open new tab")
-      "t q" '(tab-close :wk "Close tab")
-      "t r" '(tab-rename :wk "Rename tab")
-      "TAB" '(tab-next :wk "Next tab")
-      "DEL" '(tab-previous :wk "Previous tab")
-      "g c c" '(comment-line :wk "Comment lines"))
-  )
+  (dy/leader-keys
+   "t" '(:ignore t :wk "Toggle")
+   "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+   "t t" '(visual-line-mode :wk "Toggle truncated lines")
+   "t v" '(vterm-toggle :wk "Toggle vterm"))
+
+  (dy/leader-keys
+   "w" '(:ignore t :wk "Windows")
+   ;; Window splits
+   "w q" '(evil-window-delete :wk "Close window")
+   "w n" '(evil-window-new :wk "New window")
+   "w s" '(evil-window-split :wk "Horizontal split window")
+   "w v" '(evil-window-vsplit :wk "Vertical split window")
+   ;; Window motions
+   "w h" '(evil-window-left :wk "Window left")
+   "w j" '(evil-window-down :wk "Window down")
+   "w k" '(evil-window-up :wk "Window up")
+   "w l" '(evil-window-right :wk "Window right")
+   "w w" '(evil-window-next :wk "Goto next window")
+   ;; Move Windows
+   "w H" '(buf-move-left :wk "Buffer move left")
+   "w J" '(buf-move-down :wk "Buffer move down")
+   "w K" '(buf-move-up :wk "Buffer move up")
+   "w L" '(buf-move-right :wk "Buffer move right"))
+
+  (dy/leader-keys
+    ;; "TAB" '(:ignore t :wk "Tabs")
+    "t n" '(tab-new :wk "Open new tab")
+    "t q" '(tab-close :wk "Close tab")
+    "t r" '(tab-rename :wk "Rename tab")
+    "TAB" '(tab-next :wk "Next tab")
+    "DEL" '(tab-previous :wk "Previous tab")
+    "g c c" '(comment-line :wk "Comment lines"))
+)
 
 (use-package toc-org
 :ensure t
@@ -463,3 +460,23 @@ one, an error is signaled."
    (R . t)))
 
 (require 'org-tempo)
+
+;; (use-package org-latex-preview
+;;   :ensure t
+;;   :config
+;;   (plist-put org-latex-preview-appearance-options
+;; 	     :page-width 0.8)
+;;   (setq org-latex-preview-live t))
+
+(use-package ess
+  :ensure t
+  :config
+  (load "ess-autoloads")
+  (load-library "ob-R")
+  (load-library "ob-julia")
+  (setq org-confirm-babel-evaluate nil))
+
+(use-package auctex
+  :ensure t
+  :config
+  (setq TeX-PDF-mode t))

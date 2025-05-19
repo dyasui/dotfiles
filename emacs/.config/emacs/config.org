@@ -21,6 +21,7 @@
   - [[#buffer-move][BUFFER-MOVE]]
   - [[#company][COMPANY]]
   - [[#dired][DIRED]]
+  - [[#gptel][GPTEL]]
   - [[#icomplete][ICOMPLETE]]
   - [[#ivy-counsel][IVY (COUNSEL)]]
   - [[#projectile][PROJECTILE]]
@@ -28,7 +29,6 @@
   - [[#tabspaces][TABSPACES]]
   - [[#vterm][VTERM]]
   - [[#which-key][WHICH-KEY]]
-- [[#ess---r-and-julia-code-integration][ESS - R and julia code integration]]
 - [[#keybindings][KEYBINDINGS]]
 - [[#org-mode][ORG MODE]]
   - [[#enabling-table-of-contents][Enabling Table of Contents]]
@@ -36,6 +36,9 @@
   - [[#disable-electric-indent][Disable Electric Indent]]
   - [[#language-support][Language Support]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
+- [[#scientifictechinical-writing][SCIENTIFIC/TECHINICAL WRITING]]
+  - [[#emacs-speaks-statics-ess---r-and-julia-code-integration][Emacs Speaks Statics (ESS) - R and julia code integration]]
+  - [[#latex][LaTeX]]
 
 * Load these things first
   Some things (like package manager) need to load first in emacs startup.
@@ -256,7 +259,7 @@ This code enables rainbow-mode in all programming nodes as well as org-mode.
 #+end_src
 ** Show Line numbers and truncated lines
 #+begin_src emacs-lisp
-  (global-display-line-numbers-mode 1)
+  (global-display-line-numbers-mode nil)
   (global-visual-line-mode t)
 #+end_src
 
@@ -374,6 +377,13 @@ Completion starts after typing a few letters in any text buffer. Use M-n and M-p
 				
 #+end_src
 
+** GPTEL
+
+#+begin_src emacs-lisp
+(use-package gptel
+  :load-path "~/.config/emacs/elpa/gptel-0.9.8/")
+#+end_src
+
 ** ICOMPLETE
 This is the vanilla Emacs way of doing some of what =ido= and similar minibuffer completion packages do.
 #+begin_src emacs-lisp
@@ -400,8 +410,8 @@ Use =recentf-open-files= to see a list of recently opened files
 #+end_src
 ** TABSPACES
 #+begin_src emacs-lisp
-(add-to-list 'load-path "~/.emacs/")
-(require 'tabspaces)
+;; (add-to-list 'load-path "~/.emacs/")
+;; (require 'tabspaces)
 #+end_src
 
 ** VTERM
@@ -454,18 +464,6 @@ Use =recentf-open-files= to see a list of recently opened files
 	which-key-separator "  " ))
 #+end_src
 
-* ESS - R and julia code integration
-The Emacs Speaks Statistics (ESS) package has lots of functionality for working with statistical and scientific languages in Emacs.
-They seem to be heralding a switch to [[https://github.com/polymode/poly-org][polymode]], but I think org's babel function is enough for me right now.
-#+begin_src emacs-lisp
-(use-package ess
-  :ensure t
-  :config
-  (load "ess-autoloads")
-  (load-library "ob-R")
-  (load-library "ob-julia")
-  (setq org-confirm-babel-evaluate nil))
-#+end_src
 * KEYBINDINGS
 #+begin_src emacs-lisp
   (use-package general
@@ -534,6 +532,8 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
       "p" '(:ignore :wk "Project")
       "p f" '(project-find-file :wk "Find files in current project")
       "p s" '(project-switch-project :wk "switch project")
+      "p b" '(project-list-buffers :wk "List project buffers")
+      "p k" '(project-kill-buffers :wk "Close all project buffers")
       )
       
     (dy/leader-keys
@@ -617,4 +617,38 @@ org-tempo is not enabled by default, but is an extension to org-mode which allow
 (require 'org-tempo)
 #+end_src
 
+** LaTeX preview
+LaTeX text like this should be previewed better than by default:
 
+$$\text{Hello, World!}^\infty \sum_i x_i = \bar{Q}$$
+#+begin_src emacs-lisp
+;; (use-package org-latex-preview
+;;   :ensure t
+;;   :config
+;;   (plist-put org-latex-preview-appearance-options
+;; 	     :page-width 0.8)
+;;   (setq org-latex-preview-live t))
+#+end_src
+
+* SCIENTIFIC/TECHINICAL WRITING
+** Emacs Speaks Statics (ESS) - R and julia code integration
+The Emacs Speaks Statistics (ESS) package has lots of functionality for working with statistical and scientific languages in Emacs.
+They seem to be heralding a switch to [[https://github.com/polymode/poly-org][polymode]], but I think org's babel function is enough for me right now.
+#+begin_src emacs-lisp
+(use-package ess
+  :ensure t
+  :config
+  (load "ess-autoloads")
+  (load-library "ob-R")
+  (load-library "ob-julia")
+  (setq org-confirm-babel-evaluate nil))
+#+end_src
+
+** LaTeX
+*** AucTeX
+#+begin_src emacs-lisp
+(use-package auctex
+  :ensure t
+  :config
+  (setq TeX-PDF-mode t))
+#+end_src
