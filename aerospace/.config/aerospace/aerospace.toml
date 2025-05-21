@@ -94,7 +94,7 @@ alt-6 = 'workspace 6'
 alt-7 = 'workspace 7'
 alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
-alt-0 = 'workspace 0'
+alt-0 = 'workspace 10'
 alt-c = 'workspace C' # calendar
 alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
 alt-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
@@ -105,20 +105,20 @@ alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
 alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
 alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
 alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
-alt-shift-0 = ['move-node-to-workspace 0', 'workspace 0']
+alt-shift-0 = ['move-node-to-workspace 10', 'workspace 10']
 
 # Assign Workspaces to Each Display
 [workspace-to-monitor-force-assignment]
-0 = ['msi',      'built-in', 'built-in']
-1 = ['msi',      'built-in', 'crestron']
-2 = ['built-in', 'Dell',     'built-in']
-3 = ['built-in', 'Dell',     'built-in']
-4 = ['msi',      'Dell',     'built-in']
+1 = ['built-in', 'built-in', 'crestron']
+2 = ['built-in', 'built-in', 'built-in']
+3 = ['built-in', 'built-in', 'built-in']
+4 = ['built-in', 'built-in', 'built-in']
 5 = ['built-in', 'built-in', 'built-in']
 6 = ['msi',      'Dell',     'built-in']
-7 = ['built-in', 'built-in', 'built-in']
+7 = ['msi',      'Dell',     'built-in']
 8 = ['msi',      'Dell',     'built-in']
 9 = ['msi',      'Dell',     'built-in']
+10 = ['msi',      'Dell',     'built-in']
 C = ['built-in', 'built-in', 'built-in']
 
 # Float these App Windows by Default
@@ -144,9 +144,9 @@ run = ['layout floating']
 # if.app-id = 'net.kovidgoyal.kitty'
 # run = "move-node-to-workspace 2"
 #
-[[on-window-detected]]
-if.app-id = 'com.electron.logseq'
-run = 'move-node-to-workspace 3'
+# [[on-window-detected]]
+# if.app-id = 'com.electron.logseq'
+# run = 'move-node-to-workspace 3'
 
 # [[on-window-detected]]
 # if.app-id = 'org.gnu.Emacs'
