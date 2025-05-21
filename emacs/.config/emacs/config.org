@@ -29,6 +29,7 @@
   - [[#tabspaces][TABSPACES]]
   - [[#vterm][VTERM]]
   - [[#which-key][WHICH-KEY]]
+  - [[#yasnippet][YASNIPPET]]
 - [[#keybindings][KEYBINDINGS]]
 - [[#org-mode][ORG MODE]]
   - [[#enabling-table-of-contents][Enabling Table of Contents]]
@@ -36,6 +37,7 @@
   - [[#disable-electric-indent][Disable Electric Indent]]
   - [[#language-support][Language Support]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
+  - [[#latex-preview][LaTeX preview]]
 - [[#scientifictechinical-writing][SCIENTIFIC/TECHINICAL WRITING]]
   - [[#emacs-speaks-statics-ess---r-and-julia-code-integration][Emacs Speaks Statics (ESS) - R and julia code integration]]
   - [[#latex][LaTeX]]
@@ -464,6 +466,34 @@ Use =recentf-open-files= to see a list of recently opened files
 	which-key-separator "  " ))
 #+end_src
 
+** YASNIPPET
+#+begin_src emacs-lisp
+(use-package yasnippet
+  :ensure t
+  :load-path "./elpa/yasnippet-0.14.2/"
+  :config
+  (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
+  (yas-global-mode 1))
+#+end_src
+
+Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practicestip_for_companymode_andor_yasnippet/][reddit thread]]:
+#+begin_src emacs-lisp
+;; weight by frequency
+(setq company-transformers '(company-sort-by-occurrence))
+
+;; Add yasnippet support for all company backends
+;; https://github.com/syl20bnr/spacemacs/pull/179
+(defvar company-mode/enable-yas t "Enable yasnippet for all backends.")
+
+(defun company-mode/backend-with-yas (backend)
+  (if (or (not company-mode/enable-yas) (and (listp backend)    (member 'company-yasnippet backend)))
+  backend
+(append (if (consp backend) backend (list backend))
+        '(:with company-yasnippet))))
+
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+#+end_src
+
 * KEYBINDINGS
 #+begin_src emacs-lisp
   (use-package general
@@ -540,6 +570,10 @@ Use =recentf-open-files= to see a list of recently opened files
       "r" '(:ignore :wk "R")
       "r d" '(ess-rdired  :wk "open R object directory"))
     
+    (dy/leader-keys
+      "s" '(:ignore :wk "snippets")
+      "s n" '(yas-new-snippet :wk "new snippet"))
+      
     (dy/leader-keys
      "t" '(:ignore t :wk "Toggle")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")

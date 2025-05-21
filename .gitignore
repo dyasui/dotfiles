@@ -18,3 +18,4 @@ nvim/.config/nvim/lazy-lock.json
 yazi/.config/yazi/plugins/mediainfo.yazi
 emacs/.config/emacs/transient/history.el
 emacs/.config/emacs/ltximg
+emacs/.config/emacs/init.el~
