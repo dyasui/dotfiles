@@ -41,6 +41,7 @@
 - [[#scientifictechinical-writing][SCIENTIFIC/TECHINICAL WRITING]]
   - [[#emacs-speaks-statics-ess---r-and-julia-code-integration][Emacs Speaks Statics (ESS) - R and julia code integration]]
   - [[#latex][LaTeX]]
+  - [[#pdf-tools][PDF-Tools]]
 
 * Load these things first
   Some things (like package manager) need to load first in emacs startup.
@@ -685,4 +686,20 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
   :ensure t
   :config
   (setq TeX-PDF-mode t))
+#+end_src
+*** CDLaTeX
+#+begin_src emacs-lisp
+(use-package cdlatex
+  :ensure t
+  :load-path "~/.config/emacs/cdlatex-4.18.5"
+  :config
+  (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
+#+end_src
+
+** PDF-Tools
+
+#+begin_src emacs-lisp
+(use-package pdf-tools
+  :ensure t
+  :load-path "~/.config/emacs/elpa/pdf-tools-1.1.0")
 #+end_src
