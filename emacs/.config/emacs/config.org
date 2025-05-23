@@ -354,19 +354,20 @@ Text completion framework to "/complete anything/" in Emacs.
 Completion starts after typing a few letters in any text buffer. Use M-n and M-p to select, <return> to complete, or <tab> to complete the common part.
 =company-box= makes the completion window look nicer.
 #+begin_src emacs-lisp
-(use-package company
-  :defer 2
-  :custom
-  (company-begin-commands '(self-insert-command))
-  (company-idle-delay .a)
-  (company-minimum-prefix-length 2)
-  (company-show-numbers t)
-  (company-tooltip-align-annotations 't)
-  (global-company-mode t))
+  (use-package company
+    :defer 2
+    :custom
+    (company-begin-commands '(self-insert-command))
+    (company-idle-delay .a)
+    (company-minimum-prefix-length 2)
+    (company-show-numbers t)
+    (set (make-local-variable 'company-backends) '((company-yasnippet company-capf company-keywords)))
+    (company-tooltip-align-annotations 't)
+    (global-company-mode t))
 
-(use-package company-box
-  :after company
-  :hook (company-mode . company-box-mode))
+  (use-package company-box
+    :after company
+    :hook (company-mode . company-box-mode))
 #+end_src
 ** DIRED
 #+begin_src emacs-lisp
