@@ -400,6 +400,7 @@ one, an error is signaled."
   (dy/leader-keys
     "h" '(:ignore t :wk "Help")
     "h f" '(describe-function :wk "Describe function")
+    "h k" '(describe-key :wk "Describe keybinding")
     "h v " '(describe-variable :wk "Describe variable")
     "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
 
@@ -464,7 +465,7 @@ one, an error is signaled."
     "t r" '(tab-rename :wk "Rename tab")
     "TAB" '(tab-next :wk "Next tab")
     "DEL" '(tab-previous :wk "Previous tab")
-    "g c c" '(comment-line :wk "Comment lines"))
+    )
 )
 
 (use-package toc-org

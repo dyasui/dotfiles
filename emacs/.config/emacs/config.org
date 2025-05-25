@@ -514,11 +514,11 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
      "M-w" '(delete-frame :wk "Close current frame"))
 
     (dy/leader-keys
+      "SPC" '(execute-extended-command :wk "M-x")
       "c s" '(cheat-sheet :wk "Cheat Sheet"))
 
     (dy/leader-keys
-      "SPC" '(execute-extended-command :wk "M-x")
-      "f f" '(dired :wk "Find file")
+      "f f" '(project-find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
       "f r" '(recentf :wk "Find recent files")
       "f s" '(affe-grep :wk "Find string in current project"))
@@ -544,6 +544,7 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
     (dy/leader-keys
       "h" '(:ignore t :wk "Help")
       "h f" '(describe-function :wk "Describe function")
+      "h k" '(describe-key :wk "Describe keybinding")
       "h v " '(describe-variable :wk "Describe variable")
       "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
 
@@ -608,7 +609,7 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
       "t r" '(tab-rename :wk "Rename tab")
       "TAB" '(tab-next :wk "Next tab")
       "DEL" '(tab-previous :wk "Previous tab")
-      "g c c" '(comment-line :wk "Comment lines"))
+      )
   )
 #+end_src
 
