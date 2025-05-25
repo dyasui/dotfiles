@@ -60,14 +60,14 @@ alt-f = 'fullscreen'
 alt-space = 'layout floating tiling'
 
 # Window Navigation
-alt-left  = 'focus left --boundaries all-monitors-outer-frame'
-alt-down  = 'focus down --boundaries all-monitors-outer-frame'
-alt-up    = 'focus up --boundaries all-monitors-outer-frame'
-alt-right = 'focus right --boundaries all-monitors-outer-frame'
-alt-shift-left  = 'move left'
-alt-shift-down  = 'move down'
-alt-shift-up    = 'move up'
-alt-shift-right = 'move right'
+alt-l  = 'focus left --boundaries all-monitors-outer-frame'
+alt-j  = 'focus down --boundaries all-monitors-outer-frame'
+alt-k    = 'focus up --boundaries all-monitors-outer-frame'
+alt-h = 'focus right --boundaries all-monitors-outer-frame'
+alt-shift-l  = 'move left'
+alt-shift-j  = 'move down'
+alt-shift-k    = 'move up'
+alt-shift-h = 'move right'
 
 cmd-shift-left  = ['join-with left', 'mode main']
 cmd-shift-down  = ['join-with down', 'mode main']
@@ -160,9 +160,9 @@ run = "move-node-to-workspace 5"
 if.app-id = 'com.valvesoftware.steam'
 run = "move-node-to-workspace 6"
 
-[[on-window-detected]]
-if.app-id = 'org.zotero.zotero'
-run = "move-node-to-workspace 7"
+# [[on-window-detected]]
+# if.app-id = 'org.zotero.zotero'
+# run = "move-node-to-workspace 7"
 
 [[on-window-detected]]
 if.app-id = 'com.vscodium'
