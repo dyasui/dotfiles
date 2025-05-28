@@ -4,11 +4,11 @@
 # STARTUP COMMANDS
 start-at-login = true
 after-login-command = [
-  'exec-and-forget syncthing'
+  'exec-and-forget syncthing',
+  'exec-and-forget emacs --daemon'
 ]
 after-startup-command = [ # 'after-startup-command' is run after 'after-login-command'
-  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0',
-  'exec-and-forget kitty --session ~/.config/kitty/startup.conf',
+  # 'exec-and-forget kitty --session ~/.config/kitty/startup.conf',
   'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
 ]
 [exec]                   # Again, you don't need to copy all config sections to your config.
@@ -60,14 +60,14 @@ alt-f = 'fullscreen'
 alt-space = 'layout floating tiling'
 
 # Window Navigation
-alt-l  = 'focus left --boundaries all-monitors-outer-frame'
+alt-h  = 'focus left --boundaries all-monitors-outer-frame'
 alt-j  = 'focus down --boundaries all-monitors-outer-frame'
 alt-k    = 'focus up --boundaries all-monitors-outer-frame'
-alt-h = 'focus right --boundaries all-monitors-outer-frame'
-alt-shift-l  = 'move left'
+alt-l = 'focus right --boundaries all-monitors-outer-frame'
+alt-shift-h  = 'move left'
 alt-shift-j  = 'move down'
 alt-shift-k    = 'move up'
-alt-shift-h = 'move right'
+alt-shift-l = 'move right'
 
 cmd-shift-left  = ['join-with left', 'mode main']
 cmd-shift-down  = ['join-with down', 'mode main']
