@@ -12,3 +12,4 @@ emacs/.config/emacs/elpa/
 vim/.vim/plugged
 vim/.vim/autoload
 vim/.vim/.netrwhist
+emacs/.config/emacs/recentf
