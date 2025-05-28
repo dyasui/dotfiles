@@ -361,14 +361,20 @@ Completion starts after typing a few letters in any text buffer. Use M-n and M-p
     (company-idle-delay .a)
     (company-minimum-prefix-length 2)
     (company-show-numbers t)
-    (set (make-local-variable 'company-backends) '((company-yasnippet company-capf company-keywords)))
     (company-tooltip-align-annotations 't)
     (global-company-mode t))
+  (set (make-local-variable 'company-backends) '((company-yasnippet company-capf company-keywords)))
 
-  (use-package company-box
-    :after company
-    :hook (company-mode . company-box-mode))
+    (use-package company-box
+      :after company
+      :hook (company-mode . company-box-mode))
 #+end_src
+
+I had to change the =use-package= call on =company= to happen after setting the =company-backends= values to avoide the error:
+#+begin_example
+Symbol's value as variable is void: company-backends
+#+end_example
+
 ** DIRED
 #+begin_src emacs-lisp
 (use-package dired-open
