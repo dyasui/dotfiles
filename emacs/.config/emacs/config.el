@@ -1,4 +1,4 @@
-(defvar elpaca-installer-version 0.9)
+(defvar elpaca-installer-version 0.10)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -96,6 +96,92 @@
 ;; Setting RETURN key in org-mode to follow links
   (setq org-return-follows-link  t)
 
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; (load-theme 'doom-one t)
+  (setq doom-themes-enable-bold t
+	doom-themes-enable-italic t)
+  (doom-themes-org-config))
+;; solaire darkens non-standard buffers' backgrounds
+(use-package solaire-mode
+  :ensure t
+  :config
+  (solaire-global-mode +1))
+;; doom's fancy modeline
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+
+(use-package dashboard
+:ensure t
+:init
+(setq initial-buffer-choice 'dashboard-open)
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(setq dashboard-banner-logo-title "Welcome to Emacs")
+(setq dashboard-startup-banner 'logo)
+(setq dashboard-center-content t)
+(setq dashboard-items '((recents . 5)
+                      (agenda . 5)
+                      (bookmarks . 3)
+                      (projects . 3)
+                      (registers . 3)))
+;; (dashboard-modify-heading-icons '((recents . "file-text")
+;;                                  (bookmarks . "book")))
+:config
+(dashboard-setup-startup-hook))
+
+(set-face-attribute 'default nil
+		    :font "JetBrainsMono Nerd Font"
+		    :height 160
+		    :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+		    :font "Menlo"
+		    :height 160
+		    :weight 'medium)
+(set-face-attribute 'fixed-pitch nil
+		    :font "JetBrainsMono Nerd Font"
+		    :height 160
+		    :weight 'medium)
+;; italicizes commented text and keywords
+(set-face-attribute 'font-lock-comment-face nil
+		    :slant 'italic)
+(set-face-attribute 'font-lock-keyword-face nil
+		    :slant 'italic)
+;;sets default font on all graphical frames after restarting emacs
+(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
+
+;;set default line spacing
+(setq-default line-spacing 0.08)
+
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+(load-theme 'kanagawa t)
+
+(use-package rainbow-mode
+  :ensure t
+  :hook org-mode prog-mode)
+
+(setq ring-bell-function 'ignore)
+(setq tab-bar-close-button-show nil)       ;; hide tab close / X button
+(setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
+
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+(global-display-line-numbers-mode nil)
+(global-visual-line-mode t)
+
+;; save temp files to ~/.config/emacs/auto-save
+(setq auto-save-file-name-transforms
+          `((".*" ,(concat user-emacs-directory "auto-save/") t)))
+
 (require 'windmove)
 
 ;;;###autoload
@@ -172,6 +258,7 @@ one, an error is signaled."
   (company-idle-delay .a)
   (company-minimum-prefix-length 2)
   (company-show-numbers t)
+  (set (make-local-variable 'company-backends) '((company-yasnippet company-capf company-keywords)))
   (company-tooltip-align-annotations 't)
   (global-company-mode t))
 
@@ -179,109 +266,93 @@ one, an error is signaled."
   :after company
   :hook (company-mode . company-box-mode))
 
-(use-package dashboard
-:ensure t
-:init
-(setq initial-buffer-choice 'dashboard-open)
-(setq dashboard-set-heading-icons t)
-(setq dashboard-set-file-icons t)
-(setq dashboard-banner-logo-title "Welcome to Emacs")
-(setq dashboard-startup-banner 'logo)
-(setq dashboard-center-content t)
-(setq dashboard-items '((recents . 5)
-                      (agenda . 5)
-                      (bookmarks . 3)
-                      (projects . 3)
-                      (registers . 3)))
-;; (dashboard-modify-heading-icons '((recents . "file-text")
-;;                                  (bookmarks . "book")))
-:config
-(dashboard-setup-startup-hook))
-
-(use-package doom-themes
-  :ensure t
+(use-package dired-open
   :config
-  (load-theme 'doom-one t)
-  (doom-themes-org-config))
-;; solaire darkens non-standard buffers' backgrounds
-(use-package solaire-mode
-  :ensure t
+  (setq dired-open-extensions '(("gif" . "sxiv")
+				("jpg" . "sxiv")
+				("png" . "sxiv")
+				("mkv" . "mpv")
+				("mp4" . "mpv"))))
+
+(use-package gptel
+  :load-path "~/.config/emacs/elpa/gptel-0.9.8/")
+
+(fido-vertical-mode t)
+;; (icomplete-vertical-mode t)
+
+(use-package projectile
   :config
-  (solaire-global-mode +1))
-;; doom's fancy modeline
-(use-package doom-modeline
+  (projectile-mode 1))
+
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+
+;; (add-to-list 'load-path "~/.emacs/")
+;; (require 'tabspaces)
+
+(use-package vterm
+  :ensure t)
+
+(use-package vterm-toggle
   :ensure t
-  :init (doom-modeline-mode 1))
+  :after vterm
+  :config
+  (setq vterm-toggle-fullscreen-p nil)
+  (setq vterm-toggle-scope 'project)
+  (add-to-list 'display-buffer-alist
+     '((lambda (buffer-or-name _)
+     (let ((buffer (get-buffer buffer-or-name)))
+ (with-current-buffer buffer
+   (or (equal major-mode 'vterm-mode)
+       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+  (display-buffer-reuse-window display-buffer-at-bottom)
+  ;;(display-buffer-reuse-window display-buffer-in-direction)
+  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+  ;;(direction . bottom)
+  ;;(dedicated . t) ;dedicated is supported in emacs27
+  (reusable-frames . visible)
+  (window-height . 0.3)))
+  )
 
-;; Must be used *after* the theme is loaded
-;; (custom-set-faces
-;;   `(org-block ((t (:background , #16161D))))
-;; )
+(use-package which-key
+  :init
+  (which-key-mode 1)
+  :config
+  (setq which-key-side-window-location 'bottom
+	which-key-sort-order #'which-key-key-order-alpha
+	which-key-sort-uppercase-first nil
+	which-key-add-column-padding 1
+	which-key-max-display-columns nil
+	which-key-min-display-lines 6
+	which-key-side-window-slot -10
+	which-key-side-window-max-height 0.25
+	which-key-idle-delay 0.8
+	which-key-max-description-length 25
+	which-key-allow-imprecise-window-fit nil
+	which-key-separator "  " ))
 
-(use-package ess
+(use-package yasnippet
   :ensure t
+  :load-path "./elpa/yasnippet-0.14.2/"
   :config
-  (load "ess-autoloads")
-  (load-library "ob-R")
-  (load-library "ob-julia")
-  (setq org-confirm-babel-evaluate nil))
+  (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
+  (yas-global-mode 1))
 
-(setq treesit-language-source-alist
-      '((julia "https://github.com/tree-sitter/tree-sitter-julia")))
-(setq treesit-auto-install 'prompt)
+;; weight by frequency
+(setq company-transformers '(company-sort-by-occurrence))
 
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-language-id-configuration
-    '(julia-ts-mode . "julia")))
-(setq lsp-julia-package-dir nil)
-;; (after! lsp-julia
-;;   (setq lsp-julia-default-environment "~/.julia/environments/v1.10")
-;;   (setq-hook! 'julia-ts-mode-hook +format-with-lsp nil))
-;; 
-;; (after! julia-ts-mode
-;;   (add-hook! 'julia-ts-mode-hook
-;;     (setq-local lsp-enable-folding t
-;;                 lsp-folding-range-limit 100)))
-;;
-;;
-;; Julia REPL
-(defun open-popup-new-frame (buffer &optional alist) (+popup-display-buffer-fullframe-fn buffer alist))
-(use-package julia-repl
-  :hook (julia-ts-mode . julia-repl-mode)
-  :config
-  (setq julia-repl-executable-records '((default "julia" :basedir "/Users/foo/applications/julia10/usr/share/julia/base/")
-                                        (dev "julia11" :basedir    "/Users/foo/applications/julia11/usr/share/julia/base/")))
-  (setq julia-repl-executable-key 'default)
-  (setq julia-repl-switches "-q -t 4,1")
-  (set-popup-rule! "^\\*julia\\:.*\\*$" :actions '(display-buffer-pop-up-frame . inhibit-switch-frame)))
+;; Add yasnippet support for all company backends
+;; https://github.com/syl20bnr/spacemacs/pull/179
+(defvar company-mode/enable-yas t "Enable yasnippet for all backends.")
 
-(set-face-attribute 'default nil
-		    :font "JetBrainsMono Nerd Font"
-		    :height 200
-		    :weight 'medium)
-(set-face-attribute 'variable-pitch nil
-		    :font "Noto Sans"
-		    :height 200
-		    :weight 'medium)
-(set-face-attribute 'fixed-pitch nil
-		    :font "JetBrainsMono Nerd Font"
-		    :height 200
-		    :weight 'medium)
-;; italicizes commented text and keywords
-(set-face-attribute 'font-lock-comment-face nil
-		    :slant 'italic)
-(set-face-attribute 'font-lock-keyword-face nil
-		    :slant 'italic)
-;;sets default font on all graphical frames after restarting emacs
-(add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
+(defun company-mode/backend-with-yas (backend)
+  (if (or (not company-mode/enable-yas) (and (listp backend)    (member 'company-yasnippet backend)))
+  backend
+(append (if (consp backend) backend (list backend))
+        '(:with company-yasnippet))))
 
-;;set default line spacing
-(setq-default line-spacing 0.12)
-
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
 (use-package general
   :ensure t
@@ -294,12 +365,19 @@ one, an error is signaled."
     :prefix "SPC" ;; set leader
     :global-prefix "C-SPC") ;; access leader in insert mode
 
+  (general-define-key
+   "M-n" '(make-frame :wk "Open new frame")
+   "M-w" '(delete-frame :wk "Close current frame"))
+
+  (dy/leader-keys
+    "c s" '(cheat-sheet :wk "Cheat Sheet"))
+
   (dy/leader-keys
     "SPC" '(execute-extended-command :wk "M-x")
-    "f f" '(find-file :wk "Find file")
+    "f f" '(dired :wk "Find file")
     "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-    "f r" '(recentf-open-files :wk "Find recent files")
-    "c c" '(comment-line :wk "Comment lines"))
+    "f r" '(recentf :wk "Find recent files")
+    "f s" '(affe-grep :wk "Find string in current project"))
 
   (dy/leader-keys
     "b" '(:ignore t :wk "buffer")
@@ -339,6 +417,22 @@ one, an error is signaled."
     "o d t" '(org-time-stamp :wk "Org time stamp"))
 
   (dy/leader-keys
+    "p" '(:ignore :wk "Project")
+    "p f" '(project-find-file :wk "Find files in current project")
+    "p s" '(project-switch-project :wk "switch project")
+    "p b" '(project-list-buffers :wk "List project buffers")
+    "p k" '(project-kill-buffers :wk "Close all project buffers")
+    )
+
+  (dy/leader-keys
+    "r" '(:ignore :wk "R")
+    "r d" '(ess-rdired  :wk "open R object directory"))
+
+  (dy/leader-keys
+    "s" '(:ignore :wk "snippets")
+    "s n" '(yas-new-snippet :wk "new snippet"))
+
+  (dy/leader-keys
    "t" '(:ignore t :wk "Toggle")
    "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
    "t t" '(visual-line-mode :wk "Toggle truncated lines")
@@ -364,25 +458,14 @@ one, an error is signaled."
    "w L" '(buf-move-right :wk "Buffer move right"))
 
   (dy/leader-keys
-    "TAB" '(:ignore t :wk "Tabs")
-    "TAB o" '(tab-new :wk "Open new tab")
-    "TAB c" '(tab-close :wk "Close tab")
-    "TAB n" '(tab-next :wk "Next tab")
-    "TAB p" '(tab-previous :wk "Previous tab"))
+    ;; "TAB" '(:ignore t :wk "Tabs")
+    "t n" '(tab-new :wk "Open new tab")
+    "t q" '(tab-close :wk "Close tab")
+    "t r" '(tab-rename :wk "Rename tab")
+    "TAB" '(tab-next :wk "Next tab")
+    "DEL" '(tab-previous :wk "Previous tab")
+    "g c c" '(comment-line :wk "Comment lines"))
 )
-
-(use-package gptel
-  :ensure t)
-
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-
-(global-display-line-numbers-mode 1)
-(global-visual-line-mode t)
-
-(fido-vertical-mode t)
-;; (icomplete-vertical-mode t)
 
 (use-package toc-org
 :ensure t
@@ -398,60 +481,39 @@ one, an error is signaled."
 (setq org-src-preserve-indentation t)
 (setq org-edit-src-content-indentation 0)
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((julia . t)
+   (R . t)))
+
 (require 'org-tempo)
 
-(use-package projectile
-  :config
-  (projectile-mode 1))
+;; (use-package org-latex-preview
+;;   :ensure t
+;;   :config
+;;   (plist-put org-latex-preview-appearance-options
+;; 	     :page-width 0.8)
+;;   (setq org-latex-preview-live t))
 
-(use-package rainbow-mode
+(use-package ess
   :ensure t
-  :hook org-mode prog-mode)
-
-(require 'recentf)
-(recentf-mode 1)
-(setq recentf-max-menu-items 25)
-
-(use-package vterm
-  :ensure t)
-
-(use-package vterm-toggle
-  :ensure t
-  :after vterm
   :config
-  (setq vterm-toggle-fullscreen-p nil)
-  (setq vterm-toggle-scope 'project)
-  (add-to-list 'display-buffer-alist
-     '((lambda (buffer-or-name _)
-     (let ((buffer (get-buffer buffer-or-name)))
- (with-current-buffer buffer
-   (or (equal major-mode 'vterm-mode)
-       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-  (display-buffer-reuse-window display-buffer-at-bottom)
-  ;;(display-buffer-reuse-window display-buffer-in-direction)
-  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-  ;;(direction . bottom)
-  ;;(dedicated . t) ;dedicated is supported in emacs27
-  (reusable-frames . visible)
-  (window-height . 0.3)))
-  )
+  (load "ess-autoloads")
+  (load-library "ob-R")
+  (load-library "ob-julia")
+  (setq org-confirm-babel-evaluate nil))
 
-(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-(load-theme 'kanagawa t)
+(use-package auctex
+  :ensure t
+  :config
+  (setq TeX-PDF-mode t))
 
-(use-package which-key
-:init
-(which-key-mode 1)
-:config
-(setq which-key-side-window-location 'bottom
-      which-key-sort-order #'which-key-key-order-alpha
-      which-key-sort-uppercase-first nil
-      which-key-add-column-padding 1
-      which-key-max-display-columns nil
-      which-key-min-display-lines 6
-      which-key-side-window-slot -10
-      which-key-side-window-max-height 0.25
-      which-key-idle-delay 0.8
-      which-key-max-description-length 25
-      which-key-allow-imprecise-window-fit nil
-      which-key-separator "  " ))
+(use-package cdlatex
+  :ensure t
+  :load-path "~/.config/emacs/cdlatex-4.18.5"
+  :config
+  (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
+
+(use-package pdf-tools
+  :ensure t
+  :load-path "~/.config/emacs/elpa/pdf-tools-1.1.0")

@@ -1,15 +1,30 @@
 [opener]
 edit = [
-  { run = 'nvim "$@"', block = true },
+  { run = 'emacsclient "$@"', block = true },
 ]
 read = [
-  { run = 'open "$@"', desc = "Open" }
+  { run = 'fancy-cat "$@"', orphan = true, desc = "Open" }
+]
+emacs = [
+  { run = 'emacsclient -c "$@"', orphan = true, desc = "Open in Emacs"}
+]
+csv = [
+  { run = 'csvlens "$@"', block = true }
+]
+
+icat = [
+  { run = 'icat "$@"', block = true, desc = "View Image" }
 ]
 
 [open]
 prepend_rules = [
   { name = "*.pdf", use = "read" },
-  { name = "*.qmd", use = "edit" }
+  { name = "*.jpg", use = "icat" },
+  { name = "*.png", use = "icat" },
+  { name = "*.qmd", use = "edit" },
+  { name = "*.org", use = "emacs" },
+  { name = "*.csv", use = "csv"},
+  { mime = "folder/*", use = "shell --block --orphan" },
 ]
 
 [manager]
@@ -22,7 +37,12 @@ run  = 'shell "$SHELL" --block --confirm'
 desc = "Open shell here"
 
 [preview]
-tab_size        = 20
+tab_size        = 2
 max_width       = 2400
 max_height      = 3600
 image_quality   = 75
+
+# open with QuickLook on macos
+[[manager.prepend_keymap]]
+on = "<C-p>"
+run = 'shell -- qlmanage -p "$@"'

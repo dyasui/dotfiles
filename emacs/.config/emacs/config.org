@@ -3,47 +3,52 @@
 #+startup: showeverything
 #+options: toc:2
 
-* TABLE OF CONTENTS :toc:
+* TABLE OF CONTENTS :TOC:
 - [[#load-these-things-first][Load these things first]]
   - [[#elpaca-package-manager][Elpaca Package Manager]]
   - [[#evil-mode][Evil Mode]]
-- [[#buffer-move][BUFFER-MOVE]]
-- [[#company][COMPANY]]
-- [[#dashboard][DASHBOARD]]
-- [[#doom-color-themes][DOOM color themes]]
-  - [[#further-customization][Further customization]]
-- [[#ess---r-and-julia-code-integration][ESS - R and julia code integration]]
-- [[#fonts][FONTS]]
-  - [[#setting-the-font-face][Setting the font face]]
-  - [[#zooming-inout][Zooming In/Out]]
-- [[#general-keybindings][General Keybindings]]
-- [[#gptel][GPTEL]]
-- [[#gui-tweaks][GUI tweaks]]
+- [[#appearance][APPEARANCE]]
+  - [[#doom-color-themes][DOOM color themes]]
+  - [[#dashboard][DASHBOARD]]
+  - [[#fonts][FONTS]]
+  - [[#kanagawa-color-theme][Kanagawa Color-Theme]]
+  - [[#rainbow-mode-display-hex-colors-in-buffers][Rainbow Mode: display HEX colors in buffers]]
+- [[#basic-settings][BASIC SETTINGS]]
   - [[#disable-menubar-toolbars-scrollbars][Disable Menubar, toolbars, scrollbars]]
   - [[#show-line-numbers-and-truncated-lines][Show Line numbers and truncated lines]]
-- [[#ivy-counsel][IVY (COUNSEL)]]
-- [[#icomplete][ICOMPLETE]]
+  - [[#temporary-files-location][Temporary Files Location]]
+- [[#helpful-packagesmodes][HELPFUL PACKAGES/MODES]]
+  - [[#buffer-move][BUFFER-MOVE]]
+  - [[#company][COMPANY]]
+  - [[#dired][DIRED]]
+  - [[#gptel][GPTEL]]
+  - [[#icomplete][ICOMPLETE]]
+  - [[#ivy-counsel][IVY (COUNSEL)]]
+  - [[#projectile][PROJECTILE]]
+  - [[#recentf][RECENTF]]
+  - [[#tabspaces][TABSPACES]]
+  - [[#vterm][VTERM]]
+  - [[#which-key][WHICH-KEY]]
+  - [[#yasnippet][YASNIPPET]]
+- [[#keybindings][KEYBINDINGS]]
 - [[#org-mode][ORG MODE]]
   - [[#enabling-table-of-contents][Enabling Table of Contents]]
   - [[#enabling-org-bullets][Enabling Org Bullets]]
   - [[#disable-electric-indent][Disable Electric Indent]]
+  - [[#language-support][Language Support]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
-- [[#projectile][PROJECTILE]]
-- [[#rainbow-mode][RAINBOW MODE]]
-- [[#recentf][RECENTF]]
-- [[#shells-and-terminals][SHELLS AND TERMINALS]]
-  - [[#eshell][Eshell]]
-  - [[#vterm][Vterm]]
-  - [[#vterm-toggle][Vterm-Toggle]]
-- [[#theme][THEME]]
-- [[#which-key][WHICH-KEY]]
+  - [[#latex-preview][LaTeX preview]]
+- [[#scientifictechinical-writing][SCIENTIFIC/TECHINICAL WRITING]]
+  - [[#emacs-speaks-statics-ess---r-and-julia-code-integration][Emacs Speaks Statics (ESS) - R and julia code integration]]
+  - [[#latex][LaTeX]]
+  - [[#pdf-tools][PDF-Tools]]
 
 * Load these things first
   Some things (like package manager) need to load first in emacs startup.
   So we'll start with them.
 ** Elpaca Package Manager
 #+begin_src emacs-lisp
-  (defvar elpaca-installer-version 0.9)
+  (defvar elpaca-installer-version 0.10)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -115,7 +120,8 @@
 
 ** Evil Mode
 Evil-mode adds vim bindings to text editing buffers when =evil-mode= is active.
-To get the vim bindings to work in other types of buffers (like dired and ibuffer), we also need the =evil-collection=.
+To get the vim bindings to work in other types of buffers
+(like dired and ibuffer), we also need the =evil-collection=.
 #+begin_src emacs-lisp
 ;; Expands to: (elpaca evil (use-package evil :demand t))
 (use-package evil
@@ -148,7 +154,129 @@ To get the vim bindings to work in other types of buffers (like dired and ibuffe
   (setq org-return-follows-link  t)
 #+end_src
 
-* BUFFER-MOVE
+* APPEARANCE
+** DOOM color themes
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; (load-theme 'doom-one t)
+    (setq doom-themes-enable-bold t
+	  doom-themes-enable-italic t)
+    (doom-themes-org-config))
+  ;; solaire darkens non-standard buffers' backgrounds
+  (use-package solaire-mode
+    :ensure t
+    :config
+    (solaire-global-mode +1))
+  ;; doom's fancy modeline
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
+#+end_src
+** DASHBOARD
+Extensible dashboard to show recent files, bookmarks, agenda items, etc on startup
+#+begin_src emacs-lisp
+  (use-package dashboard
+  :ensure t
+  :init
+  (setq initial-buffer-choice 'dashboard-open)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "Welcome to Emacs")
+  (setq dashboard-startup-banner 'logo)
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents . 5)
+                        (agenda . 5)
+                        (bookmarks . 3)
+                        (projects . 3)
+                        (registers . 3)))
+  ;; (dashboard-modify-heading-icons '((recents . "file-text")
+  ;;                                  (bookmarks . "book")))
+  :config
+  (dashboard-setup-startup-hook))
+#+end_src
+** FONTS
+Emacs uses various fonts and font styles in different places.
+*** Setting the font face
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil
+		      :font "JetBrainsMono Nerd Font"
+		      :height 160
+		      :weight 'medium)
+  (set-face-attribute 'variable-pitch nil
+		      :font "Menlo"
+		      :height 160
+		      :weight 'medium)
+  (set-face-attribute 'fixed-pitch nil
+		      :font "JetBrainsMono Nerd Font"
+		      :height 160
+		      :weight 'medium)
+  ;; italicizes commented text and keywords
+  (set-face-attribute 'font-lock-comment-face nil
+		      :slant 'italic)
+  (set-face-attribute 'font-lock-keyword-face nil
+		      :slant 'italic)
+  ;;sets default font on all graphical frames after restarting emacs
+  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
+
+  ;;set default line spacing
+  (setq-default line-spacing 0.08)
+#+end_src
+
+*** Zooming In/Out
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-=") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+#+end_src
+
+** Kanagawa Color-Theme
+Working on a variation of the kanagawa color theme.
+#+begin_src emacs-lisp
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+(load-theme 'kanagawa t)
+#+end_src
+
+** Rainbow Mode: display HEX colors in buffers
+Display the actual color as a background for any hex color value (ex. #ffffff).
+This code enables rainbow-mode in all programming nodes as well as org-mode.
+#+begin_src emacs-lisp
+(use-package rainbow-mode
+  :ensure t
+  :hook org-mode prog-mode)
+#+end_src
+* BASIC SETTINGS
+#+begin_src emacs-lisp
+(setq ring-bell-function 'ignore)
+(setq tab-bar-close-button-show nil)       ;; hide tab close / X button
+(setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
+#+end_src
+
+** Disable Menubar, toolbars, scrollbars
+#+begin_src emacs-lisp
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+#+end_src
+** Show Line numbers and truncated lines
+#+begin_src emacs-lisp
+  (global-display-line-numbers-mode nil)
+  (global-visual-line-mode t)
+#+end_src
+
+** Temporary Files Location
+By default, tilde and other temporary files generated by emacs seem to clutter my normal workspaces.
+This option should keep them in a subdirectory of the emacs =user-directory=.
+#+begin_src emacs-lisp
+;; save temp files to ~/.config/emacs/auto-save
+(setq auto-save-file-name-transforms
+          `((".*" ,(concat user-emacs-directory "auto-save/") t))) 
+#+end_src
+
+* HELPFUL PACKAGES/MODES
+** BUFFER-MOVE
 Taken from the EmacsWiki: https://www.emacswiki.org/emacs/buffer-move.el
 #+begin_src emacs-lisp
 (require 'windmove)
@@ -220,158 +348,155 @@ one, an error is signaled."
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
 #+end_src
-* COMPANY
+** COMPANY
 [[https://company-mode.github.io/manual/][Company manual]]
 Text completion framework to "/complete anything/" in Emacs.
 Completion starts after typing a few letters in any text buffer. Use M-n and M-p to select, <return> to complete, or <tab> to complete the common part.
 =company-box= makes the completion window look nicer.
 #+begin_src emacs-lisp
-(use-package company
-  :defer 2
-  :custom
-  (company-begin-commands '(self-insert-command))
-  (company-idle-delay .a)
-  (company-minimum-prefix-length 2)
-  (company-show-numbers t)
-  (company-tooltip-align-annotations 't)
-  (global-company-mode t))
+  (use-package company
+    :defer 2
+    :custom
+    (company-begin-commands '(self-insert-command))
+    (company-idle-delay .a)
+    (company-minimum-prefix-length 2)
+    (company-show-numbers t)
+    (set (make-local-variable 'company-backends) '((company-yasnippet company-capf company-keywords)))
+    (company-tooltip-align-annotations 't)
+    (global-company-mode t))
 
-(use-package company-box
-  :after company
-  :hook (company-mode . company-box-mode))
+  (use-package company-box
+    :after company
+    :hook (company-mode . company-box-mode))
 #+end_src
-* DASHBOARD
-Extensible dashboard to show recent files, bookmarks, agenda items, etc on startup
+** DIRED
 #+begin_src emacs-lisp
-  (use-package dashboard
+(use-package dired-open
+  :config
+  (setq dired-open-extensions '(("gif" . "sxiv")
+				("jpg" . "sxiv")
+				("png" . "sxiv")
+				("mkv" . "mpv")
+				("mp4" . "mpv"))))
+				
+#+end_src
+
+** GPTEL
+
+#+begin_src emacs-lisp
+(use-package gptel
+  :load-path "~/.config/emacs/elpa/gptel-0.9.8/")
+#+end_src
+
+** ICOMPLETE
+This is the vanilla Emacs way of doing some of what =ido= and similar minibuffer completion packages do.
+#+begin_src emacs-lisp
+  (fido-vertical-mode t)
+;; (icomplete-vertical-mode t)
+#+end_src
+** IVY (COUNSEL)
+[[https://github.com/abo-abo/swiper][Ivy]] is a generic completion mechanism for Emacs
+Counsel is a collection of Ivy-enhanced versions of common Emacs commands
+[[https://github.com/Yevgnen/ivy-rich][Ivy-rich]] allows us to add descriptions alonside the M-x menu commands
+** PROJECTILE
+Project interaction library.
+#+begin_src emacs-lisp
+(use-package projectile
+  :config
+  (projectile-mode 1))
+#+end_src
+** RECENTF
+Use =recentf-open-files= to see a list of recently opened files
+#+begin_src emacs-lisp
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+#+end_src
+** TABSPACES
+#+begin_src emacs-lisp
+;; (add-to-list 'load-path "~/.emacs/")
+;; (require 'tabspaces)
+#+end_src
+
+** VTERM
+*** Enable vterm package
+#+begin_src emacs-lisp
+(use-package vterm
+  :ensure t)
+#+end_src
+*** Vterm-Toggle
+#+begin_src emacs-lisp
+(use-package vterm-toggle
   :ensure t
+  :after vterm
+  :config
+  (setq vterm-toggle-fullscreen-p nil)
+  (setq vterm-toggle-scope 'project)
+  (add-to-list 'display-buffer-alist
+     '((lambda (buffer-or-name _)
+     (let ((buffer (get-buffer buffer-or-name)))
+ (with-current-buffer buffer
+   (or (equal major-mode 'vterm-mode)
+       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+  (display-buffer-reuse-window display-buffer-at-bottom)
+  ;;(display-buffer-reuse-window display-buffer-in-direction)
+  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+  ;;(direction . bottom)
+  ;;(dedicated . t) ;dedicated is supported in emacs27
+  (reusable-frames . visible)
+  (window-height . 0.3)))
+  )
+#+end_src
+
+** WHICH-KEY
+#+begin_src emacs-lisp
+(use-package which-key
   :init
-  (setq initial-buffer-choice 'dashboard-open)
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "Welcome to Emacs")
-  (setq dashboard-startup-banner 'logo)
-  (setq dashboard-center-content t)
-  (setq dashboard-items '((recents . 5)
-                        (agenda . 5)
-                        (bookmarks . 3)
-                        (projects . 3)
-                        (registers . 3)))
-  ;; (dashboard-modify-heading-icons '((recents . "file-text")
-  ;;                                  (bookmarks . "book")))
+  (which-key-mode 1)
   :config
-  (dashboard-setup-startup-hook))
+  (setq which-key-side-window-location 'bottom
+	which-key-sort-order #'which-key-key-order-alpha
+	which-key-sort-uppercase-first nil
+	which-key-add-column-padding 1
+	which-key-max-display-columns nil
+	which-key-min-display-lines 6
+	which-key-side-window-slot -10
+	which-key-side-window-max-height 0.25
+	which-key-idle-delay 0.8
+	which-key-max-description-length 25
+	which-key-allow-imprecise-window-fit nil
+	which-key-separator "  " ))
 #+end_src
-* DOOM color themes
+
+** YASNIPPET
 #+begin_src emacs-lisp
-  (use-package doom-themes
-    :ensure t
-    :config
-    (load-theme 'doom-one t)
-    (doom-themes-org-config))
-  ;; solaire darkens non-standard buffers' backgrounds
-  (use-package solaire-mode
-    :ensure t
-    :config
-    (solaire-global-mode +1))
-  ;; doom's fancy modeline
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1))
-#+end_src
-
-** Further customization
-At some point, I want to adjust the way that source code blocks in org-mode get highlighted
-which is done using the =custom-set-faces= macro in =doom-themes=.
-#+begin_src emacs-lisp :eval no
-;; Must be used *after* the theme is loaded
-;; (custom-set-faces
-;;   `(org-block ((t (:background , #16161D))))
-;; )
-#+end_src
-
-* ESS - R and julia code integration
-The Emacs Speaks Statistics (ESS) package has lots of functionality for working with statistical and scientific languages in Emacs.
-They seem to be heralding a switch to [[https://github.com/polymode/poly-org][polymode]], but I think org's babel function is enough for me right now.
-#+begin_src emacs-lisp
-  (use-package ess
-    :ensure t
-    :config
-    (load "ess-autoloads")
-    (load-library "ob-R")
-    (load-library "ob-julia")
-    (setq org-confirm-babel-evaluate nil))
-#+end_src
-*** TODO get julia integration working
-it seems like DOOM uses =julia-mode= and some other stuff besides ESS
-
-**** I took the following from [[https://github.com/George9000/doom_discourse][this repository]] which is meant for DOOM on macOS, and I don't really know which parts are needed
-#+begin_src emacs-lisp
-(setq treesit-language-source-alist
-      '((julia "https://github.com/tree-sitter/tree-sitter-julia")))
-(setq treesit-auto-install 'prompt)
-
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-language-id-configuration
-    '(julia-ts-mode . "julia")))
-(setq lsp-julia-package-dir nil)
-;; (after! lsp-julia
-;;   (setq lsp-julia-default-environment "~/.julia/environments/v1.10")
-;;   (setq-hook! 'julia-ts-mode-hook +format-with-lsp nil))
-;; 
-;; (after! julia-ts-mode
-;;   (add-hook! 'julia-ts-mode-hook
-;;     (setq-local lsp-enable-folding t
-;;                 lsp-folding-range-limit 100)))
-;;
-;;
-;; Julia REPL
-(defun open-popup-new-frame (buffer &optional alist) (+popup-display-buffer-fullframe-fn buffer alist))
-(use-package julia-repl
-  :hook (julia-ts-mode . julia-repl-mode)
+(use-package yasnippet
+  :ensure t
+  :load-path "./elpa/yasnippet-0.14.2/"
   :config
-  (setq julia-repl-executable-records '((default "julia" :basedir "/Users/foo/applications/julia10/usr/share/julia/base/")
-                                        (dev "julia11" :basedir    "/Users/foo/applications/julia11/usr/share/julia/base/")))
-  (setq julia-repl-executable-key 'default)
-  (setq julia-repl-switches "-q -t 4,1")
-  (set-popup-rule! "^\\*julia\\:.*\\*$" :actions '(display-buffer-pop-up-frame . inhibit-switch-frame)))
-#+end_src
-* FONTS
-Emacs uses various fonts and font styles in different places.
-** Setting the font face
-#+begin_src emacs-lisp
-  (set-face-attribute 'default nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 200
-		      :weight 'medium)
-  (set-face-attribute 'variable-pitch nil
-		      :font "Noto Sans"
-		      :height 200
-		      :weight 'medium)
-  (set-face-attribute 'fixed-pitch nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 200
-		      :weight 'medium)
-  ;; italicizes commented text and keywords
-  (set-face-attribute 'font-lock-comment-face nil
-		      :slant 'italic)
-  (set-face-attribute 'font-lock-keyword-face nil
-		      :slant 'italic)
-  ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-12"))
-
-  ;;set default line spacing
-  (setq-default line-spacing 0.12)
+  (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
+  (yas-global-mode 1))
 #+end_src
 
-** Zooming In/Out
+Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practicestip_for_companymode_andor_yasnippet/][reddit thread]]:
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-=") 'text-scale-increase)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+;; weight by frequency
+(setq company-transformers '(company-sort-by-occurrence))
+
+;; Add yasnippet support for all company backends
+;; https://github.com/syl20bnr/spacemacs/pull/179
+(defvar company-mode/enable-yas t "Enable yasnippet for all backends.")
+
+(defun company-mode/backend-with-yas (backend)
+  (if (or (not company-mode/enable-yas) (and (listp backend)    (member 'company-yasnippet backend)))
+  backend
+(append (if (consp backend) backend (list backend))
+        '(:with company-yasnippet))))
+
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 #+end_src
-* General Keybindings
+
+* KEYBINDINGS
 #+begin_src emacs-lisp
   (use-package general
     :ensure t
@@ -384,12 +509,19 @@ Emacs uses various fonts and font styles in different places.
       :prefix "SPC" ;; set leader
       :global-prefix "C-SPC") ;; access leader in insert mode
 
+    (general-define-key
+     "M-n" '(make-frame :wk "Open new frame")
+     "M-w" '(delete-frame :wk "Close current frame"))
+
+    (dy/leader-keys
+      "c s" '(cheat-sheet :wk "Cheat Sheet"))
+
     (dy/leader-keys
       "SPC" '(execute-extended-command :wk "M-x")
-      "f f" '(find-file :wk "Find file")
+      "f f" '(dired :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-      "f r" '(recentf-open-files :wk "Find recent files")
-      "c c" '(comment-line :wk "Comment lines"))
+      "f r" '(recentf :wk "Find recent files")
+      "f s" '(affe-grep :wk "Find string in current project"))
 
     (dy/leader-keys
       "b" '(:ignore t :wk "buffer")
@@ -429,6 +561,22 @@ Emacs uses various fonts and font styles in different places.
       "o d t" '(org-time-stamp :wk "Org time stamp"))
       
     (dy/leader-keys
+      "p" '(:ignore :wk "Project")
+      "p f" '(project-find-file :wk "Find files in current project")
+      "p s" '(project-switch-project :wk "switch project")
+      "p b" '(project-list-buffers :wk "List project buffers")
+      "p k" '(project-kill-buffers :wk "Close all project buffers")
+      )
+      
+    (dy/leader-keys
+      "r" '(:ignore :wk "R")
+      "r d" '(ess-rdired  :wk "open R object directory"))
+    
+    (dy/leader-keys
+      "s" '(:ignore :wk "snippets")
+      "s n" '(yas-new-snippet :wk "new snippet"))
+      
+    (dy/leader-keys
      "t" '(:ignore t :wk "Toggle")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
      "t t" '(visual-line-mode :wk "Toggle truncated lines")
@@ -454,42 +602,16 @@ Emacs uses various fonts and font styles in different places.
      "w L" '(buf-move-right :wk "Buffer move right"))
 
     (dy/leader-keys
-      "TAB" '(:ignore t :wk "Tabs")
-      "TAB o" '(tab-new :wk "Open new tab")
-      "TAB c" '(tab-close :wk "Close tab")
-      "TAB n" '(tab-next :wk "Next tab")
-      "TAB p" '(tab-previous :wk "Previous tab"))
+      ;; "TAB" '(:ignore t :wk "Tabs")
+      "t n" '(tab-new :wk "Open new tab")
+      "t q" '(tab-close :wk "Close tab")
+      "t r" '(tab-rename :wk "Rename tab")
+      "TAB" '(tab-next :wk "Next tab")
+      "DEL" '(tab-previous :wk "Previous tab")
+      "g c c" '(comment-line :wk "Comment lines"))
   )
 #+end_src
 
-* GPTEL
-#+begin_src emacs-lisp
-(use-package gptel
-  :ensure t)
-#+end_src
-* GUI tweaks
-** Disable Menubar, toolbars, scrollbars
-#+begin_src emacs-lisp
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-#+end_src
-** Show Line numbers and truncated lines
-#+begin_src emacs-lisp
-  (global-display-line-numbers-mode 1)
-  (global-visual-line-mode t)
-#+end_src
-
-* IVY (COUNSEL)
-[[https://github.com/abo-abo/swiper][Ivy]] is a generic completion mechanism for Emacs
-Counsel is a collection of Ivy-enhanced versions of common Emacs commands
-[[https://github.com/Yevgnen/ivy-rich][Ivy-rich]] allows us to add descriptions alonside the M-x menu commands
-* ICOMPLETE
-This is the vanilla Emacs way of doing some of what =ido= and similar minibuffer completion packages do.
-#+begin_src emacs-lisp
-  (fido-vertical-mode t)
-;; (icomplete-vertical-mode t)
-#+end_src
 * ORG MODE
 ** Enabling Table of Contents
 #+begin_src emacs-lisp
@@ -517,87 +639,68 @@ By default =electric-indent-mode= is turned on in Emacs, so we have to turn it o
 (setq org-edit-src-content-indentation 0)
 #+end_src
 
+** Language Support
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((julia . t)
+   (R . t)))
+#+end_src
+
 ** Org-tempo source blocks
 org-tempo is not enabled by default, but is an extension to org-mode which allows a quick way to add source blocks.
 #+begin_src emacs-lisp
 (require 'org-tempo)
 #+end_src
 
-* PROJECTILE
-Project interaction library.
+** LaTeX preview
+LaTeX text like this should be previewed better than by default:
+
+$$\text{Hello, World!}^\infty \sum_i x_i = \bar{Q}$$
 #+begin_src emacs-lisp
-(use-package projectile
-  :config
-  (projectile-mode 1))
-#+end_src
-* RAINBOW MODE
-Display the actual color as a background for any hex color value (ex. #ffffff).
-This code enables rainbow-mode in all programming nodes as well as org-mode.
-#+begin_src emacs-lisp
-(use-package rainbow-mode
-  :ensure t
-  :hook org-mode prog-mode)
-#+end_src
-* RECENTF
-Use =recentf-open-files= to see a list of recently opened files
-#+begin_src emacs-lisp
-(require 'recentf)
-(recentf-mode 1)
-(setq recentf-max-menu-items 25)
-#+end_src
-* SHELLS AND TERMINALS
-** Eshell
-** Vterm
-#+begin_src emacs-lisp
-(use-package vterm
-  :ensure t)
-#+end_src
-** Vterm-Toggle
-#+begin_src emacs-lisp
-(use-package vterm-toggle
-  :ensure t
-  :after vterm
-  :config
-  (setq vterm-toggle-fullscreen-p nil)
-  (setq vterm-toggle-scope 'project)
-  (add-to-list 'display-buffer-alist
-     '((lambda (buffer-or-name _)
-     (let ((buffer (get-buffer buffer-or-name)))
- (with-current-buffer buffer
-   (or (equal major-mode 'vterm-mode)
-       (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-  (display-buffer-reuse-window display-buffer-at-bottom)
-  ;;(display-buffer-reuse-window display-buffer-in-direction)
-  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-  ;;(direction . bottom)
-  ;;(dedicated . t) ;dedicated is supported in emacs27
-  (reusable-frames . visible)
-  (window-height . 0.3)))
-  )
-#+end_src
-* THEME
-Working on a variation of the kanagawa color theme.
-#+begin_src emacs-lisp
-  (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-  (load-theme 'kanagawa t)
-#+end_src
-* WHICH-KEY
-#+begin_src emacs-lisp
-  (use-package which-key
-  :init
-  (which-key-mode 1)
-  :config
-  (setq which-key-side-window-location 'bottom
-	which-key-sort-order #'which-key-key-order-alpha
-	which-key-sort-uppercase-first nil
-	which-key-add-column-padding 1
-	which-key-max-display-columns nil
-	which-key-min-display-lines 6
-	which-key-side-window-slot -10
-	which-key-side-window-max-height 0.25
-	which-key-idle-delay 0.8
-	which-key-max-description-length 25
-	which-key-allow-imprecise-window-fit nil
-	which-key-separator "  " ))
+;; (use-package org-latex-preview
+;;   :ensure t
+;;   :config
+;;   (plist-put org-latex-preview-appearance-options
+;; 	     :page-width 0.8)
+;;   (setq org-latex-preview-live t))
 #+end_src
 
+* SCIENTIFIC/TECHINICAL WRITING
+** Emacs Speaks Statics (ESS) - R and julia code integration
+The Emacs Speaks Statistics (ESS) package has lots of functionality for working with statistical and scientific languages in Emacs.
+They seem to be heralding a switch to [[https://github.com/polymode/poly-org][polymode]], but I think org's babel function is enough for me right now.
+#+begin_src emacs-lisp
+(use-package ess
+  :ensure t
+  :config
+  (load "ess-autoloads")
+  (load-library "ob-R")
+  (load-library "ob-julia")
+  (setq org-confirm-babel-evaluate nil))
+#+end_src
+
+** LaTeX
+*** AucTeX
+#+begin_src emacs-lisp
+(use-package auctex
+  :ensure t
+  :config
+  (setq TeX-PDF-mode t))
+#+end_src
+*** CDLaTeX
+#+begin_src emacs-lisp
+(use-package cdlatex
+  :ensure t
+  :load-path "~/.config/emacs/cdlatex-4.18.5"
+  :config
+  (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
+#+end_src
+
+** PDF-Tools
+
+#+begin_src emacs-lisp
+(use-package pdf-tools
+  :ensure t
+  :load-path "~/.config/emacs/elpa/pdf-tools-1.1.0")
+#+end_src
