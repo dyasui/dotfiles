@@ -109,16 +109,16 @@ alt-shift-0 = ['move-node-to-workspace 10', 'workspace 10']
 
 # Assign Workspaces to Each Display
 [workspace-to-monitor-force-assignment]
-1 = ['built-in', 'built-in', 'crestron']
-2 = ['built-in', 'built-in', 'built-in']
-3 = ['built-in', 'built-in', 'built-in']
-4 = ['built-in', 'built-in', 'built-in']
-5 = ['built-in', 'built-in', 'built-in']
-6 = ['msi',      'Dell',     'built-in']
-7 = ['msi',      'Dell',     'built-in']
-8 = ['msi',      'Dell',     'built-in']
-9 = ['msi',      'Dell',     'built-in']
-10 = ['msi',      'Dell',     'built-in']
+1 = ['msi',      'Dell',     'built-in']
+2 = ['msi',      'Dell',     'built-in']
+3 = ['msi',      'Dell',     'built-in']
+4 = ['msi',      'Dell',     'built-in']
+5 = ['msi',      'Dell',     'built-in']
+6 = ['built-in', 'built-in', 'built-in']
+7 = ['built-in', 'built-in', 'built-in']
+8 = ['built-in', 'built-in', 'built-in']
+9 = ['built-in', 'built-in', 'built-in']
+10 = ['built-in', 'built-in', 'crestron']
 C = ['built-in', 'built-in', 'built-in']
 
 # Float these App Windows by Default
@@ -154,27 +154,27 @@ run = ['layout floating']
 #
 [[on-window-detected]]
 if.app-id = 'net.whatsapp.WhatsApp'
-run = "move-node-to-workspace 5"
+run = "move-node-to-workspace 6"
 
 [[on-window-detected]]
 if.app-id = 'com.valvesoftware.steam'
-run = "move-node-to-workspace 6"
+run = "move-node-to-workspace 7"
 
 # [[on-window-detected]]
 # if.app-id = 'org.zotero.zotero'
 # run = "move-node-to-workspace 7"
 
-[[on-window-detected]]
-if.app-id = 'com.vscodium'
-run = "move-node-to-workspace 8"
+# [[on-window-detected]]
+# if.app-id = 'com.vscodium'
+# run = "move-node-to-workspace 8"
 
-[[on-window-detected]]
-if.app-id = 'org.qgis.qgis3'
-run = "move-node-to-workspace 8"
+# [[on-window-detected]]
+# if.app-id = 'org.qgis.qgis3'
+# run = "move-node-to-workspace 8"
 
-[[on-window-detected]]
-if.app-id = 'us.zoom.xos'
-run = "move-node-to-workspace 9"
+# [[on-window-detected]]
+# if.app-id = 'us.zoom.xos'
+# run = "move-node-to-workspace 9"
 
 [[on-window-detected]]
 if.app-id = 'com.apple.iCal'
