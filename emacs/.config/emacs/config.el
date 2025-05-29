@@ -280,6 +280,12 @@ one, an error is signaled."
   (fido-vertical-mode t)
 ;; (icomplete-vertical-mode t)
 
+(use-package ob-mermaid
+  :load-path "~/.config/emacs/elpa/ob-mermaid-20250124.1831/"
+  :config
+  (setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
+  )
+
 (use-package projectile
   :config
   (projectile-mode 1))
@@ -500,6 +506,7 @@ one, an error is signaled."
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((julia . t)
+   (mermaid . t)
    (R . t)))
 
 (require 'org-tempo)

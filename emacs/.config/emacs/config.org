@@ -24,6 +24,7 @@
   - [[#gptel][GPTEL]]
   - [[#icomplete][ICOMPLETE]]
   - [[#ivy-counsel][IVY (COUNSEL)]]
+  - [[#ob-mermaid][OB-MERMAID]]
   - [[#projectile][PROJECTILE]]
   - [[#recentf][RECENTF]]
   - [[#tabspaces][TABSPACES]]
@@ -405,6 +406,26 @@ This is the vanilla Emacs way of doing some of what =ido= and similar minibuffer
 [[https://github.com/abo-abo/swiper][Ivy]] is a generic completion mechanism for Emacs
 Counsel is a collection of Ivy-enhanced versions of common Emacs commands
 [[https://github.com/Yevgnen/ivy-rich][Ivy-rich]] allows us to add descriptions alonside the M-x menu commands
+
+** OB-MERMAID
+Generate flow diagrams using a simple plain-text syntax in org-mode documents.
+Downloaded from MELPA.
+#+begin_src emacs-lisp
+(use-package ob-mermaid
+  :load-path "~/.config/emacs/elpa/ob-mermaid-20250124.1831/"
+  :config
+  (setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
+  )
+#+end_src
+
+#+begin_src mermaid :file mermaid-test.png
+sequenceDiagram
+ A-->B: Works!
+#+end_src
+
+#+RESULTS:
+[[file:mermaid-test.png]]
+
 ** PROJECTILE
 Project interaction library.
 #+begin_src emacs-lisp
@@ -670,6 +691,7 @@ By default =electric-indent-mode= is turned on in Emacs, so we have to turn it o
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((julia . t)
+   (mermaid . t)
    (R . t)))
 #+end_src
 
