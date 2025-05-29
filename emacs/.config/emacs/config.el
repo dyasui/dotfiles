@@ -150,10 +150,10 @@
   (set-face-attribute 'font-lock-keyword-face nil
 		      :slant 'italic)
   ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
+  ;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
 
   ;;set default line spacing
-  (setq-default line-spacing 0.08)
+  ;; (setq-default line-spacing 0.08)
 
   (global-set-key (kbd "C-=") 'text-scale-increase)
   (global-set-key (kbd "C--") 'text-scale-decrease)
@@ -181,19 +181,6 @@
 ;; save temp files to ~/.config/emacs/auto-save
 (setq auto-save-file-name-transforms
           `((".*" ,(concat user-emacs-directory "auto-save/") t)))
-
-(setq mac-command-modifier 'meta) ;; use command key as meta
-(setq mac-option-modifier 'none) ;; don't use alt key for anything
-
-;; reuse existing emacs frames when opening files
-(setq ns-pop-up-frames nil)
-
-;; fix modeline rendering artifacts?
-(setq ns-use-srgb-colorspace nil)
-
-;; transparent title bar
-(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-(add-to-list 'default-frame-alist '(ns-appearance . dark))
 
 (require 'windmove)
 
@@ -268,9 +255,10 @@ one, an error is signaled."
     :defer 2
     :custom
     (company-begin-commands '(self-insert-command))
-    (company-idle-delay.a)
+    (company-idle-delay .a)
     (company-minimum-prefix-length 2)
     (company-show-numbers t)
+    (company-tooltip-align-annotations 't)
     (global-company-mode t))
   (set (make-local-variable 'company-backends) '((company-yasnippet company-capf company-keywords)))
 
@@ -378,8 +366,10 @@ one, an error is signaled."
       :global-prefix "C-SPC") ;; access leader in insert mode
 
     (general-define-key
+     :keymaps 'override
      "M-n" '(make-frame :wk "Open new frame")
-     "M-w" '(delete-frame :wk "Close current frame"))
+     "M-w" '(delete-frame :wk "Close current frame")
+     "M-." '(dired :wk "Dired"))
 
     (dy/leader-keys
       "SPC" '(execute-extended-command :wk "M-x")
@@ -399,6 +389,12 @@ one, an error is signaled."
       "b p" '(previous-buffer :wk "Previous buffer")
       "b r" '(revert-buffer :wk "Reload buffer")
       "b i" '(ibuffer :wk "Buffer Index"))
+
+    (dy/leader-keys
+      "c" '(:ignore t :wk "comment")
+      "c c" '(comment-line :wk "comment line")
+      "c r" '(comment-region :wk "comment region")
+      "c b" '(comment-box :wk "comment box"))
 
     (dy/leader-keys
       "e" '(:ignore t :wk "Eshell/Evaluate")
@@ -489,6 +485,13 @@ one, an error is signaled."
 (use-package org-bullets
   :ensure t)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+(use-package citar
+  :custom
+  (citar-bibliography '("~/betterbibtex.bib"))
+  :hook
+  (LaTeX-mode . citar-capf-setup)
+  (org-mode . citar-capf-setup))
 
 (setq electric-indent-mode -1)
 (setq org-src-preserve-indentation t)

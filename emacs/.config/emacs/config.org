@@ -34,6 +34,7 @@
 - [[#org-mode][ORG MODE]]
   - [[#enabling-table-of-contents][Enabling Table of Contents]]
   - [[#enabling-org-bullets][Enabling Org Bullets]]
+  - [[#citar][Citar]]
   - [[#disable-electric-indent][Disable Electric Indent]]
   - [[#language-support][Language Support]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
@@ -218,10 +219,10 @@ Emacs uses various fonts and font styles in different places.
   (set-face-attribute 'font-lock-keyword-face nil
 		      :slant 'italic)
   ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
+  ;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
 
   ;;set default line spacing
-  (setq-default line-spacing 0.08)
+  ;; (setq-default line-spacing 0.08)
 #+end_src
 
 *** Zooming In/Out
@@ -516,8 +517,10 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
       :global-prefix "C-SPC") ;; access leader in insert mode
 
     (general-define-key
+     :keymaps 'override
      "M-n" '(make-frame :wk "Open new frame")
-     "M-w" '(delete-frame :wk "Close current frame"))
+     "M-w" '(delete-frame :wk "Close current frame")
+     "M-." '(dired :wk "Dired"))
 
     (dy/leader-keys
       "SPC" '(execute-extended-command :wk "M-x")
@@ -537,6 +540,12 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
       "b p" '(previous-buffer :wk "Previous buffer")
       "b r" '(revert-buffer :wk "Reload buffer")
       "b i" '(ibuffer :wk "Buffer Index"))
+
+    (dy/leader-keys
+      "c" '(:ignore t :wk "comment")
+      "c c" '(comment-line :wk "comment line")
+      "c r" '(comment-region :wk "comment region")
+      "c b" '(comment-box :wk "comment box"))
 
     (dy/leader-keys
       "e" '(:ignore t :wk "Eshell/Evaluate")
@@ -635,6 +644,16 @@ Org-bullets look nicer than asterisks
 (use-package org-bullets
   :ensure t)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+end_src
+
+** Citar
+#+begin_src emacs-lisp
+(use-package citar
+  :custom
+  (citar-bibliography '("~/betterbibtex.bib"))
+  :hook
+  (LaTeX-mode . citar-capf-setup)
+  (org-mode . citar-capf-setup))
 #+end_src
 
 ** Disable Electric Indent
