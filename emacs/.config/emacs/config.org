@@ -42,7 +42,7 @@
   So we'll start with them.
 ** Elpaca Package Manager
 #+begin_src emacs-lisp
-  (defvar elpaca-installer-version 0.10)
+  (defvar elpaca-installer-version 0.11)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -350,6 +350,7 @@ Completion starts after typing a few letters in any text buffer. Use M-n and M-p
 #+begin_src emacs-lisp
 (use-package company
   :defer 2
+  :ensure t
   :custom
   (company-begin-commands '(self-insert-command))
   (company-idle-delay .a)
@@ -360,6 +361,7 @@ Completion starts after typing a few letters in any text buffer. Use M-n and M-p
 
 (use-package company-box
   :after company
+  :ensure t
   :hook (company-mode . company-box-mode))
 #+end_src
 ** DIRED
@@ -397,11 +399,6 @@ Use =recentf-open-files= to see a list of recently opened files
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
-#+end_src
-** TABSPACES
-#+begin_src emacs-lisp
-(add-to-list 'load-path "~/.emacs/")
-(require 'tabspaces)
 #+end_src
 
 ** VTERM

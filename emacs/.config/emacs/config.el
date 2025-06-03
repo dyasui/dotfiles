@@ -1,4 +1,4 @@
-  (defvar elpaca-installer-version 0.10)
+  (defvar elpaca-installer-version 0.11)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -253,6 +253,7 @@ one, an error is signaled."
 
 (use-package company
   :defer 2
+  :ensure t
   :custom
   (company-begin-commands '(self-insert-command))
   (company-idle-delay .a)
@@ -263,6 +264,7 @@ one, an error is signaled."
 
 (use-package company-box
   :after company
+  :ensure t
   :hook (company-mode . company-box-mode))
 
 (use-package dired-open
@@ -283,9 +285,6 @@ one, an error is signaled."
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
-
-(add-to-list 'load-path "~/.emacs/")
-(require 'tabspaces)
 
 (use-package vterm
   :ensure t)
