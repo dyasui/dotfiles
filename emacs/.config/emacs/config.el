@@ -1,4 +1,4 @@
-  (defvar elpaca-installer-version 0.10)
+  (defvar elpaca-installer-version 0.11)
   (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
   (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
   (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
@@ -251,20 +251,21 @@ one, an error is signaled."
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
 
-  (use-package company
-    :defer 2
-    :custom
-    (company-begin-commands '(self-insert-command))
-    (company-idle-delay .a)
-    (company-minimum-prefix-length 2)
-    (company-show-numbers t)
-    (company-tooltip-align-annotations 't)
-    (global-company-mode t))
-  (set (make-local-variable 'company-backends) '((company-yasnippet company-capf company-keywords)))
+(use-package company
+  :defer 2
+  :ensure t
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .a)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
 
-    (use-package company-box
-      :after company
-      :hook (company-mode . company-box-mode))
+(use-package company-box
+  :after company
+  :ensure t
+  :hook (company-mode . company-box-mode))
 
 (use-package dired-open
   :config
@@ -293,9 +294,6 @@ one, an error is signaled."
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
-
-;; (add-to-list 'load-path "~/.emacs/")
-;; (require 'tabspaces)
 
 (use-package vterm
   :ensure t)
