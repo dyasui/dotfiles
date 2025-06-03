@@ -150,10 +150,10 @@
   (set-face-attribute 'font-lock-keyword-face nil
 		      :slant 'italic)
   ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
+  ;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
 
   ;;set default line spacing
-  (setq-default line-spacing 0.08)
+  ;; (setq-default line-spacing 0.08)
 
   (global-set-key (kbd "C-=") 'text-scale-increase)
   (global-set-key (kbd "C--") 'text-scale-decrease)
@@ -175,7 +175,7 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
 
-  (global-display-line-numbers-mode 1)
+  (global-display-line-numbers-mode nil)
   (global-visual-line-mode t)
 
 ;; save temp files to ~/.config/emacs/auto-save
@@ -275,8 +275,17 @@ one, an error is signaled."
 				("mkv" . "mpv")
 				("mp4" . "mpv"))))
 
+(use-package gptel
+  :load-path "~/.config/emacs/elpa/gptel-0.9.8/")
+
   (fido-vertical-mode t)
 ;; (icomplete-vertical-mode t)
+
+(use-package ob-mermaid
+  :load-path "~/.config/emacs/elpa/ob-mermaid-20250124.1831/"
+  :config
+  (setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
+  )
 
 (use-package projectile
   :config
@@ -327,13 +336,27 @@ one, an error is signaled."
 	which-key-allow-imprecise-window-fit nil
 	which-key-separator "  " ))
 
-(use-package ess
+(use-package yasnippet
   :ensure t
+  :load-path "./elpa/yasnippet-0.14.2/"
   :config
-  (load "ess-autoloads")
-  (load-library "ob-R")
-  (load-library "ob-julia")
-  (setq org-confirm-babel-evaluate nil))
+  (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
+  (yas-global-mode 1))
+
+;; weight by frequency
+(setq company-transformers '(company-sort-by-occurrence))
+
+;; Add yasnippet support for all company backends
+;; https://github.com/syl20bnr/spacemacs/pull/179
+(defvar company-mode/enable-yas t "Enable yasnippet for all backends.")
+
+(defun company-mode/backend-with-yas (backend)
+  (if (or (not company-mode/enable-yas) (and (listp backend)    (member 'company-yasnippet backend)))
+  backend
+(append (if (consp backend) backend (list backend))
+        '(:with company-yasnippet))))
+
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
   (use-package general
     :ensure t
@@ -347,15 +370,17 @@ one, an error is signaled."
       :global-prefix "C-SPC") ;; access leader in insert mode
 
     (general-define-key
+     :keymaps 'override
      "M-n" '(make-frame :wk "Open new frame")
-     "M-w" '(delete-frame :wk "Close current frame"))
-
-    (dy/leader-keys
-      "c s" '(cheat-sheet :wk "Cheat Sheet"))
+     "M-w" '(delete-frame :wk "Close current frame")
+     "M-." '(dired :wk "Dired"))
 
     (dy/leader-keys
       "SPC" '(execute-extended-command :wk "M-x")
-      "f f" '(dired :wk "Find file")
+      "c s" '(cheat-sheet :wk "Cheat Sheet"))
+
+    (dy/leader-keys
+      "f f" '(project-find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
       "f r" '(recentf :wk "Find recent files")
       "f s" '(affe-grep :wk "Find string in current project"))
@@ -370,6 +395,12 @@ one, an error is signaled."
       "b i" '(ibuffer :wk "Buffer Index"))
 
     (dy/leader-keys
+      "c" '(:ignore t :wk "comment")
+      "c c" '(comment-line :wk "comment line")
+      "c r" '(comment-region :wk "comment region")
+      "c b" '(comment-box :wk "comment box"))
+
+    (dy/leader-keys
       "e" '(:ignore t :wk "Eshell/Evaluate")
       "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
       "e d" '(eval-defun :wk "Evaluate defun containing or after point")
@@ -381,6 +412,7 @@ one, an error is signaled."
     (dy/leader-keys
       "h" '(:ignore t :wk "Help")
       "h f" '(describe-function :wk "Describe function")
+      "h k" '(describe-key :wk "Describe keybinding")
       "h v " '(describe-variable :wk "Describe variable")
       "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
 
@@ -401,12 +433,18 @@ one, an error is signaled."
       "p" '(:ignore :wk "Project")
       "p f" '(project-find-file :wk "Find files in current project")
       "p s" '(project-switch-project :wk "switch project")
+      "p b" '(project-list-buffers :wk "List project buffers")
+      "p k" '(project-kill-buffers :wk "Close all project buffers")
       )
       
     (dy/leader-keys
       "r" '(:ignore :wk "R")
       "r d" '(ess-rdired  :wk "open R object directory"))
     
+    (dy/leader-keys
+      "s" '(:ignore :wk "snippets")
+      "s n" '(yas-new-snippet :wk "new snippet"))
+      
     (dy/leader-keys
      "t" '(:ignore t :wk "Toggle")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
@@ -439,7 +477,7 @@ one, an error is signaled."
       "t r" '(tab-rename :wk "Rename tab")
       "TAB" '(tab-next :wk "Next tab")
       "DEL" '(tab-previous :wk "Previous tab")
-      "g c c" '(comment-line :wk "Comment lines"))
+      )
   )
 
 (use-package toc-org
@@ -452,6 +490,13 @@ one, an error is signaled."
   :ensure t)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
+(use-package citar
+  :custom
+  (citar-bibliography '("~/betterbibtex.bib"))
+  :hook
+  (LaTeX-mode . citar-capf-setup)
+  (org-mode . citar-capf-setup))
+
 (setq electric-indent-mode -1)
 (setq org-src-preserve-indentation t)
 (setq org-edit-src-content-indentation 0)
@@ -459,6 +504,37 @@ one, an error is signaled."
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((julia . t)
+   (mermaid . t)
    (R . t)))
 
 (require 'org-tempo)
+
+;; (use-package org-latex-preview
+;;   :ensure t
+;;   :config
+;;   (plist-put org-latex-preview-appearance-options
+;; 	     :page-width 0.8)
+;;   (setq org-latex-preview-live t))
+
+(use-package ess
+  :ensure t
+  :config
+  (load "ess-autoloads")
+  (load-library "ob-R")
+  (load-library "ob-julia")
+  (setq org-confirm-babel-evaluate nil))
+
+(use-package auctex
+  :ensure t
+  :config
+  (setq TeX-PDF-mode t))
+
+(use-package cdlatex
+  :ensure t
+  :load-path "~/.config/emacs/cdlatex-4.18.5"
+  :config
+  (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
+
+(use-package pdf-tools
+  :ensure t
+  :load-path "~/.config/emacs/elpa/pdf-tools-1.1.0")

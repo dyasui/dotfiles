@@ -21,21 +21,29 @@
   - [[#buffer-move][BUFFER-MOVE]]
   - [[#company][COMPANY]]
   - [[#dired][DIRED]]
+  - [[#gptel][GPTEL]]
   - [[#icomplete][ICOMPLETE]]
   - [[#ivy-counsel][IVY (COUNSEL)]]
+  - [[#ob-mermaid][OB-MERMAID]]
   - [[#projectile][PROJECTILE]]
   - [[#recentf][RECENTF]]
   - [[#tabspaces][TABSPACES]]
   - [[#vterm][VTERM]]
   - [[#which-key][WHICH-KEY]]
-- [[#ess---r-and-julia-code-integration][ESS - R and julia code integration]]
+  - [[#yasnippet][YASNIPPET]]
 - [[#keybindings][KEYBINDINGS]]
 - [[#org-mode][ORG MODE]]
   - [[#enabling-table-of-contents][Enabling Table of Contents]]
   - [[#enabling-org-bullets][Enabling Org Bullets]]
+  - [[#citar][Citar]]
   - [[#disable-electric-indent][Disable Electric Indent]]
   - [[#language-support][Language Support]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
+  - [[#latex-preview][LaTeX preview]]
+- [[#scientifictechinical-writing][SCIENTIFIC/TECHINICAL WRITING]]
+  - [[#emacs-speaks-statics-ess---r-and-julia-code-integration][Emacs Speaks Statics (ESS) - R and julia code integration]]
+  - [[#latex][LaTeX]]
+  - [[#pdf-tools][PDF-Tools]]
 
 * Load these things first
   Some things (like package manager) need to load first in emacs startup.
@@ -212,10 +220,10 @@ Emacs uses various fonts and font styles in different places.
   (set-face-attribute 'font-lock-keyword-face nil
 		      :slant 'italic)
   ;;sets default font on all graphical frames after restarting emacs
-  (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
+  ;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
 
   ;;set default line spacing
-  (setq-default line-spacing 0.08)
+  ;; (setq-default line-spacing 0.08)
 #+end_src
 
 *** Zooming In/Out
@@ -256,7 +264,7 @@ This code enables rainbow-mode in all programming nodes as well as org-mode.
 #+end_src
 ** Show Line numbers and truncated lines
 #+begin_src emacs-lisp
-  (global-display-line-numbers-mode 1)
+  (global-display-line-numbers-mode nil)
   (global-visual-line-mode t)
 #+end_src
 
@@ -364,6 +372,12 @@ Completion starts after typing a few letters in any text buffer. Use M-n and M-p
   :ensure t
   :hook (company-mode . company-box-mode))
 #+end_src
+
+I had to change the =use-package= call on =company= to happen after setting the =company-backends= values to avoide the error:
+#+begin_example
+Symbol's value as variable is void: company-backends
+#+end_example
+
 ** DIRED
 #+begin_src emacs-lisp
 (use-package dired-open
@@ -376,6 +390,13 @@ Completion starts after typing a few letters in any text buffer. Use M-n and M-p
 				
 #+end_src
 
+** GPTEL
+
+#+begin_src emacs-lisp
+(use-package gptel
+  :load-path "~/.config/emacs/elpa/gptel-0.9.8/")
+#+end_src
+
 ** ICOMPLETE
 This is the vanilla Emacs way of doing some of what =ido= and similar minibuffer completion packages do.
 #+begin_src emacs-lisp
@@ -386,6 +407,26 @@ This is the vanilla Emacs way of doing some of what =ido= and similar minibuffer
 [[https://github.com/abo-abo/swiper][Ivy]] is a generic completion mechanism for Emacs
 Counsel is a collection of Ivy-enhanced versions of common Emacs commands
 [[https://github.com/Yevgnen/ivy-rich][Ivy-rich]] allows us to add descriptions alonside the M-x menu commands
+
+** OB-MERMAID
+Generate flow diagrams using a simple plain-text syntax in org-mode documents.
+Downloaded from MELPA.
+#+begin_src emacs-lisp
+(use-package ob-mermaid
+  :load-path "~/.config/emacs/elpa/ob-mermaid-20250124.1831/"
+  :config
+  (setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
+  )
+#+end_src
+
+#+begin_src mermaid :file mermaid-test.png
+sequenceDiagram
+ A-->B: Works!
+#+end_src
+
+#+RESULTS:
+[[file:mermaid-test.png]]
+
 ** PROJECTILE
 Project interaction library.
 #+begin_src emacs-lisp
@@ -451,18 +492,34 @@ Use =recentf-open-files= to see a list of recently opened files
 	which-key-separator "  " ))
 #+end_src
 
-* ESS - R and julia code integration
-The Emacs Speaks Statistics (ESS) package has lots of functionality for working with statistical and scientific languages in Emacs.
-They seem to be heralding a switch to [[https://github.com/polymode/poly-org][polymode]], but I think org's babel function is enough for me right now.
+** YASNIPPET
 #+begin_src emacs-lisp
-(use-package ess
+(use-package yasnippet
   :ensure t
+  :load-path "./elpa/yasnippet-0.14.2/"
   :config
-  (load "ess-autoloads")
-  (load-library "ob-R")
-  (load-library "ob-julia")
-  (setq org-confirm-babel-evaluate nil))
+  (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
+  (yas-global-mode 1))
 #+end_src
+
+Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practicestip_for_companymode_andor_yasnippet/][reddit thread]]:
+#+begin_src emacs-lisp
+;; weight by frequency
+(setq company-transformers '(company-sort-by-occurrence))
+
+;; Add yasnippet support for all company backends
+;; https://github.com/syl20bnr/spacemacs/pull/179
+(defvar company-mode/enable-yas t "Enable yasnippet for all backends.")
+
+(defun company-mode/backend-with-yas (backend)
+  (if (or (not company-mode/enable-yas) (and (listp backend)    (member 'company-yasnippet backend)))
+  backend
+(append (if (consp backend) backend (list backend))
+        '(:with company-yasnippet))))
+
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+#+end_src
+
 * KEYBINDINGS
 #+begin_src emacs-lisp
   (use-package general
@@ -477,15 +534,17 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
       :global-prefix "C-SPC") ;; access leader in insert mode
 
     (general-define-key
+     :keymaps 'override
      "M-n" '(make-frame :wk "Open new frame")
-     "M-w" '(delete-frame :wk "Close current frame"))
-
-    (dy/leader-keys
-      "c s" '(cheat-sheet :wk "Cheat Sheet"))
+     "M-w" '(delete-frame :wk "Close current frame")
+     "M-." '(dired :wk "Dired"))
 
     (dy/leader-keys
       "SPC" '(execute-extended-command :wk "M-x")
-      "f f" '(dired :wk "Find file")
+      "c s" '(cheat-sheet :wk "Cheat Sheet"))
+
+    (dy/leader-keys
+      "f f" '(project-find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
       "f r" '(recentf :wk "Find recent files")
       "f s" '(affe-grep :wk "Find string in current project"))
@@ -500,6 +559,12 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
       "b i" '(ibuffer :wk "Buffer Index"))
 
     (dy/leader-keys
+      "c" '(:ignore t :wk "comment")
+      "c c" '(comment-line :wk "comment line")
+      "c r" '(comment-region :wk "comment region")
+      "c b" '(comment-box :wk "comment box"))
+
+    (dy/leader-keys
       "e" '(:ignore t :wk "Eshell/Evaluate")
       "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
       "e d" '(eval-defun :wk "Evaluate defun containing or after point")
@@ -511,6 +576,7 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
     (dy/leader-keys
       "h" '(:ignore t :wk "Help")
       "h f" '(describe-function :wk "Describe function")
+      "h k" '(describe-key :wk "Describe keybinding")
       "h v " '(describe-variable :wk "Describe variable")
       "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
 
@@ -531,12 +597,18 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
       "p" '(:ignore :wk "Project")
       "p f" '(project-find-file :wk "Find files in current project")
       "p s" '(project-switch-project :wk "switch project")
+      "p b" '(project-list-buffers :wk "List project buffers")
+      "p k" '(project-kill-buffers :wk "Close all project buffers")
       )
       
     (dy/leader-keys
       "r" '(:ignore :wk "R")
       "r d" '(ess-rdired  :wk "open R object directory"))
     
+    (dy/leader-keys
+      "s" '(:ignore :wk "snippets")
+      "s n" '(yas-new-snippet :wk "new snippet"))
+      
     (dy/leader-keys
      "t" '(:ignore t :wk "Toggle")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
@@ -569,7 +641,7 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
       "t r" '(tab-rename :wk "Rename tab")
       "TAB" '(tab-next :wk "Next tab")
       "DEL" '(tab-previous :wk "Previous tab")
-      "g c c" '(comment-line :wk "Comment lines"))
+      )
   )
 #+end_src
 
@@ -591,6 +663,16 @@ Org-bullets look nicer than asterisks
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 #+end_src
 
+** Citar
+#+begin_src emacs-lisp
+(use-package citar
+  :custom
+  (citar-bibliography '("~/betterbibtex.bib"))
+  :hook
+  (LaTeX-mode . citar-capf-setup)
+  (org-mode . citar-capf-setup))
+#+end_src
+
 ** Disable Electric Indent
 Whenever I would add a new line inside a source block in org-mode, everything inside would automatically get indented which was really annoying.
 By default =electric-indent-mode= is turned on in Emacs, so we have to turn it off.
@@ -605,6 +687,7 @@ By default =electric-indent-mode= is turned on in Emacs, so we have to turn it o
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((julia . t)
+   (mermaid . t)
    (R . t)))
 #+end_src
 
@@ -614,4 +697,54 @@ org-tempo is not enabled by default, but is an extension to org-mode which allow
 (require 'org-tempo)
 #+end_src
 
+** LaTeX preview
+LaTeX text like this should be previewed better than by default:
 
+$$\text{Hello, World!}^\infty \sum_i x_i = \bar{Q}$$
+#+begin_src emacs-lisp
+;; (use-package org-latex-preview
+;;   :ensure t
+;;   :config
+;;   (plist-put org-latex-preview-appearance-options
+;; 	     :page-width 0.8)
+;;   (setq org-latex-preview-live t))
+#+end_src
+
+* SCIENTIFIC/TECHINICAL WRITING
+** Emacs Speaks Statics (ESS) - R and julia code integration
+The Emacs Speaks Statistics (ESS) package has lots of functionality for working with statistical and scientific languages in Emacs.
+They seem to be heralding a switch to [[https://github.com/polymode/poly-org][polymode]], but I think org's babel function is enough for me right now.
+#+begin_src emacs-lisp
+(use-package ess
+  :ensure t
+  :config
+  (load "ess-autoloads")
+  (load-library "ob-R")
+  (load-library "ob-julia")
+  (setq org-confirm-babel-evaluate nil))
+#+end_src
+
+** LaTeX
+*** AucTeX
+#+begin_src emacs-lisp
+(use-package auctex
+  :ensure t
+  :config
+  (setq TeX-PDF-mode t))
+#+end_src
+*** CDLaTeX
+#+begin_src emacs-lisp
+(use-package cdlatex
+  :ensure t
+  :load-path "~/.config/emacs/cdlatex-4.18.5"
+  :config
+  (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
+#+end_src
+
+** PDF-Tools
+
+#+begin_src emacs-lisp
+(use-package pdf-tools
+  :ensure t
+  :load-path "~/.config/emacs/elpa/pdf-tools-1.1.0")
+#+end_src
