@@ -384,6 +384,7 @@ one, an error is signaled."
     (dy/leader-keys
       "f f" '(project-find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+      "f i" '(imenu :wk "Find heading in imenu")
       "f r" '(recentf :wk "Find recent files")
       "f s" '(affe-grep :wk "Find string in current project"))
 
