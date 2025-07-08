@@ -167,14 +167,19 @@ To get the vim bindings to work in other types of buffers
 	  doom-themes-enable-italic t)
     (doom-themes-org-config))
   ;; solaire darkens non-standard buffers' backgrounds
-  (use-package solaire-mode
-    :ensure t
-    :config
-    (solaire-global-mode +1))
-  ;; doom's fancy modeline
+  ;; (use-package solaire-mode
+  ;;   :ensure t
+  ;;   :config
+  ;;   (solaire-global-mode +1))
+  ;; ;; doom's fancy modeline
   (use-package doom-modeline
     :ensure t
-    :init (doom-modeline-mode 1))
+    :init (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-env-enable-python t)
+    (setq doom-modeline-env-enable-R t)
+    (setq doom-modeline-env-enable-julia t)
+    (setq doom-modeline-height 18))
 #+end_src
 ** DASHBOARD
 Extensible dashboard to show recent files, bookmarks, agenda items, etc on startup
@@ -189,9 +194,9 @@ Extensible dashboard to show recent files, bookmarks, agenda items, etc on start
   (setq dashboard-startup-banner 'logo)
   (setq dashboard-center-content t)
   (setq dashboard-items '((recents . 5)
-                        (agenda . 5)
+                        (projects . 5)
                         (bookmarks . 3)
-                        (projects . 3)
+                        (agenda . 3)
                         (registers . 3)))
   ;; (dashboard-modify-heading-icons '((recents . "file-text")
   ;;                                  (bookmarks . "book")))
@@ -264,7 +269,7 @@ This code enables rainbow-mode in all programming nodes as well as org-mode.
 #+end_src
 ** Show Line numbers and truncated lines
 #+begin_src emacs-lisp
-  (global-display-line-numbers-mode nil)
+  ;; (global-display-line-numbers-mode nil)
   (global-visual-line-mode t)
 #+end_src
 

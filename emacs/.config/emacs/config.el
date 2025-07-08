@@ -104,14 +104,19 @@
 	  doom-themes-enable-italic t)
     (doom-themes-org-config))
   ;; solaire darkens non-standard buffers' backgrounds
-  (use-package solaire-mode
-    :ensure t
-    :config
-    (solaire-global-mode +1))
-  ;; doom's fancy modeline
+  ;; (use-package solaire-mode
+  ;;   :ensure t
+  ;;   :config
+  ;;   (solaire-global-mode +1))
+  ;; ;; doom's fancy modeline
   (use-package doom-modeline
     :ensure t
-    :init (doom-modeline-mode 1))
+    :init (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-env-enable-python t)
+    (setq doom-modeline-env-enable-R t)
+    (setq doom-modeline-env-enable-julia t)
+    (setq doom-modeline-height 18))
 
   (use-package dashboard
   :ensure t
@@ -123,9 +128,9 @@
   (setq dashboard-startup-banner 'logo)
   (setq dashboard-center-content t)
   (setq dashboard-items '((recents . 5)
-                        (agenda . 5)
+                        (projects . 5)
                         (bookmarks . 3)
-                        (projects . 3)
+                        (agenda . 3)
                         (registers . 3)))
   ;; (dashboard-modify-heading-icons '((recents . "file-text")
   ;;                                  (bookmarks . "book")))
@@ -175,7 +180,7 @@
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
 
-  (global-display-line-numbers-mode nil)
+  ;; (global-display-line-numbers-mode nil)
   (global-visual-line-mode t)
 
 ;; save temp files to ~/.config/emacs/auto-save
