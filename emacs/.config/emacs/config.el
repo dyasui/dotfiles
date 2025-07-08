@@ -257,21 +257,20 @@ one, an error is signaled."
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
 
-(use-package company
-  :defer 2
-  :ensure t
-  :custom
-  (company-begin-commands '(self-insert-command))
-  (company-idle-delay .a)
-  (company-minimum-prefix-length 2)
-  (company-show-numbers t)
-  (company-tooltip-align-annotations 't)
-  (global-company-mode t))
+  (use-package company
+    :defer 2
+    :custom
+    (company-begin-commands '(self-insert-command))
+    (company-idle-delay .1)
+    (company-minimum-prefix-length 2)
+    (company-show-numbers t)
+    (company-tooltip-align-annotations 't)
+    (global-company-mode t))
+(set (make-local-variable 'company-backends) '((company-yasnippet company-capf company-keywords)))
 
-(use-package company-box
-  :after company
-  :ensure t
-  :hook (company-mode . company-box-mode))
+    (use-package company-box
+      :after company
+      :hook (company-mode . company-box-mode))
 
 (use-package dired-open
   :config
