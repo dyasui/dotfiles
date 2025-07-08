@@ -87,6 +87,8 @@ alias ddgr="BROWSER=w3m ddgr -n 5"
 alias qvim="NVIM_APPNAME=quarto-nvim-kickstarter nvim"
 alias tvim="NVIM_APPNAME=neotex/nvim nvim"
 alias rg="rg --hyperlink-format=kitty"
+alias du="du -sh"
+alias csv="csvlens"
 
 # Shell integrations
 
