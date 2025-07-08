@@ -511,6 +511,8 @@ one, an error is signaled."
  'org-babel-load-languages
  '((julia . t)
    (mermaid . t)
+   (latex . t)
+   (shell . t)
    (R . t)))
 
 (require 'org-tempo)

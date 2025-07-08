@@ -694,6 +694,8 @@ By default =electric-indent-mode= is turned on in Emacs, so we have to turn it o
  'org-babel-load-languages
  '((julia . t)
    (mermaid . t)
+   (latex . t)
+   (shell . t)
    (R . t)))
 #+end_src
 
