@@ -184,8 +184,9 @@
   (global-visual-line-mode t)
 
 ;; save temp files to ~/.config/emacs/auto-save
-(setq auto-save-file-name-transforms
-          `((".*" ,(concat user-emacs-directory "auto-save/") t)))
+;; (setq auto-save-file-name-transforms
+          ;; `((".*" ,(concat user-emacs-directory "auto-save/") t))) 
+(setq backup-directory-alist '((".*" . "~/local/share/Trash/files")))
 
 (require 'windmove)
 
