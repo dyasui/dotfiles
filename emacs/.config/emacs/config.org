@@ -399,7 +399,34 @@ Symbol's value as variable is void: company-backends
 
 #+begin_src emacs-lisp
 (use-package gptel
-  :load-path "~/.config/emacs/elpa/gptel-0.9.8/")
+  :load-path "~/.config/emacs/elpa/gptel-20250713.2034/"
+  :config
+  (setq gptel-default-mode 'org-mode) ;; chat in org-mode or markdown
+  (setq gptel-prompt-prefix-alist
+   '((org-mode . "*  :") (text-mode . "💬 :")))
+  (setq gptel-response-prefix-alist
+   '((org-mode . "*  ") (text-mode . "> 🤖 ")))
+   ;; I was having problems with sourcing the api keys from .authinfo
+   ;; setting the gptel-api-key with the host name works here
+  (setq auth-sources '("~/.authinfo"))
+  (setq gptel-api-key (auth-source-pick-first-password :host "openrouter.ai"))
+  (gptel-make-openai "OpenRouter" 
+    :host "openrouter.ai"
+    :endpoint "/api/v1/chat/completions"
+    :stream t
+    :key gptel-api-key ; function that returns key from .authinfo
+    :models '(anthropic/claude-sonnet-4
+              google/gemini-2.5-pro
+              deepseek/deepseek-r1-0528
+	          openai/o3))
+  (gptel-make-privategpt "LMStudio"
+    :protocol "http"
+    :host "localhost:1234"
+    :stream t
+    :context t
+    :sources t
+    :models '(qwen3-14b-mlx))
+)
 #+end_src
 
 ** ICOMPLETE
@@ -744,9 +771,11 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
 #+begin_src emacs-lisp
 (use-package cdlatex
   :ensure t
-  :load-path "~/.config/emacs/cdlatex-4.18.5"
+  :hook (org-mode . org-cdlatex-mode)
+  :bind ("<f5>" . cdlatex-math-symbol)
   :config
-  (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
+  ;; Unbind the backtick key
+  (define-key cdlatex-mode-map (kbd "`") nil))
 #+end_src
 
 ** PDF-Tools
