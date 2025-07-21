@@ -24,3 +24,5 @@ yazi/.config/yazi/plugins/mediainfo.yazi
 emacs/.config/emacs/transient/history.el
 emacs/.config/emacs/ltximg
 emacs/.config/emacs/init.el~
+emacs/.config/emacs/sessions
+emacs/.config/emacs/projects
