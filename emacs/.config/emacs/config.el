@@ -168,6 +168,8 @@
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 (load-theme 'kanagawa t)
 
+(use-package org-modern
+  :ensure t)
 (use-package rainbow-mode
   :ensure t
   :hook org-mode prog-mode)
@@ -281,7 +283,37 @@ one, an error is signaled."
 				("mp4" . "mpv"))))
 
 (use-package gptel
-  :load-path "~/.config/emacs/elpa/gptel-0.9.8/")
+  :load-path "~/.config/emacs/elpa/gptel-20250713.2034/"
+  :config
+  (setq gptel-default-mode 'org-mode) ;; chat in org-mode or markdown
+  (setq gptel-prompt-prefix-alist
+   '((org-mode . "*  :") (text-mode . "💬 :")))
+  (setq gptel-response-prefix-alist
+   '((org-mode . "**  ") (text-mode . "> 🤖 ")))
+   ;; I was having problems with sourcing the api keys from .authinfo
+   ;; setting the gptel-api-key with the host name works here
+  (setq auth-sources '("~/.authinfo"))
+  (setq gptel-api-key (auth-source-pick-first-password :host "openrouter.ai"))
+  (gptel-make-openai "OpenRouter" 
+    :host "openrouter.ai"
+    :endpoint "/api/v1/chat/completions"
+    :stream t
+    :key gptel-api-key ; function that returns key from .authinfo
+    :models '(anthropic/claude-sonnet-4
+              google/gemini-2.5-pro
+              deepseek/deepseek-r1-0528
+	          openai/o3))
+  (gptel-make-privategpt "LMStudio"
+    :protocol "http"
+    :host "localhost:1234"
+    :stream t
+    :context t
+    :sources t
+    :models '(qwen3-14b-mlx))
+  ;; System prompt presets for various use cases
+  (gptel-make-preset 'translate
+    :system "You are highly skilled translator with expertise in many languages, especially Bosnian. Your task is to identify the language of the text I provide and accurately translate it into the specified target language while preserving the meaning, tone, and nuance of the original text. If I provide lyrics to a song, return a table with each line in the original song next to it's translated English version. Ignore any formatting like [Chorus], verse (x2), etc, and do not show repeated sections. If I ask a question in English, please reply in English. If there is nuance to the translation of a word/expression, please provide a footnote clarifying your choice. Use correct accents like š,č,ć, etc even if they are not properly used in the source text. Immediately provide an your answer without using chain-of-thought reasoning. /nothink")
+)
 
   (fido-vertical-mode t)
 ;; (icomplete-vertical-mode t)
