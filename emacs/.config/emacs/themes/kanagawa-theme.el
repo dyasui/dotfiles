@@ -176,7 +176,7 @@
 	 `(fringe ((,class (:background ,bg2 :foreground ,fg4))))
 	 `(cursor ((,class (:background ,fg4))))
    `(isearch ((,class (:bold t :foreground ,warning :background ,bg3))))
-   `(mode-line ((,class (:underline nil :overline nil :box (:line-width 1 :color bg1) :bold t :foreground , bg1 :background , "#363646"))))
+   `(mode-line ((,class (:underline nil :overline nil :box nil :bold t :foreground , bg1 :background , "#363646"))))
    `(mode-line-inactive ((,class (:box (:line-width 1 :color nil :style pressed-button) :foreground ,var :background ,bg1 :weight normal))))
    `(mode-line-buffer-id ((,class (:bold t :foreground ,func :background ,unspec))))
 	 `(mode-line-highlight ((,class (:foreground ,keyword :box nil :weight bold))))
@@ -196,6 +196,10 @@
    `(org-link ((,class (:underline t :foreground , "#6693bf" ))))
    `(org-special-keyword ((,class (:foreground , "#4d699b"))))
    `(org-block ((,class (:foreground ,fg3 :background ,"#181820"))))
+   `(org-block-begin-line
+     ((t (:overline ,lotusGray2 :foreground ,lotusGray :background ,lotusInk1))))
+   `(org-block-end-line
+     ((t (:overline ,lotusGray2 :foreground ,lotusGray :background ,lotusInk1))))
    `(org-quote ((,class (:inherit org-block :slant italic))))
    `(org-verse ((,class (:inherit org-block :slant italic))))
    `(org-todo ((,class (:box (:line-width 1 :color ,fg3) :foreground ,keyword :bold t))))
