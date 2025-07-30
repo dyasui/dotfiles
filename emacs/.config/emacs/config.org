@@ -251,7 +251,8 @@ Working on a variation of the kanagawa color theme.
 Modern-looking visual style for org buffer rendering.
 #+begin_src emacs-lisp
 (use-package org-modern
-  :ensure t)
+  :ensure t
+  :hook org-mode)
 #+end_src
 ** Rainbow Mode: display HEX colors in buffers
 Display the actual color as a background for any hex color value (ex. #ffffff).
@@ -479,7 +480,8 @@ I want to group buffers into different workspaces, which is something handled by
 (use-package perspective
   :init
   (persp-mode)
-  :general (:prefix "
+  :custom
+  (persp-mode-prefix-key (kbd "C-<tab>"))
   :config
   (setq switch-to-prev-buffer-skip
       (lambda (win buff bury-or-kill)

@@ -1,42 +1,42 @@
-  (defvar elpaca-installer-version 0.11)
-  (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
-  (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
-  (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
-  (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-				:ref nil :depth 1 :inherit ignore
-				:files (:defaults "elpaca-test.el" (:exclude "extensions"))
-				:build (:not elpaca--activate-package)))
-  (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
-	 (build (expand-file-name "elpaca/" elpaca-builds-directory))
-	 (order (cdr elpaca-order))
-	 (default-directory repo))
-    (add-to-list 'load-path (if (file-exists-p build) build repo))
-    (unless (file-exists-p repo)
-      (make-directory repo t)
-      (when (< emacs-major-version 28) (require 'subr-x))
-      (condition-case-unless-debug err
-	  (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-		    ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
-						    ,@(when-let* ((depth (plist-get order :depth)))
-							(list (format "--depth=%d" depth) "--no-single-branch"))
-						    ,(plist-get order :repo) ,repo))))
-		    ((zerop (call-process "git" nil buffer t "checkout"
-					  (or (plist-get order :ref) "--"))))
-		    (emacs (concat invocation-directory invocation-name))
-		    ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-					  "--eval" "(byte-recompile-directory \".\" 0 'force)")))
-		    ((require 'elpaca))
-		    ((elpaca-generate-autoloads "elpaca" repo)))
-	      (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-	    (error "%s" (with-current-buffer buffer (buffer-string))))
-	((error) (warn "%s" err) (delete-directory repo 'recursive))))
-    (unless (require 'elpaca-autoloads nil t)
-      (require 'elpaca)
-      (elpaca-generate-autoloads "elpaca" repo)
-      (load "./elpaca-autoloads")))
-  (add-hook 'after-init-hook #'elpaca-process-queues)
-  (elpaca `(,@elpaca-order))
-  ;; (elpaca example-package)
+(defvar elpaca-installer-version 0.11)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+			      :ref nil :depth 1 :inherit ignore
+			      :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+			      :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+	(if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+		  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+						  ,@(when-let* ((depth (plist-get order :depth)))
+						      (list (format "--depth=%d" depth) "--no-single-branch"))
+						  ,(plist-get order :repo) ,repo))))
+		  ((zerop (call-process "git" nil buffer t "checkout"
+					(or (plist-get order :ref) "--"))))
+		  (emacs (concat invocation-directory invocation-name))
+		  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+					"--eval" "(byte-recompile-directory \".\" 0 'force)")))
+		  ((require 'elpaca))
+		  ((elpaca-generate-autoloads "elpaca" repo)))
+	    (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+	  (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
+;; (elpaca example-package)
 ;; Install use-package support
 (elpaca elpaca-use-package
   ;; Enable :elpaca use-package keyword.
@@ -137,18 +137,18 @@
   :config
   (dashboard-setup-startup-hook))
 
-  (set-face-attribute 'default nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 160
-		      :weight 'medium)
-  (set-face-attribute 'variable-pitch nil
-		      :font "Menlo"
-		      :height 160
-		      :weight 'medium)
-  (set-face-attribute 'fixed-pitch nil
-		      :font "JetBrainsMono Nerd Font"
-		      :height 160
-		      :weight 'medium)
+(set-face-attribute 'default nil
+	      :font "JetBrainsMono Nerd Font"
+	      :height 160
+	      :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+	      :font "Menlo"
+	      :height 160
+	      :weight 'medium)
+(set-face-attribute 'fixed-pitch nil
+	      :font "JetBrainsMono Nerd Font"
+	      :height 160
+	      :weight 'medium)
   ;; italicizes commented text and keywords
   (set-face-attribute 'font-lock-comment-face nil
 		      :slant 'italic)
@@ -169,7 +169,9 @@
 (load-theme 'kanagawa t)
 
 (use-package org-modern
-  :ensure t)
+  :ensure t
+  :hook org-mode)
+
 (use-package rainbow-mode
   :ensure t
   :hook org-mode prog-mode)
@@ -188,7 +190,10 @@
 ;; save temp files to ~/.config/emacs/auto-save
 ;; (setq auto-save-file-name-transforms
           ;; `((".*" ,(concat user-emacs-directory "auto-save/") t))) 
-(setq backup-directory-alist '((".*" . "~/local/share/Trash/files")))
+(setq backup-directory-alist '((".*" . "~/.local/share/Trash/files")))
+
+  (fido-vertical-mode t)
+;; (icomplete-vertical-mode t)
 
 (require 'windmove)
 
@@ -283,7 +288,7 @@ one, an error is signaled."
 				("mp4" . "mpv"))))
 
 (use-package gptel
-  :load-path "~/.config/emacs/elpa/gptel-20250713.2034/"
+  :ensure t
   :config
   (setq gptel-default-mode 'org-mode) ;; chat in org-mode or markdown
   (setq gptel-prompt-prefix-alist
@@ -301,6 +306,7 @@ one, an error is signaled."
     :key gptel-api-key ; function that returns key from .authinfo
     :models '(anthropic/claude-sonnet-4
               google/gemini-2.5-pro
+	          google/gemini-2.5-flash
               deepseek/deepseek-r1-0528
 	          openai/o3))
   (gptel-make-privategpt "LMStudio"
@@ -309,22 +315,33 @@ one, an error is signaled."
     :stream t
     :context t
     :sources t
-    :models '(qwen3-14b-mlx))
+    :models '(qwen3-14b-mlx
+	      qwen3-30b-a3b
+	      qwen3-14b))
   ;; System prompt presets for various use cases
   (gptel-make-preset 'translate
-    :system "You are highly skilled translator with expertise in many languages, especially Bosnian. Your task is to identify the language of the text I provide and accurately translate it into the specified target language while preserving the meaning, tone, and nuance of the original text. If I provide lyrics to a song, return a table with each line in the original song next to it's translated English version. Ignore any formatting like [Chorus], verse (x2), etc, and do not show repeated sections. If I ask a question in English, please reply in English. If there is nuance to the translation of a word/expression, please provide a footnote clarifying your choice. Use correct accents like š,č,ć, etc even if they are not properly used in the source text. Immediately provide an your answer without using chain-of-thought reasoning. /nothink")
+    :system "You are highly skilled translator with expertise in many languages, especially Bosnian. Your task is to identify the language of the text I provide and accurately translate it into the specified target language while preserving the meaning, tone, and nuance of the original text. If I provide lyrics to a song, return an org table with each line in the original song next to it's translated English version. Ignore any formatting like [Chorus], verse (x2), etc, and do not show repeated sections. If I ask a question in English, please reply in English. If there is nuance to the translation of a word/expression, please provide a footnote clarifying your choice. Use correct accents like š,č,ć, etc even if they are not properly used in the source text. Immediately provide an your answer without using chain-of-thought reasoning. /nothink")
 )
 
-  (fido-vertical-mode t)
-;; (icomplete-vertical-mode t)
+;; (use-package ob-mermaid
+;;   :disabled t
+;;   :load-path "~/.config/emacs/elpa/ob-mermaid-20250124.1831/"
+;;   :config
+;;   (setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
+;;   )
 
-(use-package ob-mermaid
-  :load-path "~/.config/emacs/elpa/ob-mermaid-20250124.1831/"
+(use-package perspective
+  :init
+  (persp-mode)
+  :custom
+  (persp-mode-prefix-key (kbd "C-<tab>"))
   :config
-  (setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
-  )
+  (setq switch-to-prev-buffer-skip
+      (lambda (win buff bury-or-kill)
+        (not (persp-is-current-buffer buff)))))
 
 (use-package projectile
+  :disabled
   :config
   (projectile-mode 1))
 
@@ -419,13 +436,12 @@ one, an error is signaled."
     (dy/leader-keys
       "f f" '(project-find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-      "f i" '(imenu :wk "Find heading in imenu")
+      "f i" '(imenu :wk "Find index")
       "f r" '(recentf :wk "Find recent files")
       "f s" '(affe-grep :wk "Find string in current project"))
 
     (dy/leader-keys
       "b" '(:ignore t :wk "buffer")
-      "b s" '(switch-to-buffer :wk "Switch buffer")
       "b q" '(kill-this-buffer :wk "Kill buffer")
       "b n" '(next-buffer :wk "Next buffer")
       "b p" '(previous-buffer :wk "Previous buffer")
@@ -437,6 +453,12 @@ one, an error is signaled."
       "c c" '(comment-line :wk "comment line")
       "c r" '(comment-region :wk "comment region")
       "c b" '(comment-box :wk "comment box"))
+
+    (dy/leader-keys
+      "d" '(:ignore t :wk "dired")
+      "d d" '(dired :wk "open dired")
+      "d j" '(dired-jump :wk "open current directory")
+      "d L" '(dired-jump-other-window :wk "open current directory in new window"))
 
     (dy/leader-keys
       "e" '(:ignore t :wk "Eshell/Evaluate")
@@ -455,6 +477,12 @@ one, an error is signaled."
       "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
 
     (dy/leader-keys
+      "m" '(:ignore t :wk "Bookmark")
+      "m s" '(bookmark-set :wk "Set a bookmark")
+      "m j" '(bookmark-jump :wk "Jump to a bookmark")
+      "m l" '(list-bookmarks :wk "List bookmarks"))
+
+    (dy/leader-keys
       "o" '(:ignore t :wk "Org")
       "o a" '(org-agenda :wk "Org agenda")
       "o e" '(org-export-dispatch :wk "Org export dispatch")
@@ -470,6 +498,7 @@ one, an error is signaled."
     (dy/leader-keys
       "p" '(:ignore :wk "Project")
       "p f" '(project-find-file :wk "Find files in current project")
+      "p d" '(project-dired :wk "Open dired for project directory")
       "p s" '(project-switch-project :wk "switch project")
       "p b" '(project-list-buffers :wk "List project buffers")
       "p k" '(project-kill-buffers :wk "Close all project buffers")
@@ -507,15 +536,6 @@ one, an error is signaled."
      "w J" '(buf-move-down :wk "Buffer move down")
      "w K" '(buf-move-up :wk "Buffer move up")
      "w L" '(buf-move-right :wk "Buffer move right"))
-
-    (dy/leader-keys
-      ;; "TAB" '(:ignore t :wk "Tabs")
-      "t n" '(tab-new :wk "Open new tab")
-      "t q" '(tab-close :wk "Close tab")
-      "t r" '(tab-rename :wk "Rename tab")
-      "TAB" '(tab-next :wk "Next tab")
-      "DEL" '(tab-previous :wk "Previous tab")
-      )
   )
 
 (use-package toc-org
@@ -530,10 +550,26 @@ one, an error is signaled."
 
 (use-package citar
   :custom
-  (citar-bibliography '("~/betterbibtex.bib"))
+  (citar-bibliography '("~/zotero-library.bib"))
   :hook
   (LaTeX-mode . citar-capf-setup)
   (org-mode . citar-capf-setup))
+
+(use-package citar-embark
+  :after citar embark
+  :no-require
+  :config (citar-embark-mode))
+
+(use-package embark
+  :ensure t)
+
+;; Use `citar' with `org-cite'
+(use-package citar-org
+  :after oc
+  :custom
+  (org-cite-insert-processor 'citar)
+  (org-cite-follow-processor 'citar)
+  (org-cite-activate-processor 'citar))
 
 (setq electric-indent-mode -1)
 (setq org-src-preserve-indentation t)
@@ -542,7 +578,6 @@ one, an error is signaled."
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((julia . t)
-   (mermaid . t)
    (latex . t)
    (shell . t)
    (R . t)))
@@ -571,9 +606,11 @@ one, an error is signaled."
 
 (use-package cdlatex
   :ensure t
-  :load-path "~/.config/emacs/cdlatex-4.18.5"
+  :hook (org-mode . org-cdlatex-mode)
+  :bind ("<f5>" . cdlatex-math-symbol)
   :config
-  (add-hook 'org-mode-hook #'turn-on-org-cdlatex))
+  ;; Unbind the backtick key
+  (define-key cdlatex-mode-map (kbd "`") nil))
 
 (use-package pdf-tools
   :ensure t
