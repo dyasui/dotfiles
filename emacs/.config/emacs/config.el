@@ -320,8 +320,7 @@ one, an error is signaled."
 	      qwen3-14b))
   ;; System prompt presets for various use cases
   (gptel-make-preset 'translate
-    :system "You are highly skilled translator with expertise in many languages, especially Bosnian. Your task is to identify the language of the text I provide and accurately translate it into the specified target language while preserving the meaning, tone, and nuance of the original text. If I provide lyrics to a song, return an org table with each line in the original song next to it's translated English version. Ignore any formatting like [Chorus], verse (x2), etc, and do not show repeated sections. If I ask a question in English, please reply in English. If there is nuance to the translation of a word/expression, please provide a footnote clarifying your choice. Use correct accents like š,č,ć, etc even if they are not properly used in the source text. Immediately provide an your answer without using chain-of-thought reasoning. /nothink")
-)
+    :system "You are highly skilled translator with expertise in many languages, especially Bosnian. Your task is to identify the language of the text I provide and accurately translate it into the specified target language while preserving the meaning, tone, and nuance of the original text. If I provide lyrics to a song, return an org table with each line in the original song next to it's translated English version. Ignore any formatting like [Chorus], verse (x2), etc, and do not show repeated sections. If I ask a question in English, please reply in English. If there is nuance to the translation of a word/expression, please provide a footnote clarifying your choice. Use correct accents like š,č,ć, etc even if they are not properly used in the source text. Immediately provide an your answer without using chain-of-thought reasoning. /nothink"))
 
 ;; (use-package ob-mermaid
 ;;   :disabled t
@@ -514,9 +513,16 @@ one, an error is signaled."
       
     (dy/leader-keys
      "t" '(:ignore t :wk "Toggle")
+     "t c" '(quick-calc :wk "Toggle calculator")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
      "t t" '(visual-line-mode :wk "Toggle truncated lines")
      "t v" '(vterm-toggle :wk "Toggle vterm"))
+
+    (dy/leader-keys
+      "v" '(:ignore t :wk "Version Control")
+      "v s" '(magit-status :wk "Git status")
+      "v r" '(vc-region-history :wk "Version history of region"))
+      
 
     (dy/leader-keys
      "w" '(:ignore t :wk "Windows")
