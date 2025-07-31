@@ -14,6 +14,7 @@
   - [[#kanagawa-color-theme][Kanagawa Color-Theme]]
   - [[#org-modern][Org-Modern]]
   - [[#rainbow-mode-display-hex-colors-in-buffers][Rainbow Mode: display HEX colors in buffers]]
+  - [[#olivetti][Olivetti]]
 - [[#basic-settings][BASIC SETTINGS]]
   - [[#disable-menubar-toolbars-scrollbars][Disable Menubar, toolbars, scrollbars]]
   - [[#show-line-numbers-and-truncated-lines][Show Line numbers and truncated lines]]
@@ -260,8 +261,17 @@ This code enables rainbow-mode in all programming nodes as well as org-mode.
 #+begin_src emacs-lisp
 (use-package rainbow-mode
   :ensure t
-  :hook org-mode prog-mode)
+  :hook (org-mode prog-mode))
 #+end_src
+
+** Olivetti
+Installed from melpa-stable
+#+begin_src emacs-lisp
+(use-package olivetti
+  :ensure t
+  :hook (org-mode LaTeX-mode))
+#+end_src
+
 * BASIC SETTINGS
 #+begin_src emacs-lisp
 (setq ring-bell-function 'ignore)

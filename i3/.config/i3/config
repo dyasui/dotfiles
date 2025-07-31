@@ -78,7 +78,7 @@ bindsym Mod4+space exec rofi -show drun -matching fuzzy -sort true
 bindsym Mod4+d exec rofi -show run 
 bindsym $mod+b exec firefox
 bindsym $mod+Return exec kitty
-bindsym $mod+n exec /home/dante/Applications/Logseq-linux-x64-0.10.9.AppImage
+# bindsym $mod+n exec /home/dante/Applications/Logseq-linux-x64-0.10.9.AppImage
 bindsym $mod+e exec emacs
 bindsym $mod+Shift+s exec firefox http://127.0.0.1:8384/#
 bindsym $mod+m exec kitty spotify_player
@@ -138,12 +138,12 @@ set $ws1 "1:  "
 set $ws2 "2:  " 
 set $ws3 "3: 󰗚 " 
 set $ws4 "4:  " 
-set $ws5 "5:  " 
-set $ws6 "6:  " 
-set $ws7 "7: 󱉟 " 
-set $ws8 "8:  " 
-set $ws9 "9:  " 
-set $ws10 "10:  "
+set $ws5 "5: 󰭹 " 
+set $ws6 "6: 󰎳 " 
+set $ws7 "7: 󰎶 " 
+set $ws8 "8: 󰎹 " 
+set $ws9 "9: 󰎼 " 
+set $ws10 "10: 󰽽 "
 # add calendar for something that works on Linux?
 bindsym $mod+1 workspace number $ws1 
 bindsym $mod+2 workspace number $ws2 

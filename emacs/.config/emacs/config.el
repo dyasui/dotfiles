@@ -174,7 +174,11 @@
 
 (use-package rainbow-mode
   :ensure t
-  :hook org-mode prog-mode)
+  :hook (org-mode prog-mode))
+
+(use-package olivetti
+  :ensure t
+  :hook (org-mode LaTeX-mode))
 
 (setq ring-bell-function 'ignore)
 (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
