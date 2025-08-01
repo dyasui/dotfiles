@@ -12,7 +12,6 @@
   - [[#dashboard][DASHBOARD]]
   - [[#fonts][FONTS]]
   - [[#kanagawa-color-theme][Kanagawa Color-Theme]]
-  - [[#org-modern][Org-Modern]]
   - [[#rainbow-mode-display-hex-colors-in-buffers][Rainbow Mode: display HEX colors in buffers]]
   - [[#olivetti][Olivetti]]
 - [[#basic-settings][BASIC SETTINGS]]
@@ -35,10 +34,9 @@
   - [[#yasnippet][YASNIPPET]]
 - [[#keybindings][KEYBINDINGS]]
 - [[#org-mode][ORG MODE]]
-  - [[#enabling-table-of-contents][Enabling Table of Contents]]
-  - [[#enabling-org-bullets][Enabling Org Bullets]]
+  - [[#agenda-file][Agenda file]]
+  - [[#aesthetics][Aesthetics]]
   - [[#citar][Citar]]
-  - [[#disable-electric-indent][Disable Electric Indent]]
   - [[#language-support][Language Support]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
   - [[#latex-preview][LaTeX preview]]
@@ -210,7 +208,8 @@ Emacs uses various fonts and font styles in different places.
 *** Setting the font face
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
-	      :font "JetBrainsMono Nerd Font"
+	      :font "Liga SFMono Nerd Font"
+	      ;; height = 10*point size
 	      :height 160
 	      :weight 'medium)
 (set-face-attribute 'variable-pitch nil
@@ -218,7 +217,7 @@ Emacs uses various fonts and font styles in different places.
 	      :height 160
 	      :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
-	      :font "JetBrainsMono Nerd Font"
+	      :font "Iosevka Nerd Font"
 	      :height 160
 	      :weight 'medium)
   ;; italicizes commented text and keywords
@@ -231,6 +230,7 @@ Emacs uses various fonts and font styles in different places.
 
   ;;set default line spacing
   ;; (setq-default line-spacing 0.08)
+
 #+end_src
 
 *** Zooming In/Out
@@ -248,13 +248,6 @@ Working on a variation of the kanagawa color theme.
 (load-theme 'kanagawa t)
 #+end_src
 
-** Org-Modern
-Modern-looking visual style for org buffer rendering.
-#+begin_src emacs-lisp
-(use-package org-modern
-  :ensure t
-  :hook org-mode)
-#+end_src
 ** Rainbow Mode: display HEX colors in buffers
 Display the actual color as a background for any hex color value (ex. #ffffff).
 This code enables rainbow-mode in all programming nodes as well as org-mode.
@@ -269,7 +262,7 @@ Installed from melpa-stable
 #+begin_src emacs-lisp
 (use-package olivetti
   :ensure t
-  :hook (org-mode LaTeX-mode))
+  :hook (org-mode))
 #+end_src
 
 * BASIC SETTINGS
@@ -598,6 +591,12 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
     :ensure t
     :config
     (general-evil-setup)
+
+    (general-create-definer dy/normal-mode
+      :states '(normal visual)
+      :keymaps 'override
+      "g c c" '(comment-line :wk "Comment Line"))
+
     ;; set space bar as global leader key
     (general-create-definer dy/leader-keys
       :states '(normal insert visual emacs)
@@ -616,7 +615,7 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
       "c s" '(cheat-sheet :wk "Cheat Sheet"))
 
     (dy/leader-keys
-      "f f" '(project-find-file :wk "Find file")
+      "f f" '(find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
       "f i" '(imenu :wk "Find index")
       "f r" '(recentf :wk "Find recent files")
@@ -632,7 +631,7 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
 
     (dy/leader-keys
       "c" '(:ignore t :wk "comment")
-      "c c" '(comment-line :wk "comment line")
+      ;; "c c" '(comment-line :wk "comment line")
       "c r" '(comment-region :wk "comment region")
       "c b" '(comment-box :wk "comment box"))
 
@@ -662,6 +661,7 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
       "m" '(:ignore t :wk "Bookmark")
       "m s" '(bookmark-set :wk "Set a bookmark")
       "m j" '(bookmark-jump :wk "Jump to a bookmark")
+      "m t t" '(org-todo :wk "Mark as TODO")
       "m l" '(list-bookmarks :wk "List bookmarks"))
 
     (dy/leader-keys
@@ -699,7 +699,8 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
      "t c" '(quick-calc :wk "Toggle calculator")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
      "t t" '(visual-line-mode :wk "Toggle truncated lines")
-     "t v" '(vterm-toggle :wk "Toggle vterm"))
+     "t v" '(vterm-toggle :wk "Toggle vterm")
+     "t z" '(olivetti-mode :wk "Toggle olivetti (zen) mode"))
 
     (dy/leader-keys
       "v" '(:ignore t :wk "Version Control")
@@ -729,7 +730,12 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
 #+end_src
 
 * ORG MODE
-** Enabling Table of Contents
+** Agenda file
+#+begin_src emacs-lisp
+(setq org-agenda-files (list "~/Org"))
+#+end_src
+** Aesthetics
+*** Enabling Table of Contents
 #+begin_src emacs-lisp
 (use-package toc-org
 :ensure t
@@ -737,13 +743,66 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
 :init (add-hook 'org-mode-hook 'toc-org-enable))
 #+end_src
 
-** Enabling Org Bullets
+*** Org-Modern
+Modern-looking visual style for org buffer rendering.
+#+begin_src emacs-lisp
+(use-package org-modern
+  :ensure t
+  :hook org-mode
+  :config
+  (eval-after-load 'org-modern
+    '(setq org-modern-star 'nil))
+  (custom-set-variables
+   '(org-modern-list
+	   '((?+ . "•")
+	     (?- . "◦")
+	     (?* . "•")))))
+#+end_src
+**** Examples:
+-----
+- item <2025-08-01 Fri>
+  + subitem <2025-08-01 Fri>
+    * [X] Checked off
+    * [ ] unchecked
+    - [-] partially checked
+-----
+Table:
+| col 1  | col 2  |
+|--------+--------|
+| item 1 | item 2 |
+-----
+***** TODO labels
+****** DONE [#A] Most important
+****** TODO [#B] Less important [0%]
+****** CANCEL [#C] not important anymore [50%]
+****** DONE [#A] Everything combined :tag:test:
+- [X] first [100%]
+- [X] second
+- [X] third
+
+*** Enabling Org Bullets
 Org-bullets look nicer than asterisks
 #+begin_src emacs-lisp
 (add-hook 'org-mode-hook 'org-indent-mode)
 (use-package org-bullets
   :ensure t)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+end_src
+
+*** Disable Electric Indent
+Whenever I would add a new line inside a source block in org-mode,
+everything inside would automatically get indented which was really
+annoying.
+By default =electric-indent-mode= is turned on in Emacs, so we have to turn it off.
+#+begin_src emacs-lisp
+(setq electric-indent-mode -1)
+(setq org-src-preserve-indentation t)
+(setq org-edit-src-content-indentation 0)
+#+end_src
+
+*** Hide Emphasis Markers
+#+begin_src emacs-lisp
+(setq org-hide-emphasis-markers t)
 #+end_src
 
 ** Citar
@@ -770,18 +829,6 @@ Org-bullets look nicer than asterisks
   (org-cite-insert-processor 'citar)
   (org-cite-follow-processor 'citar)
   (org-cite-activate-processor 'citar))
-#+end_src
-
-** Disable Electric Indent
-Whenever I would add a new line inside a source block in org-mode,
-everything inside would automatically get indented which was really
-annoying.
-By default =electric-indent-mode= is turned on in Emacs, so we have to
-turn it off.
-#+begin_src emacs-lisp
-(setq electric-indent-mode -1)
-(setq org-src-preserve-indentation t)
-(setq org-edit-src-content-indentation 0)
 #+end_src
 
 ** Language Support
@@ -837,13 +884,13 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
 #+end_src
 *** CDLaTeX
 #+begin_src emacs-lisp
-(use-package cdlatex
-  :ensure t
-  :hook (org-mode . org-cdlatex-mode)
-  :bind ("<f5>" . cdlatex-math-symbol)
-  :config
-  ;; Unbind the backtick key
-  (define-key cdlatex-mode-map (kbd "`") nil))
+;; (use-package cdlatex
+;;   :ensure t
+;;   :hook (org-mode . org-cdlatex-mode)
+;;   :bind ("<f5>" . cdlatex-math-symbol)
+;;   :config
+;;   ;; Unbind the backtick key
+;;   (define-key cdlatex-mode-map (kbd "`") nil))
 #+end_src
 
 ** PDF-Tools

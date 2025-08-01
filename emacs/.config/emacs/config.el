@@ -138,7 +138,8 @@
   (dashboard-setup-startup-hook))
 
 (set-face-attribute 'default nil
-	      :font "JetBrainsMono Nerd Font"
+	      :font "Liga SFMono Nerd Font"
+	      ;; height = 10*point size
 	      :height 160
 	      :weight 'medium)
 (set-face-attribute 'variable-pitch nil
@@ -146,7 +147,7 @@
 	      :height 160
 	      :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
-	      :font "JetBrainsMono Nerd Font"
+	      :font "Iosevka Nerd Font"
 	      :height 160
 	      :weight 'medium)
   ;; italicizes commented text and keywords
@@ -168,17 +169,13 @@
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 (load-theme 'kanagawa t)
 
-(use-package org-modern
-  :ensure t
-  :hook org-mode)
-
 (use-package rainbow-mode
   :ensure t
   :hook (org-mode prog-mode))
 
 (use-package olivetti
   :ensure t
-  :hook (org-mode LaTeX-mode))
+  :hook (org-mode))
 
 (setq ring-bell-function 'ignore)
 (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
@@ -419,6 +416,12 @@ one, an error is signaled."
     :ensure t
     :config
     (general-evil-setup)
+
+    (general-create-definer dy/normal-mode
+      :states '(normal visual)
+      :keymaps 'override
+      "g c c" '(comment-line :wk "Comment Line"))
+
     ;; set space bar as global leader key
     (general-create-definer dy/leader-keys
       :states '(normal insert visual emacs)
@@ -437,7 +440,7 @@ one, an error is signaled."
       "c s" '(cheat-sheet :wk "Cheat Sheet"))
 
     (dy/leader-keys
-      "f f" '(project-find-file :wk "Find file")
+      "f f" '(find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
       "f i" '(imenu :wk "Find index")
       "f r" '(recentf :wk "Find recent files")
@@ -453,7 +456,7 @@ one, an error is signaled."
 
     (dy/leader-keys
       "c" '(:ignore t :wk "comment")
-      "c c" '(comment-line :wk "comment line")
+      ;; "c c" '(comment-line :wk "comment line")
       "c r" '(comment-region :wk "comment region")
       "c b" '(comment-box :wk "comment box"))
 
@@ -483,6 +486,7 @@ one, an error is signaled."
       "m" '(:ignore t :wk "Bookmark")
       "m s" '(bookmark-set :wk "Set a bookmark")
       "m j" '(bookmark-jump :wk "Jump to a bookmark")
+      "m t t" '(org-todo :wk "Mark as TODO")
       "m l" '(list-bookmarks :wk "List bookmarks"))
 
     (dy/leader-keys
@@ -520,7 +524,8 @@ one, an error is signaled."
      "t c" '(quick-calc :wk "Toggle calculator")
      "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
      "t t" '(visual-line-mode :wk "Toggle truncated lines")
-     "t v" '(vterm-toggle :wk "Toggle vterm"))
+     "t v" '(vterm-toggle :wk "Toggle vterm")
+     "t z" '(olivetti-mode :wk "Toggle olivetti (zen) mode"))
 
     (dy/leader-keys
       "v" '(:ignore t :wk "Version Control")
@@ -548,15 +553,35 @@ one, an error is signaled."
      "w L" '(buf-move-right :wk "Buffer move right"))
   )
 
+(setq org-agenda-files (list "~/Org"))
+
 (use-package toc-org
 :ensure t
 :commands toc-org-enable
 :init (add-hook 'org-mode-hook 'toc-org-enable))
 
+(use-package org-modern
+  :ensure t
+  :hook org-mode
+  :config
+  (eval-after-load 'org-modern
+    '(setq org-modern-star 'nil))
+  (custom-set-variables
+   '(org-modern-list
+	   '((?+ . "•")
+	     (?- . "◦")
+	     (?* . "•")))))
+
 (add-hook 'org-mode-hook 'org-indent-mode)
 (use-package org-bullets
   :ensure t)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+(setq electric-indent-mode -1)
+(setq org-src-preserve-indentation t)
+(setq org-edit-src-content-indentation 0)
+
+(setq org-hide-emphasis-markers t)
 
 (use-package citar
   :custom
@@ -580,10 +605,6 @@ one, an error is signaled."
   (org-cite-insert-processor 'citar)
   (org-cite-follow-processor 'citar)
   (org-cite-activate-processor 'citar))
-
-(setq electric-indent-mode -1)
-(setq org-src-preserve-indentation t)
-(setq org-edit-src-content-indentation 0)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -614,13 +635,13 @@ one, an error is signaled."
   :config
   (setq TeX-PDF-mode t))
 
-(use-package cdlatex
-  :ensure t
-  :hook (org-mode . org-cdlatex-mode)
-  :bind ("<f5>" . cdlatex-math-symbol)
-  :config
-  ;; Unbind the backtick key
-  (define-key cdlatex-mode-map (kbd "`") nil))
+;; (use-package cdlatex
+;;   :ensure t
+;;   :hook (org-mode . org-cdlatex-mode)
+;;   :bind ("<f5>" . cdlatex-math-symbol)
+;;   :config
+;;   ;; Unbind the backtick key
+;;   (define-key cdlatex-mode-map (kbd "`") nil))
 
 (use-package pdf-tools
   :ensure t
