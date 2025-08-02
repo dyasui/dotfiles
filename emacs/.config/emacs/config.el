@@ -143,12 +143,12 @@
 	      :height 160
 	      :weight 'medium)
 (set-face-attribute 'variable-pitch nil
-	      :font "Menlo"
-	      :height 160
+	      :font "CMU Serif"
+	      :height 1.0
 	      :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
-	      :font "Iosevka Nerd Font"
-	      :height 160
+	      :font "Liga SFMono Nerd Font"
+	      :height 0.6
 	      :weight 'medium)
   ;; italicizes commented text and keywords
   (set-face-attribute 'font-lock-comment-face nil
@@ -193,7 +193,7 @@
     '(org-modern-replace-stars "◉○❖◈◇"))
   (custom-set-variables
    '(org-modern-checkbox
-     '((?X . #("□🗸" 0 2 (composition ((2)))))
+     '((?X . #("□✔" 0 2 (composition ((2)))))
       (?\s . "□")
       (?- . #("□–" 0 2 (composition ((2))))))))
   (custom-set-variables
@@ -336,27 +336,20 @@ one, an error is signaled."
 				("mp4" . "mpv"))))
 
 (use-package gptel
-  :ensure t
+  ;; I was having conflicting versions with elpaca until I set this
+  :load-path "elpa/gptel-0.9.8.5/" 
   :config
+  ;; jump cursor to next prompt line
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+   ;; setting the gptel-api-key with the host name works here
+  (setq auth-sources '("~/.authinfo"))
+  (setq gptel-api-key
+	(auth-source-pick-first-password :host "openrouter.ai"))
   (setq gptel-default-mode 'org-mode) ;; chat in org-mode or markdown
   (setq gptel-prompt-prefix-alist
    '((org-mode . "*  :") (text-mode . "💬 :")))
   (setq gptel-response-prefix-alist
    '((org-mode . "**  ") (text-mode . "> 🤖 ")))
-   ;; I was having problems with sourcing the api keys from .authinfo
-   ;; setting the gptel-api-key with the host name works here
-  (setq auth-sources '("~/.authinfo"))
-  (setq gptel-api-key (auth-source-pick-first-password :host "openrouter.ai"))
-  (gptel-make-openai "OpenRouter" 
-    :host "openrouter.ai"
-    :endpoint "/api/v1/chat/completions"
-    :stream t
-    :key gptel-api-key ; function that returns key from .authinfo
-    :models '(anthropic/claude-sonnet-4
-              google/gemini-2.5-pro
-	          google/gemini-2.5-flash
-              deepseek/deepseek-r1-0528
-	          openai/o3))
   (gptel-make-privategpt "LMStudio"
     :protocol "http"
     :host "localhost:1234"
@@ -364,11 +357,19 @@ one, an error is signaled."
     :context t
     :sources t
     :models '(qwen3-14b-mlx
-	      qwen3-30b-a3b
-	      qwen3-14b))
-  ;; System prompt presets for various use cases
-  (gptel-make-preset 'translate
-    :system "You are highly skilled translator with expertise in many languages, especially Bosnian. Your task is to identify the language of the text I provide and accurately translate it into the specified target language while preserving the meaning, tone, and nuance of the original text. If I provide lyrics to a song, return an org table with each line in the original song next to it's translated English version. Ignore any formatting like [Chorus], verse (x2), etc, and do not show repeated sections. If I ask a question in English, please reply in English. If there is nuance to the translation of a word/expression, please provide a footnote clarifying your choice. Use correct accents like š,č,ć, etc even if they are not properly used in the source text. Immediately provide an your answer without using chain-of-thought reasoning. /nothink"))
+  	      qwen3-30b-a3b
+  	      qwen3-14b))
+  (setq gptel-model   'gemini-2.5-flash
+      gptel-backend
+      (gptel-make-openai "OpenRouter"
+        :host "openrouter.ai"
+        :endpoint "/api/v1/chat/completions"
+        :stream t
+	:key gptel-api-key ; function that returns key from .authinfo
+	:models '(google/gemini-2.5-pro
+		  anthropic/claude-sonnet-4
+		  google/gemini-2.5-flash
+		  deepseek/deepseek-r1-0528))))
 
 ;; (use-package ob-mermaid
 ;;   :disabled t
@@ -459,148 +460,145 @@ one, an error is signaled."
 
 (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
-  (use-package general
-    :ensure t
-    :config
-    (general-evil-setup)
-
-    (general-define-key
-      :states '(normal visual)
-      :keymaps 'override
-      "g c c" '(comment-line :wk "Comment Line"))
-
-    ;; set space bar as global leader key
-    (general-create-definer dy/leader-keys
-      :states '(normal insert visual emacs)
-      :keymaps 'override
-      :prefix "SPC" ;; set leader
-      :global-prefix "C-SPC") ;; access leader in insert mode
-
-    (general-define-key
-     :keymaps 'override
-     "M-n" '(make-frame :wk "Open new frame")
-     "M-w" '(delete-frame :wk "Close current frame")
-     "M-." '(dired :wk "Dired"))
-
-    (dy/leader-keys
-      "SPC" '(execute-extended-command :wk "M-x")
-      "c s" '(cheat-sheet :wk "Cheat Sheet"))
-
-    (dy/leader-keys
-      "f f" '(find-file :wk "Find file")
-      "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
-      "f i" '(imenu :wk "Find index")
-      "f p" '(project-find-file :wk "Find files in current project")
-      "f r" '(recentf-open-files :wk "Find recent files")
-      "f s" '(affe-grep :wk "Find string in current project"))
-
-    (dy/leader-keys
-      "b" '(:ignore t :wk "buffer")
-      "b q" '(kill-this-buffer :wk "Kill buffer")
-      "b n" '(next-buffer :wk "Next buffer")
-      "b p" '(previous-buffer :wk "Previous buffer")
-      "b r" '(revert-buffer :wk "Reload buffer")
-      "b i" '(ibuffer :wk "Buffer Index"))
-
-    (dy/leader-keys
-      "c" '(:ignore t :wk "comment")
-      ;; "c c" '(comment-line :wk "comment line")
-      "c r" '(comment-region :wk "comment region")
-      "c b" '(comment-box :wk "comment box"))
-
-    (dy/leader-keys
-      "d" '(:ignore t :wk "dired")
-      "d d" '(dired :wk "open dired")
-      "d j" '(dired-jump :wk "open current directory")
-      "d L" '(dired-jump-other-window :wk "open current directory in new window"))
-
-    (dy/leader-keys
-      "e" '(:ignore t :wk "Eshell/Evaluate")
-      "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
-      "e d" '(eval-defun :wk "Evaluate defun containing or after point")
-      "e e" '(eval-expression :wk "Evaluate an elisp expression")
-      "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
-      "e r" '(eval-region :wk "Evaluate elisp in region")
-      "e s" '(eshell :wk "Eshell"))
-
-    (dy/leader-keys
-      "h" '(:ignore t :wk "Help")
-      "h f" '(describe-function :wk "Describe function")
-      "h k" '(describe-key :wk "Describe keybinding")
-      "h v " '(describe-variable :wk "Describe variable")
-      "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
-
-    (dy/leader-keys
-      "m" '(:ignore t :wk "Bookmark")
-      "m s" '(bookmark-set :wk "Set a bookmark")
-      "m j" '(bookmark-jump :wk "Jump to a bookmark")
-      "m t t" '(org-todo :wk "Mark as TODO")
-      "m l" '(list-bookmarks :wk "List bookmarks"))
-
-    (dy/leader-keys
-      "o" '(:ignore t :wk "Org")
-      "o a" '(org-agenda :wk "Org agenda")
-      "o e" '(org-export-dispatch :wk "Org export dispatch")
-      "o i" '(org-toggle-item :wk "Org toggle item")
-      "o t" '(org-todo :wk "Org todo")
-      "o b t" '(org-babel-tangle :wk "Org babel tangle")
-      "o T" '(org-todo-list :wk "Org todo list"))
-
-    (dy/leader-keys
-      "o d" '(:ignore t :wk "Dates/times")
-      "o d t" '(org-time-stamp :wk "Org time stamp"))
-      
-    (dy/leader-keys
-      "p" '(:ignore :wk "Perspective")
-      "p d" '(project-dired :wk "Open dired for project directory")
-      "p s" '(persp-switch :wk "Switch perspective")
-      "p S" '(persp-state-save :wk "Save perspectives to file")
-      "p L" '(persp-state-load :wk "Load perspectives from file")
-      "p r" '(persp-rename :wk "Rename current perspective")
-      "p b" '(project-list-buffers :wk "List project buffers")
-      "p k" '(project-kill-buffers :wk "Close all project buffers")
-      )
-      
-    (dy/leader-keys
-      "r" '(:ignore :wk "R")
-      "r d" '(ess-rdired  :wk "open R object directory"))
-    
-    (dy/leader-keys
-      "s" '(:ignore :wk "snippets")
-      "s n" '(yas-new-snippet :wk "new snippet"))
-      
-    (dy/leader-keys
-     "t" '(:ignore t :wk "Toggle")
-     "t c" '(quick-calc :wk "Toggle calculator")
-     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-     "t t" '(visual-line-mode :wk "Toggle truncated lines")
-     "t v" '(vterm-toggle :wk "Toggle vterm")
-     "t z" '(olivetti-mode :wk "Toggle olivetti (zen) mode"))
-
-    (dy/leader-keys
-      "v" '(:ignore t :wk "Version Control")
-      "v s" '(magit-status :wk "Git status")
-      "v r" '(vc-region-history :wk "Version history of region"))
-      
-
-    (dy/leader-keys
-     "w" '(:ignore t :wk "Windows")
-     ;; Window splits
-     "w q" '(evil-window-delete :wk "Close window")
-     "w n" '(evil-window-new :wk "New window")
-     "w s" '(evil-window-split :wk "Horizontal split window")
-     "w v" '(evil-window-vsplit :wk "Vertical split window")
-     ;; Window motions
-     "w h" '(evil-window-left :wk "Window left")
-     "w j" '(evil-window-down :wk "Window down")
-     "w k" '(evil-window-up :wk "Window up")
-     "w l" '(evil-window-right :wk "Window right")
-     "w w" '(evil-window-next :wk "Goto next window")
-     ;; Move Windows
-     "w H" '(buf-move-left :wk "Buffer move left")
-     "w J" '(buf-move-down :wk "Buffer move down")
-     "w K" '(buf-move-up :wk "Buffer move up")
-     "w L" '(buf-move-right :wk "Buffer move right"))
+(use-package general
+  :ensure t
+  :config
+  (general-evil-setup)
+  
+  (general-define-key
+   :states '(normal visual)
+   :keymaps 'override
+   "g c c" '(comment-line :wk "Comment Line"))
+  
+  ;; set space bar as global leader key
+  (general-create-definer dy/leader-keys
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+    :prefix "SPC" ;; set leader
+    :global-prefix "C-SPC") ;; access leader in insert mode
+  
+  (general-define-key
+   :keymaps 'override
+   "M-n" '(make-frame :wk "Open new frame")
+   "M-w" '(delete-frame :wk "Close current frame")
+   "M-." '(dired :wk "Dired"))
+  
+  (dy/leader-keys
+    "SPC" '(execute-extended-command :wk "M-x")
+    "c s" '(cheat-sheet :wk "Cheat Sheet"))
+  
+  (dy/leader-keys
+    "f f" '(find-file :wk "Find file")
+    "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+    "f i" '(imenu :wk "Find index")
+    "f r" '(recentf :wk "Find recent files")
+    "f s" '(affe-grep :wk "Find string in current project"))
+  
+  (dy/leader-keys
+    "b" '(:ignore t :wk "buffer")
+    "b q" '(kill-this-buffer :wk "Kill buffer")
+    "b n" '(next-buffer :wk "Next buffer")
+    "b p" '(previous-buffer :wk "Previous buffer")
+    "b r" '(revert-buffer :wk "Reload buffer")
+    "b i" '(ibuffer :wk "Buffer Index"))
+  
+  (dy/leader-keys
+    "c" '(:ignore t :wk "comment")
+    ;; "c c" '(comment-line :wk "comment line")
+    "c r" '(comment-region :wk "comment region")
+    "c b" '(comment-box :wk "comment box"))
+  
+  (dy/leader-keys
+    "d" '(:ignore t :wk "dired")
+    "d d" '(dired :wk "open dired")
+    "d j" '(dired-jump :wk "open current directory")
+    "d L" '(dired-jump-other-window :wk "open current directory in new window"))
+  
+  (dy/leader-keys
+    "e" '(:ignore t :wk "Eshell/Evaluate")
+    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+    "e e" '(eval-expression :wk "Evaluate an elisp expression")
+    "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+    "e r" '(eval-region :wk "Evaluate elisp in region")
+    "e s" '(eshell :wk "Eshell"))
+  
+  (dy/leader-keys
+    "h" '(:ignore t :wk "Help")
+    "h f" '(describe-function :wk "Describe function")
+    "h k" '(describe-key :wk "Describe keybinding")
+    "h v " '(describe-variable :wk "Describe variable")
+    "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
+  
+  (dy/leader-keys
+    "m" '(:ignore t :wk "Bookmark")
+    "m s" '(bookmark-set :wk "Set a bookmark")
+    "m j" '(bookmark-jump :wk "Jump to a bookmark")
+    "m t t" '(org-todo :wk "Mark as TODO")
+    "m l" '(list-bookmarks :wk "List bookmarks"))
+  
+  (dy/leader-keys
+    "o" '(:ignore t :wk "Org")
+    "o a" '(org-agenda :wk "Org agenda")
+    "o e" '(org-export-dispatch :wk "Org export dispatch")
+    "o i" '(org-toggle-item :wk "Org toggle item")
+    "o t" '(org-todo :wk "Org todo")
+    "o b t" '(org-babel-tangle :wk "Org babel tangle")
+    "o T" '(org-todo-list :wk "Org todo list"))
+  
+  (dy/leader-keys
+    "o d" '(:ignore t :wk "Dates/times")
+    "o d t" '(org-time-stamp :wk "Org time stamp"))
+  
+  (dy/leader-keys
+    "p" '(:ignore :wk "Project")
+    "p f" '(project-find-file :wk "Find files in current project")
+    "p d" '(project-dired :wk "Open dired for project directory")
+    "p s" '(project-switch-project :wk "switch project")
+    "p b" '(project-list-buffers :wk "List project buffers")
+    "p k" '(project-kill-buffers :wk "Close all project buffers")
+    )
+  
+  (dy/leader-keys
+    "r" '(:ignore :wk "R")
+    "r d" '(ess-rdired  :wk "open R object directory"))
+  
+  (dy/leader-keys
+    "s" '(:ignore :wk "snippets")
+    "s n" '(yas-new-snippet :wk "new snippet"))
+  
+  (dy/leader-keys
+    "t" '(:ignore t :wk "Toggle")
+    "t c" '(quick-calc :wk "Toggle calculator")
+    "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+    "t t" '(visual-line-mode :wk "Toggle truncated lines")
+    "t v" '(vterm-toggle :wk "Toggle vterm")
+    "t z" '(olivetti-mode :wk "Toggle olivetti (zen) mode"))
+  
+  (dy/leader-keys
+    "v" '(:ignore t :wk "Version Control")
+    "v s" '(magit-status :wk "Git status")
+    "v r" '(vc-region-history :wk "Version history of region"))
+  
+  
+  (dy/leader-keys
+    "w" '(:ignore t :wk "Windows")
+    ;; Window splits
+    "w q" '(evil-window-delete :wk "Close window")
+    "w n" '(evil-window-new :wk "New window")
+    "w s" '(evil-window-split :wk "Horizontal split window")
+    "w v" '(evil-window-vsplit :wk "Vertical split window")
+    ;; Window motions
+    "w h" '(evil-window-left :wk "Window left")
+    "w j" '(evil-window-down :wk "Window down")
+    "w k" '(evil-window-up :wk "Window up")
+    "w l" '(evil-window-right :wk "Window right")
+    "w w" '(evil-window-next :wk "Goto next window")
+    ;; Move Windows
+    "w H" '(buf-move-left :wk "Buffer move left")
+    "w J" '(buf-move-down :wk "Buffer move down")
+    "w K" '(buf-move-up :wk "Buffer move up")
+    "w L" '(buf-move-right :wk "Buffer move right"))
   )
 
 (setq org-agenda-files (list "~/Org"))
@@ -608,6 +606,10 @@ one, an error is signaled."
 (use-package citar
   :custom
   (citar-bibliography '("~/zotero-library.bib"))
+  ;; Use `citar' with `org-cite'
+  (org-cite-insert-processor 'citar)
+  (org-cite-follow-processor 'citar)
+  (org-cite-activate-processor 'citar)
   :hook
   (LaTeX-mode . citar-capf-setup)
   (org-mode . citar-capf-setup))
@@ -620,13 +622,15 @@ one, an error is signaled."
 (use-package embark
   :ensure t)
 
-;; Use `citar' with `org-cite'
-(use-package citar-org
-  :after oc
-  :custom
-  (org-cite-insert-processor 'citar)
-  (org-cite-follow-processor 'citar)
-  (org-cite-activate-processor 'citar))
+(use-package org-journal
+  :ensure t
+  :defer t
+  :init
+  ;; Change default prefix key; needs to be set before loading org-journal
+  (setq org-journal-prefix-key "<SPC> j")
+  :config
+  (setq org-journal-dir "~/Org/journals/")
+  (setq org-journal-file-format "%Y_%m_%d.org"))
 
 (org-babel-do-load-languages
  'org-babel-load-languages

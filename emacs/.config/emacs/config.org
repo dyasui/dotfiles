@@ -37,6 +37,7 @@
 - [[#org-mode-1][ORG MODE]]
   - [[#agenda-file][Agenda file]]
   - [[#citar][Citar]]
+  - [[#journal][Journal]]
   - [[#language-support][Language Support]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
   - [[#latex-preview][LaTeX preview]]
@@ -213,12 +214,12 @@ Emacs uses various fonts and font styles in different places. =ttt=
 	      :height 160
 	      :weight 'medium)
 (set-face-attribute 'variable-pitch nil
-	      :font "Menlo"
-	      :height 160
+	      :font "CMU Serif"
+	      :height 1.0
 	      :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
-	      :font "Iosevka Nerd Font"
-	      :height 160
+	      :font "Liga SFMono Nerd Font"
+	      :height 0.6
 	      :weight 'medium)
   ;; italicizes commented text and keywords
   (set-face-attribute 'font-lock-comment-face nil
@@ -288,7 +289,7 @@ Installed from melpa-stable
     '(org-modern-replace-stars "◉○❖◈◇"))
   (custom-set-variables
    '(org-modern-checkbox
-     '((?X . #("□🗸" 0 2 (composition ((2)))))
+     '((?X . #("□✔" 0 2 (composition ((2)))))
       (?\s . "□")
       (?- . #("□–" 0 2 (composition ((2))))))))
   (custom-set-variables
@@ -506,27 +507,20 @@ Symbol's value as variable is void: company-backends
 
 #+begin_src emacs-lisp
 (use-package gptel
-  :ensure t
+  ;; I was having conflicting versions with elpaca until I set this
+  :load-path "elpa/gptel-0.9.8.5/" 
   :config
+  ;; jump cursor to next prompt line
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+   ;; setting the gptel-api-key with the host name works here
+  (setq auth-sources '("~/.authinfo"))
+  (setq gptel-api-key
+	(auth-source-pick-first-password :host "openrouter.ai"))
   (setq gptel-default-mode 'org-mode) ;; chat in org-mode or markdown
   (setq gptel-prompt-prefix-alist
    '((org-mode . "*  :") (text-mode . "💬 :")))
   (setq gptel-response-prefix-alist
    '((org-mode . "**  ") (text-mode . "> 🤖 ")))
-   ;; I was having problems with sourcing the api keys from .authinfo
-   ;; setting the gptel-api-key with the host name works here
-  (setq auth-sources '("~/.authinfo"))
-  (setq gptel-api-key (auth-source-pick-first-password :host "openrouter.ai"))
-  (gptel-make-openai "OpenRouter" 
-    :host "openrouter.ai"
-    :endpoint "/api/v1/chat/completions"
-    :stream t
-    :key gptel-api-key ; function that returns key from .authinfo
-    :models '(anthropic/claude-sonnet-4
-              google/gemini-2.5-pro
-	          google/gemini-2.5-flash
-              deepseek/deepseek-r1-0528
-	          openai/o3))
   (gptel-make-privategpt "LMStudio"
     :protocol "http"
     :host "localhost:1234"
@@ -534,11 +528,19 @@ Symbol's value as variable is void: company-backends
     :context t
     :sources t
     :models '(qwen3-14b-mlx
-	      qwen3-30b-a3b
-	      qwen3-14b))
-  ;; System prompt presets for various use cases
-  (gptel-make-preset 'translate
-    :system "You are highly skilled translator with expertise in many languages, especially Bosnian. Your task is to identify the language of the text I provide and accurately translate it into the specified target language while preserving the meaning, tone, and nuance of the original text. If I provide lyrics to a song, return an org table with each line in the original song next to it's translated English version. Ignore any formatting like [Chorus], verse (x2), etc, and do not show repeated sections. If I ask a question in English, please reply in English. If there is nuance to the translation of a word/expression, please provide a footnote clarifying your choice. Use correct accents like š,č,ć, etc even if they are not properly used in the source text. Immediately provide an your answer without using chain-of-thought reasoning. /nothink"))
+  	      qwen3-30b-a3b
+  	      qwen3-14b))
+  (setq gptel-model   'gemini-2.5-flash
+      gptel-backend
+      (gptel-make-openai "OpenRouter"
+        :host "openrouter.ai"
+        :endpoint "/api/v1/chat/completions"
+        :stream t
+	:key gptel-api-key ; function that returns key from .authinfo
+	:models '(google/gemini-2.5-pro
+		  anthropic/claude-sonnet-4
+		  google/gemini-2.5-flash
+		  deepseek/deepseek-r1-0528))))
 #+end_src
 
 ** IVY (COUNSEL)
@@ -829,6 +831,10 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
 (use-package citar
   :custom
   (citar-bibliography '("~/zotero-library.bib"))
+  ;; Use `citar' with `org-cite'
+  (org-cite-insert-processor 'citar)
+  (org-cite-follow-processor 'citar)
+  (org-cite-activate-processor 'citar)
   :hook
   (LaTeX-mode . citar-capf-setup)
   (org-mode . citar-capf-setup))
@@ -840,15 +846,24 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
 
 (use-package embark
   :ensure t)
-
-;; Use `citar' with `org-cite'
-(use-package citar-org
-  :after oc
-  :custom
-  (org-cite-insert-processor 'citar)
-  (org-cite-follow-processor 'citar)
-  (org-cite-activate-processor 'citar))
 #+end_src
+
+** Journal
+I have a folder of daily journal entries that I have been using in Logseq, and it seems like the [[https://github.com/bastibe/org-journal][org-journal]] package is the best way to make them easy to find in emacs.
+#+begin_src emacs-lisp
+(use-package org-journal
+  :ensure t
+  :defer t
+  :init
+  ;; Change default prefix key; needs to be set before loading org-journal
+  (setq org-journal-prefix-key "<SPC> j")
+  :config
+  (setq org-journal-dir "~/Org/journals/")
+  (setq org-journal-file-format "%Y_%m_%d.org"))
+#+end_src
+
+#+RESULTS:
+: [nil 26765 49704 369509 nil elpaca-process-queues nil nil 0 nil]
 
 ** Language Support
 #+begin_src emacs-lisp
