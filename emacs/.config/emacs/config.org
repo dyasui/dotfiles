@@ -13,7 +13,8 @@
   - [[#fonts][FONTS]]
   - [[#kanagawa-color-theme][Kanagawa Color-Theme]]
   - [[#rainbow-mode-display-hex-colors-in-buffers][Rainbow Mode: display HEX colors in buffers]]
-  - [[#olivetti][Olivetti]]
+  - [[#olivetti-mode][Olivetti-mode]]
+  - [[#org-mode][<<<Org>>> Mode]]
 - [[#basic-settings][BASIC SETTINGS]]
   - [[#disable-menubar-toolbars-scrollbars][Disable Menubar, toolbars, scrollbars]]
   - [[#show-line-numbers-and-truncated-lines][Show Line numbers and truncated lines]]
@@ -33,9 +34,8 @@
   - [[#which-key][WHICH-KEY]]
   - [[#yasnippet][YASNIPPET]]
 - [[#keybindings][KEYBINDINGS]]
-- [[#org-mode][ORG MODE]]
+- [[#org-mode-1][ORG MODE]]
   - [[#agenda-file][Agenda file]]
-  - [[#aesthetics][Aesthetics]]
   - [[#citar][Citar]]
   - [[#language-support][Language Support]]
   - [[#org-tempo-source-blocks][Org-tempo source blocks]]
@@ -184,7 +184,7 @@ To get the vim bindings to work in other types of buffers
 ** DASHBOARD
 Extensible dashboard to show recent files, bookmarks, agenda items, etc on startup
 #+begin_src emacs-lisp
-  (use-package dashboard
+(use-package dashboard
   :ensure t
   :init
   (setq initial-buffer-choice 'dashboard-open)
@@ -204,7 +204,7 @@ Extensible dashboard to show recent files, bookmarks, agenda items, etc on start
   (dashboard-setup-startup-hook))
 #+end_src
 ** FONTS
-Emacs uses various fonts and font styles in different places.
+Emacs uses various fonts and font styles in different places. =ttt=
 *** Setting the font face
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
@@ -257,14 +257,104 @@ This code enables rainbow-mode in all programming nodes as well as org-mode.
   :hook (org-mode prog-mode))
 #+end_src
 
-** Olivetti
+** Olivetti-mode
 Installed from melpa-stable
 #+begin_src emacs-lisp
 (use-package olivetti
   :ensure t
-  :hook (org-mode))
+  :hook (org-mode)
+  :config
+  (setq olivetti-body-width 100))
 #+end_src
 
+** <<<Org>>> Mode
+*** Enabling Table of Contents
+#+begin_src emacs-lisp
+(use-package toc-org
+:ensure t
+:commands toc-org-enable
+:init (add-hook 'org-mode-hook 'toc-org-enable))
+#+end_src
+
+*** Org-Modern
+<<Modern>>-looking visual style for org buffer rendering.
+#+begin_src emacs-lisp
+(use-package org-modern
+  :ensure t
+  :hook org-mode
+  :config
+  (setq org-modern-star 'replace)
+  (custom-set-variables
+    '(org-modern-replace-stars "◉○❖◈◇"))
+  (custom-set-variables
+   '(org-modern-checkbox
+     '((?X . #("□🗸" 0 2 (composition ((2)))))
+      (?\s . "□")
+      (?- . #("□–" 0 2 (composition ((2))))))))
+  (custom-set-variables
+   '(org-modern-list
+	   '((?+ . "•")
+	     (?- . "◦")
+	     (?* . "∗"))))
+  (custom-set-variables
+   '(org-modern-radio-target '(" ✒ " t " ")))
+  (custom-set-variables
+   '(org-modern-internal-target '(" ↪ " t " ")))
+  (setq org-modern-symbol '"Iosevka")
+  (setq org-modern-keyword
+	(quote (("title" . "📓") (t . t)))))
+	   ;; (("title" . "📓") (t . t))
+	   ;; (("date" . "📅") (t . t))
+	   ;; (("author" . "🖎") (t . t))
+#+end_src
+**** Examples:
+-----
+- item <2025-08-01 Fri>
+  + subitem <2025-08-01 Fri>
+    * [X] Checked off
+    * [ ] unchecked
+    - [-] partially checked
+-----
+Table:
+| col 1  | col 2  |
+|--------+--------|
+| item 1 | item 2 |
+-----
+***** TODO labels
+****** DONE [#A] Most important
+****** TODO [#B] Less important [0%]
+****** CANCEL [#C] not important anymore [50%]
+****** DONE [#A] Everything combined :tag:test:
+- [X] first [100%]
+- [X] second
+- [X] third
+*** Disable Electric Indent
+Whenever I would add a new line inside a source block in org mode,
+everything inside would automatically get indented which was really
+annoying.
+By default =electric-indent-mode= is turned on in Emacs, so we have to turn it off.
+#+begin_src emacs-lisp
+(setq electric-indent-mode -1)
+(setq org-src-preserve-indentation t)
+(setq org-edit-src-content-indentation 0)
+#+end_src
+
+*** Hide Emphasis Markers
+#+begin_src emacs-lisp
+(setq org-hide-emphasis-markers t)
+#+end_src
+
+***  Mixed-pitch in Org mode
+#+begin_src emacs-lisp
+(use-package mixed-pitch
+  :hook
+  (org-mode . mixed-pitch-mode))
+#+end_src
+
+*** Org-elipses
+#+begin_src emacs-lisp
+(setq org-ellipsis "⇥")
+#+end_src
 * BASIC SETTINGS
 #+begin_src emacs-lisp
 (setq ring-bell-function 'ignore)
@@ -483,7 +573,7 @@ I want to group buffers into different workspaces, which is something handled by
   :init
   (persp-mode)
   :custom
-  (persp-mode-prefix-key (kbd "C-<tab>"))
+  (persp-mode-prefix-key (kbd "C-x p"))
   :config
   (setq switch-to-prev-buffer-skip
       (lambda (win buff bury-or-kill)
@@ -618,7 +708,8 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
       "f f" '(find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
       "f i" '(imenu :wk "Find index")
-      "f r" '(recentf :wk "Find recent files")
+      "f p" '(project-find-file :wk "Find files in current project")
+      "f r" '(recentf-open-files :wk "Find recent files")
       "f s" '(affe-grep :wk "Find string in current project"))
 
     (dy/leader-keys
@@ -678,10 +769,12 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
       "o d t" '(org-time-stamp :wk "Org time stamp"))
       
     (dy/leader-keys
-      "p" '(:ignore :wk "Project")
-      "p f" '(project-find-file :wk "Find files in current project")
+      "p" '(:ignore :wk "Perspective")
       "p d" '(project-dired :wk "Open dired for project directory")
-      "p s" '(project-switch-project :wk "switch project")
+      "p s" '(persp-switch :wk "Switch perspective")
+      "p S" '(persp-state-save :wk "Save perspectives to file")
+      "p L" '(persp-state-load :wk "Load perspectives from file")
+      "p r" '(persp-rename :wk "Rename current perspective")
       "p b" '(project-list-buffers :wk "List project buffers")
       "p k" '(project-kill-buffers :wk "Close all project buffers")
       )
@@ -734,77 +827,6 @@ Taken from a random [[https://www.reddit.com/r/emacs/comments/3r9fic/best_practi
 #+begin_src emacs-lisp
 (setq org-agenda-files (list "~/Org"))
 #+end_src
-** Aesthetics
-*** Enabling Table of Contents
-#+begin_src emacs-lisp
-(use-package toc-org
-:ensure t
-:commands toc-org-enable
-:init (add-hook 'org-mode-hook 'toc-org-enable))
-#+end_src
-
-*** Org-Modern
-Modern-looking visual style for org buffer rendering.
-#+begin_src emacs-lisp
-(use-package org-modern
-  :ensure t
-  :hook org-mode
-  :config
-  (eval-after-load 'org-modern
-    '(setq org-modern-star 'nil))
-  (custom-set-variables
-   '(org-modern-list
-	   '((?+ . "•")
-	     (?- . "◦")
-	     (?* . "•")))))
-#+end_src
-**** Examples:
------
-- item <2025-08-01 Fri>
-  + subitem <2025-08-01 Fri>
-    * [X] Checked off
-    * [ ] unchecked
-    - [-] partially checked
------
-Table:
-| col 1  | col 2  |
-|--------+--------|
-| item 1 | item 2 |
------
-***** TODO labels
-****** DONE [#A] Most important
-****** TODO [#B] Less important [0%]
-****** CANCEL [#C] not important anymore [50%]
-****** DONE [#A] Everything combined :tag:test:
-- [X] first [100%]
-- [X] second
-- [X] third
-
-*** Enabling Org Bullets
-Org-bullets look nicer than asterisks
-#+begin_src emacs-lisp
-(add-hook 'org-mode-hook 'org-indent-mode)
-(use-package org-bullets
-  :ensure t)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-#+end_src
-
-*** Disable Electric Indent
-Whenever I would add a new line inside a source block in org-mode,
-everything inside would automatically get indented which was really
-annoying.
-By default =electric-indent-mode= is turned on in Emacs, so we have to turn it off.
-#+begin_src emacs-lisp
-(setq electric-indent-mode -1)
-(setq org-src-preserve-indentation t)
-(setq org-edit-src-content-indentation 0)
-#+end_src
-
-*** Hide Emphasis Markers
-#+begin_src emacs-lisp
-(setq org-hide-emphasis-markers t)
-#+end_src
-
 ** Citar
 #+begin_src emacs-lisp
 (use-package citar
@@ -848,7 +870,7 @@ org-tempo is not enabled by default, but is an extension to org-mode which allow
 #+end_src
 
 ** LaTeX preview
-LaTeX text like this should be previewed better than by default:
+LaTeX text like this $\beta_0 + \beta_1 X_i + \epsilon_i$ should be previewed better than by default:
 
 $$\text{Hello, World!}^\infty \sum_i x_i = \bar{Q}$$
 #+begin_src emacs-lisp

@@ -118,7 +118,7 @@
     (setq doom-modeline-env-enable-julia t)
     (setq doom-modeline-height 18))
 
-  (use-package dashboard
+(use-package dashboard
   :ensure t
   :init
   (setq initial-buffer-choice 'dashboard-open)
@@ -175,7 +175,54 @@
 
 (use-package olivetti
   :ensure t
-  :hook (org-mode))
+  :hook (org-mode)
+  :config
+  (setq olivetti-body-width 100))
+
+(use-package toc-org
+:ensure t
+:commands toc-org-enable
+:init (add-hook 'org-mode-hook 'toc-org-enable))
+
+(use-package org-modern
+  :ensure t
+  :hook org-mode
+  :config
+  (setq org-modern-star 'replace)
+  (custom-set-variables
+    '(org-modern-replace-stars "◉○❖◈◇"))
+  (custom-set-variables
+   '(org-modern-checkbox
+     '((?X . #("□🗸" 0 2 (composition ((2)))))
+      (?\s . "□")
+      (?- . #("□–" 0 2 (composition ((2))))))))
+  (custom-set-variables
+   '(org-modern-list
+	   '((?+ . "•")
+	     (?- . "◦")
+	     (?* . "∗"))))
+  (custom-set-variables
+   '(org-modern-radio-target '(" ✒ " t " ")))
+  (custom-set-variables
+   '(org-modern-internal-target '(" ↪ " t " ")))
+  (setq org-modern-symbol '"Iosevka")
+  (setq org-modern-keyword
+	(quote (("title" . "📓") (t . t)))))
+	   ;; (("title" . "📓") (t . t))
+	   ;; (("date" . "📅") (t . t))
+	   ;; (("author" . "🖎") (t . t))
+
+(setq electric-indent-mode -1)
+(setq org-src-preserve-indentation t)
+(setq org-edit-src-content-indentation 0)
+
+(setq org-hide-emphasis-markers t)
+
+(use-package mixed-pitch
+  :hook
+  (org-mode . mixed-pitch-mode))
+
+(setq org-ellipsis "⇥")
 
 (setq ring-bell-function 'ignore)
 (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
@@ -334,7 +381,7 @@ one, an error is signaled."
   :init
   (persp-mode)
   :custom
-  (persp-mode-prefix-key (kbd "C-<tab>"))
+  (persp-mode-prefix-key (kbd "C-x p"))
   :config
   (setq switch-to-prev-buffer-skip
       (lambda (win buff bury-or-kill)
@@ -443,7 +490,8 @@ one, an error is signaled."
       "f f" '(find-file :wk "Find file")
       "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
       "f i" '(imenu :wk "Find index")
-      "f r" '(recentf :wk "Find recent files")
+      "f p" '(project-find-file :wk "Find files in current project")
+      "f r" '(recentf-open-files :wk "Find recent files")
       "f s" '(affe-grep :wk "Find string in current project"))
 
     (dy/leader-keys
@@ -503,10 +551,12 @@ one, an error is signaled."
       "o d t" '(org-time-stamp :wk "Org time stamp"))
       
     (dy/leader-keys
-      "p" '(:ignore :wk "Project")
-      "p f" '(project-find-file :wk "Find files in current project")
+      "p" '(:ignore :wk "Perspective")
       "p d" '(project-dired :wk "Open dired for project directory")
-      "p s" '(project-switch-project :wk "switch project")
+      "p s" '(persp-switch :wk "Switch perspective")
+      "p S" '(persp-state-save :wk "Save perspectives to file")
+      "p L" '(persp-state-load :wk "Load perspectives from file")
+      "p r" '(persp-rename :wk "Rename current perspective")
       "p b" '(project-list-buffers :wk "List project buffers")
       "p k" '(project-kill-buffers :wk "Close all project buffers")
       )
@@ -554,34 +604,6 @@ one, an error is signaled."
   )
 
 (setq org-agenda-files (list "~/Org"))
-
-(use-package toc-org
-:ensure t
-:commands toc-org-enable
-:init (add-hook 'org-mode-hook 'toc-org-enable))
-
-(use-package org-modern
-  :ensure t
-  :hook org-mode
-  :config
-  (eval-after-load 'org-modern
-    '(setq org-modern-star 'nil))
-  (custom-set-variables
-   '(org-modern-list
-	   '((?+ . "•")
-	     (?- . "◦")
-	     (?* . "•")))))
-
-(add-hook 'org-mode-hook 'org-indent-mode)
-(use-package org-bullets
-  :ensure t)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-(setq electric-indent-mode -1)
-(setq org-src-preserve-indentation t)
-(setq org-edit-src-content-indentation 0)
-
-(setq org-hide-emphasis-markers t)
 
 (use-package citar
   :custom
