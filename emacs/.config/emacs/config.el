@@ -417,7 +417,7 @@ one, an error is signaled."
     :config
     (general-evil-setup)
 
-    (general-create-definer dy/normal-mode
+    (general-define-key
       :states '(normal visual)
       :keymaps 'override
       "g c c" '(comment-line :wk "Comment Line"))
