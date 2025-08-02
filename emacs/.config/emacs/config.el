@@ -500,6 +500,8 @@ one, an error is signaled."
     "b n" '(next-buffer :wk "Next buffer")
     "b p" '(previous-buffer :wk "Previous buffer")
     "b r" '(revert-buffer :wk "Reload buffer")
+    "b s" '(switch-to-buffer :wk "Switch buffers")
+    "b S" '(persp-switch-to-buffer :wk "Switch buffers (from any perspective")
     "b i" '(ibuffer :wk "Buffer Index"))
   
   (dy/leader-keys
@@ -573,6 +575,7 @@ one, an error is signaled."
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
     "t t" '(visual-line-mode :wk "Toggle truncated lines")
     "t v" '(vterm-toggle :wk "Toggle vterm")
+    "t m p" '(mixed-pitch-mode :wk "Toggle mixed-pitch mode")
     "t z" '(olivetti-mode :wk "Toggle olivetti (zen) mode"))
   
   (dy/leader-keys
