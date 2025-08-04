@@ -359,7 +359,7 @@ one, an error is signaled."
     :models '(qwen3-14b-mlx
   	      qwen3-30b-a3b
   	      qwen3-14b))
-  (setq gptel-model   'gemini-2.5-flash
+  (setq gptel-model   'google/gemini-2.5-flash
       gptel-backend
       (gptel-make-openai "OpenRouter"
         :host "openrouter.ai"
@@ -440,7 +440,6 @@ one, an error is signaled."
 
 (use-package yasnippet
   :ensure t
-  :load-path "./elpa/yasnippet-0.14.2/"
   :config
   (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
   (yas-global-mode 1))
@@ -572,7 +571,9 @@ one, an error is signaled."
   
   (dy/leader-keys
     "t" '(:ignore t :wk "Toggle")
+    "t b" '(org-hide-block-all :wk "Toggle org blocks")
     "t c" '(quick-calc :wk "Toggle calculator")
+    "t i" '(org-toggle-inline-images :wk "Toggle inline images")
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
     "t t" '(visual-line-mode :wk "Toggle truncated lines")
     "t v" '(vterm-toggle :wk "Toggle vterm")
