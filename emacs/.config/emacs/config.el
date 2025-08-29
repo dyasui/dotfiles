@@ -96,27 +96,27 @@
 ;; Setting RETURN key in org-mode to follow links
   (setq org-return-follows-link  t)
 
-  (use-package doom-themes
-    :ensure t
-    :config
-    ;; (load-theme 'doom-one t)
-    (setq doom-themes-enable-bold t
-	  doom-themes-enable-italic t)
-    (doom-themes-org-config))
-  ;; solaire darkens non-standard buffers' backgrounds
-  ;; (use-package solaire-mode
-  ;;   :ensure t
-  ;;   :config
-  ;;   (solaire-global-mode +1))
-  ;; ;; doom's fancy modeline
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1)
-    :config
-    (setq doom-modeline-env-enable-python t)
-    (setq doom-modeline-env-enable-R t)
-    (setq doom-modeline-env-enable-julia t)
-    (setq doom-modeline-height 18))
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; (load-theme 'doom-one t)
+  (setq doom-themes-enable-bold t
+	doom-themes-enable-italic t)
+  (doom-themes-org-config))
+;; solaire darkens non-standard buffers' backgrounds
+;; (use-package solaire-mode
+;;   :ensure t
+;;   :config
+;;   (solaire-global-mode +1))
+;; ;; doom's fancy modeline
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-env-enable-python t)
+  (setq doom-modeline-env-enable-R t)
+  (setq doom-modeline-env-enable-julia t)
+  (setq doom-modeline-height 18))
 
 (use-package dashboard
   :ensure t
@@ -161,10 +161,10 @@
   ;;set default line spacing
   ;; (setq-default line-spacing 0.08)
 
-  (global-set-key (kbd "C-=") 'text-scale-increase)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 (load-theme 'kanagawa t)
@@ -228,19 +228,19 @@
 (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
 (setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
 
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 
-  ;; (global-display-line-numbers-mode nil)
-  (global-visual-line-mode t)
+;; (global-display-line-numbers-mode nil)
+(global-visual-line-mode t)
 
 ;; save temp files to ~/.config/emacs/auto-save
 ;; (setq auto-save-file-name-transforms
           ;; `((".*" ,(concat user-emacs-directory "auto-save/") t))) 
 (setq backup-directory-alist '((".*" . "~/.local/share/Trash/files")))
 
-  (fido-vertical-mode t)
+(fido-vertical-mode t)
 ;; (icomplete-vertical-mode t)
 
 (require 'windmove)
@@ -312,7 +312,7 @@ one, an error is signaled."
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
 
-  (use-package company
+(use-package company
     :defer 2
     :custom
     (company-begin-commands '(self-insert-command))
@@ -350,12 +350,12 @@ one, an error is signaled."
    '((org-mode . "*  :") (text-mode . "💬 :")))
   (setq gptel-response-prefix-alist
    '((org-mode . "**  ") (text-mode . "> 🤖 ")))
-  (gptel-make-privategpt "LMStudio"
+  (gptel-make-openai "LMStudio"
     :protocol "http"
     :host "localhost:1234"
     :stream t
-    :context t
-    :sources t
+    ;; :context t
+    ;; :sources t
     :models '(qwen3-14b-mlx
   	      qwen3-30b-a3b
   	      qwen3-14b))
@@ -370,6 +370,103 @@ one, an error is signaled."
 		  anthropic/claude-sonnet-4
 		  google/gemini-2.5-flash
 		  deepseek/deepseek-r1-0528))))
+
+;;;; My Local AI Assistant
+;;;
+;;; This section contains the functions for a local AI assistant that
+;;; uses gptel for the brain, and will later use local TTS/STT.
+
+(defcustom my-assistant-backend 'Ollama
+  "The `gptel-backend' to use for the assistant."
+  :type '(symbol)
+  :group 'gptel)
+
+(defcustom my-assistant-model "qwen3-14b"
+  "The `gptel-model' to use for the assistant."
+  :type '(string)
+  :group 'gptel)
+
+(defun my-assistant-ask (prompt)
+  "Send PROMPT to the assistant's LLM and return the response synchronously.
+This function will block until the LLM response is received."
+  (let ((response-text nil))
+    ;; Call the asynchronous function with our custom callback.
+    (gptel-request prompt
+                   :callback (lambda (response _info)
+                               ;; This runs when the answer arrives.
+                               (setq response-text (or response ""))))
+    ;; Wait for the callback to set the `response-text` variable.
+    (while (not response-text)
+      (accept-process-output nil 0.1))
+    ;; Return the final result.
+    response-text))
+(defcustom my-assistant-piper-model "en_US-kusal-medium"
+  "The Piper voice model to use for TTS."
+  :type 'string
+  :group 'gptel)
+
+(defcustom my-assistant-piper-data-dir nil
+  "Directory containing Piper voice models. If nil, uses current directory."
+  :type '(choice (const :tag "Current directory" nil)
+                 (directory :tag "Custom directory"))
+  :group 'gptel)
+
+(setq my-assistant-piper-data-dir "~/.local/share/piper-voices")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; My Assistant - Core Function
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun my-assistant-speak (text)
+  "Speak TEXT using Piper TTS engine with robust audio playback."
+  (message "ASSISTANT (speak): Requesting TTS for \"%s...\"" (substring text 0 (min 30 (length text))))
+  (unless (executable-find my-assistant-piper-executable)
+    (error "Cannot find Piper executable: '%s'. Check =my-assistant-piper-executable= and Emacs =exec-path="
+           my-assistant-piper-executable))
+  (let* ((temp-file (make-temp-file "piper-tts-" nil ".wav"))
+         (data-dir-arg (when (and my-assistant-piper-data-dir (file-directory-p my-assistant-piper-data-dir))
+                         (list "--data-dir" (expand-file-name my-assistant-piper-data-dir))))
+         (piper-args (append (list "-m" my-assistant-piper-model "-f" temp-file)
+                             data-dir-arg
+                             (list "--" text))))
+    (unwind-protect
+        (let* ((piper-output-buffer (generate-new-buffer "*piper-output*"))
+               (exit-code (apply #'call-process my-assistant-piper-executable nil piper-output-buffer t piper-args)))
+          (if (/= exit-code 0)
+              (progn
+                (display-buffer piper-output-buffer)
+                (error "Piper process failed with exit code %s. See *piper-output* buffer." exit-code))
+            (kill-buffer piper-output-buffer)
+            (when (file-exists-p temp-file)
+              (message "Piper generated audio: %s" temp-file)
+              (if (executable-find "play")
+                  (let ((play-output-buffer (generate-new-buffer "*play-output*")))
+                    (message "Attempting to play audio with 'play'...")
+                    (let ((play-exit-code (call-process "play" nil play-output-buffer t temp-file)))
+                      (if (/= play-exit-code 0)
+                          (progn
+                            (display-buffer play-output-buffer)
+                            (error "Sox 'play' process failed with exit code %d. See *play-output* buffer." play-exit-code))
+                        (kill-buffer play-output-buffer)
+                        (message "Audio playback finished."))))
+                (error "Sox 'play' command not found. Cannot play audio."))))
+          )
+      (when (file-exists-p temp-file)
+        (delete-file temp-file)))))
+
+;; --- Phase 3 Placeholder ---
+(defun my-assistant-listen ()
+  "Listen for audio and return the transcribed text. (Placeholder)"
+  (let ((input (read-from-minibuffer "ASSISTANT (listen): ")))
+    (message "ASSISTANT (listen): You said '%s'" input)
+    input))
+
+;; --- The Main Interactive Function ---
+(defun my-assistant-interactive ()
+  "Ask the assistant a question and get a spoken response."
+  (interactive)
+  (let* ((question (read-from-minibuffer "Ask your assistant: "))
+         (answer (my-assistant-ask question)))
+    (my-assistant-speak answer)))
 
 ;; (use-package ob-mermaid
 ;;   :disabled t
