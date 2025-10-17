@@ -3,9 +3,9 @@
 (defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
 (defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
 (defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
-			      :ref nil :depth 1 :inherit ignore
-			      :files (:defaults "elpaca-test.el" (:exclude "extensions"))
-			      :build (:not elpaca--activate-package)))
+         :ref nil :depth 1 :inherit ignore
+         :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+         :build (:not elpaca--activate-package)))
 (let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
        (build (expand-file-name "elpaca/" elpaca-builds-directory))
        (order (cdr elpaca-order))
@@ -15,20 +15,20 @@
     (make-directory repo t)
     (when (< emacs-major-version 28) (require 'subr-x))
     (condition-case-unless-debug err
-	(if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
-		  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
-						  ,@(when-let* ((depth (plist-get order :depth)))
-						      (list (format "--depth=%d" depth) "--no-single-branch"))
-						  ,(plist-get order :repo) ,repo))))
-		  ((zerop (call-process "git" nil buffer t "checkout"
-					(or (plist-get order :ref) "--"))))
-		  (emacs (concat invocation-directory invocation-name))
-		  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
-					"--eval" "(byte-recompile-directory \".\" 0 'force)")))
-		  ((require 'elpaca))
-		  ((elpaca-generate-autoloads "elpaca" repo)))
-	    (progn (message "%s" (buffer-string)) (kill-buffer buffer))
-	  (error "%s" (with-current-buffer buffer (buffer-string))))
+ (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+    ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+        ,@(when-let* ((depth (plist-get order :depth)))
+            (list (format "--depth=%d" depth) "--no-single-branch"))
+        ,(plist-get order :repo) ,repo))))
+    ((zerop (call-process "git" nil buffer t "checkout"
+     (or (plist-get order :ref) "--"))))
+    (emacs (concat invocation-directory invocation-name))
+    ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+     "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+    ((require 'elpaca))
+    ((elpaca-generate-autoloads "elpaca" repo)))
+     (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+   (error "%s" (with-current-buffer buffer (buffer-string))))
       ((error) (warn "%s" err) (delete-directory repo 'recursive))))
   (unless (require 'elpaca-autoloads nil t)
     (require 'elpaca)
@@ -73,7 +73,7 @@
           evil-want-keybinding nil
           evil-vsplit-window-right t
           evil-split-window-below t
-	      evil-want-C-u-scroll t ;; override emacs-like use of C-u to repeat
+       evil-want-C-u-scroll t ;; override emacs-like use of C-u to repeat
           evil-undo-system 'undo-redo)  ;; Adds vim-like C-r redo functionality
     (evil-mode))
 
@@ -101,7 +101,7 @@
     :config
     ;; (load-theme 'doom-one t)
     (setq doom-themes-enable-bold t
-	  doom-themes-enable-italic t)
+   doom-themes-enable-italic t)
     (doom-themes-org-config))
   ;; solaire darkens non-standard buffers' backgrounds
   ;; (use-package solaire-mode
@@ -138,23 +138,23 @@
   (dashboard-setup-startup-hook))
 
 (set-face-attribute 'default nil
-	      :font "Liga SFMono Nerd Font"
-	      ;; height = 10*point size
-	      :height 160
-	      :weight 'medium)
+       :font "Liga SFMono Nerd Font"
+       ;; height = 10*point size
+       :height 160
+       :weight 'medium)
 (set-face-attribute 'variable-pitch nil
-	      :font "CMU Serif"
-	      :height 1.0
-	      :weight 'medium)
+       :font "CMU Serif"
+       :height 1.0
+       :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
-	      :font "Liga SFMono Nerd Font"
-	      :height 0.6
-	      :weight 'medium)
+       :font "Liga SFMono Nerd Font"
+       :height 0.6
+       :weight 'medium)
   ;; italicizes commented text and keywords
   (set-face-attribute 'font-lock-comment-face nil
-		      :slant 'italic)
+        :slant 'italic)
   (set-face-attribute 'font-lock-keyword-face nil
-		      :slant 'italic)
+        :slant 'italic)
   ;;sets default font on all graphical frames after restarting emacs
   ;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
 
@@ -198,19 +198,19 @@
       (?- . #("□–" 0 2 (composition ((2))))))))
   (custom-set-variables
    '(org-modern-list
-	   '((?+ . "•")
-	     (?- . "◦")
-	     (?* . "∗"))))
+    '((?+ . "•")
+      (?- . "◦")
+      (?* . "∗"))))
   (custom-set-variables
    '(org-modern-radio-target '(" ✒ " t " ")))
   (custom-set-variables
    '(org-modern-internal-target '(" ↪ " t " ")))
   (setq org-modern-symbol '"Iosevka")
   (setq org-modern-keyword
-	(quote (("title" . "📓") (t . t)))))
-	   ;; (("title" . "📓") (t . t))
-	   ;; (("date" . "📅") (t . t))
-	   ;; (("author" . "🖎") (t . t))
+ (quote (("title" . "📓") (t . t)))))
+    ;; (("title" . "📓") (t . t))
+    ;; (("date" . "📅") (t . t))
+    ;; (("author" . "🖎") (t . t))
 
 (setq electric-indent-mode -1)
 (setq org-src-preserve-indentation t)
@@ -227,6 +227,7 @@
 (setq ring-bell-function 'ignore)
 (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
 (setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
+(setq-default indent-tabs-mode nil) ;; use spaces instead of tabs
 
   (menu-bar-mode -1)
   (tool-bar-mode -1)
@@ -254,7 +255,7 @@ error is signaled."
 ;;  split, if possible."
   (interactive)
   (let* ((other-win (windmove-find-other-window 'up))
-	 (buf-this-buf (window-buffer (selected-window))))
+  (buf-this-buf (window-buffer (selected-window))))
     (if (null other-win)
         (error "No window above this one")
       ;; swap top with this one
@@ -270,7 +271,7 @@ If there is no split, ie now window under the current one, an
 error is signaled."
   (interactive)
   (let* ((other-win (windmove-find-other-window 'down))
-	 (buf-this-buf (window-buffer (selected-window))))
+  (buf-this-buf (window-buffer (selected-window))))
     (if (or (null other-win) 
             (string-match "^ \\*Minibuf" (buffer-name (window-buffer other-win))))
         (error "No window under this one")
@@ -287,7 +288,7 @@ If there is no split, ie now window on the left of the current
 one, an error is signaled."
   (interactive)
   (let* ((other-win (windmove-find-other-window 'left))
-	 (buf-this-buf (window-buffer (selected-window))))
+  (buf-this-buf (window-buffer (selected-window))))
     (if (null other-win)
         (error "No left split")
       ;; swap top with this one
@@ -303,7 +304,7 @@ If there is no split, ie now window on the right of the current
 one, an error is signaled."
   (interactive)
   (let* ((other-win (windmove-find-other-window 'right))
-	 (buf-this-buf (window-buffer (selected-window))))
+  (buf-this-buf (window-buffer (selected-window))))
     (if (null other-win)
         (error "No right split")
       ;; swap top with this one
@@ -330,10 +331,10 @@ one, an error is signaled."
 (use-package dired-open
   :config
   (setq dired-open-extensions '(("gif" . "sxiv")
-				("jpg" . "sxiv")
-				("png" . "sxiv")
-				("mkv" . "mpv")
-				("mp4" . "mpv"))))
+    ("jpg" . "sxiv")
+    ("png" . "sxiv")
+    ("mkv" . "mpv")
+    ("mp4" . "mpv"))))
 
 (use-package gptel
   ;; I was having conflicting versions with elpaca until I set this
@@ -344,7 +345,7 @@ one, an error is signaled."
    ;; setting the gptel-api-key with the host name works here
   (setq auth-sources '("~/.authinfo"))
   (setq gptel-api-key
-	(auth-source-pick-first-password :host "openrouter.ai"))
+ (auth-source-pick-first-password :host "openrouter.ai"))
   (setq gptel-default-mode 'org-mode) ;; chat in org-mode or markdown
   (setq gptel-prompt-prefix-alist
    '((org-mode . "*  :") (text-mode . "💬 :")))
@@ -357,19 +358,26 @@ one, an error is signaled."
     :context t
     :sources t
     :models '(qwen3-14b-mlx
-  	      qwen3-30b-a3b
-  	      qwen3-14b))
+              qwen3-4b-thinking-2507
+              qwen3-4b-2507
+              qwen3-30b-a3b
+              gemma-3n-e4b
+              qwen3-14b))
   (setq gptel-model   'google/gemini-2.5-flash
       gptel-backend
       (gptel-make-openai "OpenRouter"
         :host "openrouter.ai"
         :endpoint "/api/v1/chat/completions"
         :stream t
-	:key gptel-api-key ; function that returns key from .authinfo
-	:models '(google/gemini-2.5-pro
-		  anthropic/claude-sonnet-4
-		  google/gemini-2.5-flash
-		  deepseek/deepseek-r1-0528))))
+ :key gptel-api-key ; function that returns key from .authinfo
+ :models '(google/gemini-2.5-pro
+           google/gemini-2.5-flash
+           anthropic/claude-sonnet-4.5
+           openai/gpt-5
+           z-ai/glm-4.6
+           qwen/qwen3-vl-235b-a22b-thinking
+           qwen/qwen3-vl-235b-a22b-instruct
+           deepseek/deepseek-r1-0528))))
 
 ;; (use-package ob-mermaid
 ;;   :disabled t
@@ -426,17 +434,17 @@ one, an error is signaled."
   (which-key-mode 1)
   :config
   (setq which-key-side-window-location 'bottom
-	which-key-sort-order #'which-key-key-order-alpha
-	which-key-sort-uppercase-first nil
-	which-key-add-column-padding 1
-	which-key-max-display-columns nil
-	which-key-min-display-lines 6
-	which-key-side-window-slot -10
-	which-key-side-window-max-height 0.25
-	which-key-idle-delay 0.8
-	which-key-max-description-length 25
-	which-key-allow-imprecise-window-fit nil
-	which-key-separator "  " ))
+ which-key-sort-order #'which-key-key-order-alpha
+ which-key-sort-uppercase-first nil
+ which-key-add-column-padding 1
+ which-key-max-display-columns nil
+ which-key-min-display-lines 6
+ which-key-side-window-slot -10
+ which-key-side-window-max-height 0.25
+ which-key-idle-delay 0.8
+ which-key-max-description-length 25
+ which-key-allow-imprecise-window-fit nil
+ which-key-separator "  " ))
 
 (use-package yasnippet
   :ensure t
@@ -608,24 +616,26 @@ one, an error is signaled."
 
 (setq org-agenda-files (list "~/Org"))
 
-(use-package citar
-  :custom
-  (citar-bibliography '("~/zotero-library.bib"))
-  ;; Use `citar' with `org-cite'
-  (org-cite-insert-processor 'citar)
-  (org-cite-follow-processor 'citar)
-  (org-cite-activate-processor 'citar)
-  :hook
-  (LaTeX-mode . citar-capf-setup)
-  (org-mode . citar-capf-setup))
+;; (use-package citar
+;;   :custom
+;;   (citar-bibliography '("~/zotero-library.bib"))
+;;   ;; Use `citar' with `org-cite'
+;;   (org-cite-insert-processor 'citar)
+;;   (org-cite-follow-processor 'citar)
+;;   (org-cite-activate-processor 'citar)
+;;   :hook
+;;   (LaTeX-mode . citar-capf-setup)
+;;   (org-mode . citar-capf-setup))
+;;
+;; (use-package citar-embark
+;;   :after citar embark
+;;   :no-require
+;;   :config (citar-embark-mode))
+;;
+;; (use-package embark
+;;   :ensure t)
 
-(use-package citar-embark
-  :after citar embark
-  :no-require
-  :config (citar-embark-mode))
-
-(use-package embark
-  :ensure t)
+(setq org-cite-global-bibliography '("~/betterbibtex.bib"))
 
 (use-package org-journal
   :ensure t
@@ -650,7 +660,7 @@ one, an error is signaled."
 ;;   :ensure t
 ;;   :config
 ;;   (plist-put org-latex-preview-appearance-options
-;; 	     :page-width 0.8)
+;;       :page-width 0.8)
 ;;   (setq org-latex-preview-live t))
 
 (use-package ess
