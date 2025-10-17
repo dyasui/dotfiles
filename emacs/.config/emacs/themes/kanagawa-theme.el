@@ -199,7 +199,7 @@
    `(org-block-begin-line
      ((t (:overline ,lotusGray2 :foreground ,lotusGray :background ,lotusInk1))))
    `(org-block-end-line
-     ((t (:overline ,lotusGray2 :foreground ,lotusGray :background ,lotusInk1))))
+     ((t (:overline ,lotusGray2 :foreground ,lotusGray :background ,bg1))))
    `(org-quote ((,class (:inherit org-block :slant italic))))
    `(org-verse ((,class (:inherit org-block :slant italic))))
    `(org-todo ((,class (:box (:line-width 1 :color ,fg3) :foreground ,keyword :bold t))))
