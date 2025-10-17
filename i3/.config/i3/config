@@ -8,7 +8,7 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy
 exec syncthing
 exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
 exec --no-startup-id nm-applet
-exec --no-startup-id feh --randomize --bg-fill --recursive ~/Pictures/Wallpapers/Places
+exec --no-startup-id feh --randomize --bg-fill --recursive ~/Media/Wallpapers/Places
 # add side monitor as secondary display
 # exec --no-startup-id xrandr --output DisplayPort-2 --auto --left-of DisplayPort-0
 
