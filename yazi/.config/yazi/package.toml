@@ -3,5 +3,15 @@ use = "boydaihungst/mediainfo"
 rev = "447fe95"
 hash = "dcaebc8bc261206f6b59e2c67464af5"
 
+[[plugin.deps]]
+use = "wylie102/duckdb"
+rev = "3f8c863"
+hash = "87b9233a74325e95011670ed20bbd0d4"
+
+[[plugin.deps]]
+use = "Ape/open-with-cmd"
+rev = "433cf30"
+hash = "86e0312b01bc5762813c6c1d0517f073"
+
 [flavor]
 deps = []
