@@ -58,6 +58,7 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
+export EDITOR="nvim"
 # Keybindings
 bindkey -e
 bindkey '^p' history-search-backward
@@ -72,7 +73,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # Aliases
-alias ls='gls --color --hyperlin=auto'
+alias ls='gls --color --hyperlink=auto'
 alias la='gls -a --color --hyperlink=auto'
 alias lt='eza -Tl'
 alias c='clear'
@@ -122,4 +123,5 @@ export PATH=/Users/dante/.juliaup/bin:/Users/dante/Library/Python/3.9/bin:/usr/l
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/dante/.lmstudio/bin"
 # End of LM Studio CLI section
-
+#
+export PATH='/Users/dante/.duckdb/cli/latest':$PATH
