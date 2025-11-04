@@ -96,143 +96,13 @@
 ;; Setting RETURN key in org-mode to follow links
   (setq org-return-follows-link  t)
 
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; (load-theme 'doom-one t)
-  (setq doom-themes-enable-bold t
-	doom-themes-enable-italic t)
-  (doom-themes-org-config))
-;; solaire darkens non-standard buffers' backgrounds
-;; (use-package solaire-mode
-;;   :ensure t
-;;   :config
-;;   (solaire-global-mode +1))
-;; ;; doom's fancy modeline
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :config
-  (setq doom-modeline-env-enable-python t)
-  (setq doom-modeline-env-enable-R t)
-  (setq doom-modeline-env-enable-julia t)
-  (setq doom-modeline-height 18))
-
-(use-package dashboard
-  :ensure t
-  :init
-  (setq initial-buffer-choice 'dashboard-open)
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "Welcome to Emacs")
-  (setq dashboard-startup-banner 'logo)
-  (setq dashboard-center-content t)
-  (setq dashboard-items '((recents . 5)
-                        (projects . 5)
-                        (bookmarks . 3)
-                        (agenda . 3)
-                        (registers . 3)))
-  ;; (dashboard-modify-heading-icons '((recents . "file-text")
-  ;;                                  (bookmarks . "book")))
-  :config
-  (dashboard-setup-startup-hook))
-
-(set-face-attribute 'default nil
-       :font "Liga SFMono Nerd Font"
-       ;; height = 10*point size
-       :height 160
-       :weight 'medium)
-(set-face-attribute 'variable-pitch nil
-       :font "CMU Serif"
-       :height 1.0
-       :weight 'medium)
-(set-face-attribute 'fixed-pitch nil
-       :font "Liga SFMono Nerd Font"
-       :height 0.6
-       :weight 'medium)
-  ;; italicizes commented text and keywords
-  (set-face-attribute 'font-lock-comment-face nil
-        :slant 'italic)
-  (set-face-attribute 'font-lock-keyword-face nil
-        :slant 'italic)
-  ;;sets default font on all graphical frames after restarting emacs
-  ;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
-
-  ;;set default line spacing
-  ;; (setq-default line-spacing 0.08)
-
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
-
-(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
-(load-theme 'kanagawa t)
-
-(use-package rainbow-mode
-  :ensure t
-  :hook (org-mode prog-mode))
-
-(use-package olivetti
-  :ensure t
-  :hook (org-mode)
-  :config
-  (setq olivetti-body-width 100))
-
-(use-package toc-org
-:ensure t
-:commands toc-org-enable
-:init (add-hook 'org-mode-hook 'toc-org-enable))
-
-(use-package org-modern
-  :ensure t
-  :hook org-mode
-  :config
-  (setq org-modern-star 'replace)
-  (custom-set-variables
-    '(org-modern-replace-stars "◉○❖◈◇"))
-  (custom-set-variables
-   '(org-modern-checkbox
-     '((?X . #("□✔" 0 2 (composition ((2)))))
-      (?\s . "□")
-      (?- . #("□–" 0 2 (composition ((2))))))))
-  (custom-set-variables
-   '(org-modern-list
-    '((?+ . "•")
-      (?- . "◦")
-      (?* . "∗"))))
-  (custom-set-variables
-   '(org-modern-radio-target '(" ✒ " t " ")))
-  (custom-set-variables
-   '(org-modern-internal-target '(" ↪ " t " ")))
-  (setq org-modern-symbol '"Iosevka")
-  (setq org-modern-keyword
- (quote (("title" . "📓") (t . t)))))
-    ;; (("title" . "📓") (t . t))
-    ;; (("date" . "📅") (t . t))
-    ;; (("author" . "🖎") (t . t))
-
-(setq electric-indent-mode -1)
-(setq org-src-preserve-indentation t)
-(setq org-edit-src-content-indentation 0)
-
-(setq org-hide-emphasis-markers t)
-
-(use-package mixed-pitch
-  :hook
-  (org-mode . mixed-pitch-mode))
-
-(setq org-ellipsis "⇥")
-
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 (setq ring-bell-function 'ignore)
 (setq tab-bar-close-button-show nil)       ;; hide tab close / X button
 (setq tab-bar-new-tab-choice "*dashboard*");; buffer to show in new tabs
 (setq-default indent-tabs-mode nil) ;; use spaces instead of tabs
-
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-
 ;; (global-display-line-numbers-mode nil)
 (global-visual-line-mode t)
 
@@ -240,9 +110,6 @@
 ;; (setq auto-save-file-name-transforms
           ;; `((".*" ,(concat user-emacs-directory "auto-save/") t))) 
 (setq backup-directory-alist '((".*" . "~/.local/share/Trash/files")))
-
-(fido-vertical-mode t)
-;; (icomplete-vertical-mode t)
 
 (require 'windmove)
 
@@ -313,175 +180,123 @@ one, an error is signaled."
       (set-window-buffer other-win buf-this-buf)
       (select-window other-win))))
 
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+(load-theme 'kanagawa t)
+
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; (load-theme 'doom-one t)
+    (setq doom-themes-enable-bold t
+   doom-themes-enable-italic t)
+    (doom-themes-org-config))
+  ;; solaire darkens non-standard buffers' backgrounds
+  ;; (use-package solaire-mode
+  ;;   :ensure t
+  ;;   :config
+  ;;   (solaire-global-mode +1))
+  ;; ;; doom's fancy modeline
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-env-enable-python t)
+    (setq doom-modeline-env-enable-R t)
+    (setq doom-modeline-env-enable-julia t)
+    (setq doom-modeline-height 18))
+
+(set-face-attribute 'default nil
+       :font "Liga SFMono Nerd Font"
+       ;; height = 10*point size
+       :height 160
+       :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+       :font "CMU Serif"
+       :height 1.0
+       :weight 'medium)
+(set-face-attribute 'fixed-pitch nil
+       :font "Liga SFMono Nerd Font"
+       :height 0.6
+       :weight 'medium)
+  ;; italicizes commented text and keywords
+  (set-face-attribute 'font-lock-comment-face nil
+        :slant 'italic)
+  (set-face-attribute 'font-lock-keyword-face nil
+        :slant 'italic)
+  ;;sets default font on all graphical frames after restarting emacs
+  ;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono Nerd Font-10"))
+
+  ;;set default line spacing
+  ;; (setq-default line-spacing 0.08)
+
+(use-package dashboard
+  :ensure t
+  :init
+  (setq initial-buffer-choice 'dashboard-open)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "Welcome to Emacs")
+  (setq dashboard-startup-banner 'logo)
+  (setq dashboard-center-content t)
+  (setq dashboard-items '((recents . 5)
+                        (projects . 5)
+                        (bookmarks . 3)
+                        (agenda . 3)
+                        (registers . 3)))
+  ;; (dashboard-modify-heading-icons '((recents . "file-text")
+  ;;                                  (bookmarks . "book")))
+  :config
+  (dashboard-setup-startup-hook))
+
+(use-package rainbow-mode
+  :ensure t
+  :hook (org-mode prog-mode))
+
+(use-package olivetti
+  :ensure t
+  :hook (org-mode)
+  :config
+  (setq olivetti-body-width 100))
+
 (use-package company
-    :defer 2
-    :custom
-    (company-begin-commands '(self-insert-command))
-    (company-idle-delay .1)
-    (company-minimum-prefix-length 2)
-    (company-show-numbers t)
-    (company-tooltip-align-annotations 't)
-    (global-company-mode t))
+  :defer 2
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .1)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
 (set (make-local-variable 'company-backends) '((company-yasnippet company-capf company-keywords)))
 
-    (use-package company-box
-      :after company
-      :hook (company-mode . company-box-mode))
+(use-package company-box
+  :after company
+  :hook (company-mode . company-box-mode))
 
-(use-package dired-open
+;; Ido modes
+(fido-vertical-mode t)
+;; (icomplete-vertical-mode t)
+
+(use-package yasnippet
+  :ensure t
   :config
-  (setq dired-open-extensions '(("gif" . "sxiv")
-    ("jpg" . "sxiv")
-    ("png" . "sxiv")
-    ("mkv" . "mpv")
-    ("mp4" . "mpv"))))
+  (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
+  (yas-global-mode 1))
 
-(use-package gptel
-  ;; I was having conflicting versions with elpaca until I set this
-  :load-path "elpa/gptel-0.9.8.5/" 
-  :config
-  ;; jump cursor to next prompt line
-  (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
-   ;; setting the gptel-api-key with the host name works here
-  (setq auth-sources '("~/.authinfo"))
-  (setq gptel-api-key
- (auth-source-pick-first-password :host "openrouter.ai"))
-  (setq gptel-default-mode 'org-mode) ;; chat in org-mode or markdown
-  (setq gptel-prompt-prefix-alist
-   '((org-mode . "*  :") (text-mode . "💬 :")))
-  (setq gptel-response-prefix-alist
-   '((org-mode . "**  ") (text-mode . "> 🤖 ")))
-  (gptel-make-openai "LMStudio"
-    :protocol "http"
-    :host "localhost:1234"
-    :stream t
-    ;; :context t
-    ;; :sources t
-    :models '(qwen3-14b-mlx
-              qwen3-4b-thinking-2507
-              qwen3-4b-2507
-              qwen3-30b-a3b
-              gemma-3n-e4b
-              qwen3-14b))
-  (setq gptel-model   'google/gemini-2.5-flash
-      gptel-backend
-      (gptel-make-openai "OpenRouter"
-        :host "openrouter.ai"
-        :endpoint "/api/v1/chat/completions"
-        :stream t
- :key gptel-api-key ; function that returns key from .authinfo
- :models '(google/gemini-2.5-pro
-           google/gemini-2.5-flash
-           anthropic/claude-sonnet-4.5
-           openai/gpt-5
-           z-ai/glm-4.6
-           qwen/qwen3-vl-235b-a22b-thinking
-           qwen/qwen3-vl-235b-a22b-instruct
-           deepseek/deepseek-r1-0528))))
+;; weight by frequency
+(setq company-transformers '(company-sort-by-occurrence))
 
-;;;; My Local AI Assistant
-;;;
-;;; This section contains the functions for a local AI assistant that
-;;; uses gptel for the brain, and will later use local TTS/STT.
+;; Add yasnippet support for all company backends
+;; https://github.com/syl20bnr/spacemacs/pull/179
+(defvar company-mode/enable-yas t "Enable yasnippet for all backends.")
 
-(defcustom my-assistant-backend 'Ollama
-  "The `gptel-backend' to use for the assistant."
-  :type '(symbol)
-  :group 'gptel)
+(defun company-mode/backend-with-yas (backend)
+  (if (or (not company-mode/enable-yas) (and (listp backend)    (member 'company-yasnippet backend)))
+  backend
+(append (if (consp backend) backend (list backend))
+        '(:with company-yasnippet))))
 
-(defcustom my-assistant-model "qwen3-14b"
-  "The `gptel-model' to use for the assistant."
-  :type '(string)
-  :group 'gptel)
-
-(defun my-assistant-ask (prompt)
-  "Send PROMPT to the assistant's LLM and return the response synchronously.
-This function will block until the LLM response is received."
-  (let ((response-text nil))
-    ;; Call the asynchronous function with our custom callback.
-    (gptel-request prompt
-                   :callback (lambda (response _info)
-                               ;; This runs when the answer arrives.
-                               (setq response-text (or response ""))))
-    ;; Wait for the callback to set the `response-text` variable.
-    (while (not response-text)
-      (accept-process-output nil 0.1))
-    ;; Return the final result.
-    response-text))
-(defcustom my-assistant-piper-model "en_US-kusal-medium"
-  "The Piper voice model to use for TTS."
-  :type 'string
-  :group 'gptel)
-
-(defcustom my-assistant-piper-data-dir nil
-  "Directory containing Piper voice models. If nil, uses current directory."
-  :type '(choice (const :tag "Current directory" nil)
-                 (directory :tag "Custom directory"))
-  :group 'gptel)
-
-(setq my-assistant-piper-data-dir "~/.local/share/piper-voices")
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; My Assistant - Core Function
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun my-assistant-speak (text)
-  "Speak TEXT using Piper TTS engine with robust audio playback."
-  (message "ASSISTANT (speak): Requesting TTS for \"%s...\"" (substring text 0 (min 30 (length text))))
-  (unless (executable-find my-assistant-piper-executable)
-    (error "Cannot find Piper executable: '%s'. Check =my-assistant-piper-executable= and Emacs =exec-path="
-           my-assistant-piper-executable))
-  (let* ((temp-file (make-temp-file "piper-tts-" nil ".wav"))
-         (data-dir-arg (when (and my-assistant-piper-data-dir (file-directory-p my-assistant-piper-data-dir))
-                         (list "--data-dir" (expand-file-name my-assistant-piper-data-dir))))
-         (piper-args (append (list "-m" my-assistant-piper-model "-f" temp-file)
-                             data-dir-arg
-                             (list "--" text))))
-    (unwind-protect
-        (let* ((piper-output-buffer (generate-new-buffer "*piper-output*"))
-               (exit-code (apply #'call-process my-assistant-piper-executable nil piper-output-buffer t piper-args)))
-          (if (/= exit-code 0)
-              (progn
-                (display-buffer piper-output-buffer)
-                (error "Piper process failed with exit code %s. See *piper-output* buffer." exit-code))
-            (kill-buffer piper-output-buffer)
-            (when (file-exists-p temp-file)
-              (message "Piper generated audio: %s" temp-file)
-              (if (executable-find "play")
-                  (let ((play-output-buffer (generate-new-buffer "*play-output*")))
-                    (message "Attempting to play audio with 'play'...")
-                    (let ((play-exit-code (call-process "play" nil play-output-buffer t temp-file)))
-                      (if (/= play-exit-code 0)
-                          (progn
-                            (display-buffer play-output-buffer)
-                            (error "Sox 'play' process failed with exit code %d. See *play-output* buffer." play-exit-code))
-                        (kill-buffer play-output-buffer)
-                        (message "Audio playback finished."))))
-                (error "Sox 'play' command not found. Cannot play audio."))))
-          )
-      (when (file-exists-p temp-file)
-        (delete-file temp-file)))))
-
-;; --- Phase 3 Placeholder ---
-(defun my-assistant-listen ()
-  "Listen for audio and return the transcribed text. (Placeholder)"
-  (let ((input (read-from-minibuffer "ASSISTANT (listen): ")))
-    (message "ASSISTANT (listen): You said '%s'" input)
-    input))
-
-;; --- The Main Interactive Function ---
-(defun my-assistant-interactive ()
-  "Ask the assistant a question and get a spoken response."
-  (interactive)
-  (let* ((question (read-from-minibuffer "Ask your assistant: "))
-         (answer (my-assistant-ask question)))
-    (my-assistant-speak answer)))
-
-;; (use-package ob-mermaid
-;;   :disabled t
-;;   :load-path "~/.config/emacs/elpa/ob-mermaid-20250124.1831/"
-;;   :config
-;;   (setq ob-mermaid-cli-path "/opt/homebrew/bin/mmdc")
-;;   )
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
 (use-package perspective
   :init
@@ -543,26 +358,13 @@ This function will block until the LLM response is received."
  which-key-allow-imprecise-window-fit nil
  which-key-separator "  " ))
 
-(use-package yasnippet
-  :ensure t
+(use-package dired-open
   :config
-  (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
-  (yas-global-mode 1))
-
-;; weight by frequency
-(setq company-transformers '(company-sort-by-occurrence))
-
-;; Add yasnippet support for all company backends
-;; https://github.com/syl20bnr/spacemacs/pull/179
-(defvar company-mode/enable-yas t "Enable yasnippet for all backends.")
-
-(defun company-mode/backend-with-yas (backend)
-  (if (or (not company-mode/enable-yas) (and (listp backend)    (member 'company-yasnippet backend)))
-  backend
-(append (if (consp backend) backend (list backend))
-        '(:with company-yasnippet))))
-
-(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+  (setq dired-open-extensions '(("gif" . "sxiv")
+    ("jpg" . "sxiv")
+    ("png" . "sxiv")
+    ("mkv" . "mpv")
+    ("mp4" . "mpv"))))
 
 (use-package general
   :ensure t
@@ -711,7 +513,88 @@ This function will block until the LLM response is received."
     "w L" '(buf-move-right :wk "Buffer move right"))
   )
 
+  (global-set-key (kbd "C-=") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+
 (setq org-agenda-files (list "~/Org"))
+
+(use-package org-journal
+  :ensure t
+  :defer t
+  :init
+  ;; Change default prefix key; needs to be set before loading org-journal
+  (setq org-journal-prefix-key "<SPC> j")
+  :config
+  (setq org-journal-dir "~/Org/journals/")
+  (setq org-journal-file-format "%Y_%m_%d.org"))
+
+;; Language support
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((julia . t)
+   (latex . t)
+   (shell . t)
+   (R . t)))
+
+;; org-tempo is not enabled by default,
+;;allows a quick way to add source blocks.
+(require 'org-tempo)
+
+(use-package toc-org
+:ensure t
+:commands toc-org-enable
+:init (add-hook 'org-mode-hook 'toc-org-enable))
+
+(use-package org-modern
+  :ensure t
+  :hook org-mode
+  :config
+  (setq org-modern-star 'replace)
+  (custom-set-variables
+    '(org-modern-replace-stars "◉○❖◈◇"))
+  (custom-set-variables
+   '(org-modern-checkbox
+     '((?X . #("□✔" 0 2 (composition ((2)))))
+      (?\s . "□")
+      (?- . #("□–" 0 2 (composition ((2))))))))
+  (custom-set-variables
+   '(org-modern-list
+    '((?+ . "•")
+      (?- . "◦")
+      (?* . "∗"))))
+  (custom-set-variables
+   '(org-modern-radio-target '(" ✒ " t " ")))
+  (custom-set-variables
+   '(org-modern-internal-target '(" ↪ " t " ")))
+  (setq org-modern-symbol '"Iosevka")
+  (setq org-modern-keyword
+ (quote (("title" . "📓") (t . t)))))
+    ;; (("title" . "📓") (t . t))
+    ;; (("date" . "📅") (t . t))
+    ;; (("author" . "🖎") (t . t))
+
+(setq electric-indent-mode -1)
+(setq org-src-preserve-indentation t)
+(setq org-edit-src-content-indentation 0)
+
+(setq org-hide-emphasis-markers t)
+
+(use-package mixed-pitch
+  :hook
+  (org-mode . mixed-pitch-mode))
+
+(setq org-ellipsis "⇥")
+
+;; (use-package org-latex-preview
+;;   :ensure t
+;;   :config
+;;   (plist-put org-latex-preview-appearance-options
+;;       :page-width 0.8)
+;;   (setq org-latex-preview-live t))
+
+(setq org-cite-global-bibliography '("~/betterbibtex.bib"))
 
 ;; (use-package citar
 ;;   :custom
@@ -732,33 +615,152 @@ This function will block until the LLM response is received."
 ;; (use-package embark
 ;;   :ensure t)
 
-(setq org-cite-global-bibliography '("~/betterbibtex.bib"))
-
-(use-package org-journal
+;; transient required by gptel
+(use-package transient
   :ensure t
-  :defer t
-  :init
-  ;; Change default prefix key; needs to be set before loading org-journal
-  (setq org-journal-prefix-key "<SPC> j")
+  :demand t)
+
+(use-package gptel
+  ;; I was having conflicting versions with elpaca until I set this
+  ;; :load-path "elpa/gptel-0.9.9/" 
+  :ensure t
+  :after transient
   :config
-  (setq org-journal-dir "~/Org/journals/")
-  (setq org-journal-file-format "%Y_%m_%d.org"))
+  ;; jump cursor to next prompt line
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+   ;; setting the gptel-api-key with the host name works here
+  (setq auth-sources '("~/.authinfo"))
+  (setq gptel-api-key
+ (auth-source-pick-first-password :host "openrouter.ai"))
+  (setq gptel-default-mode 'org-mode) ;; chat in org-mode or markdown
+  (setq gptel-prompt-prefix-alist
+   '((org-mode . "*  :") (text-mode . "💬 :")))
+  (setq gptel-response-prefix-alist
+   '((org-mode . "**  ") (text-mode . "> 🤖 ")))
+  (gptel-make-openai "LMStudio"
+    :protocol "http"
+    :host "localhost:1234"
+    :stream t
+    ;; :context t
+    ;; :sources t
+    :models '(qwen3-14b-mlx
+              qwen3-4b-thinking-2507
+              qwen3-4b-2507
+              qwen3-30b-a3b
+              gemma-3n-e4b
+              qwen3-14b))
+  (setq gptel-model   'google/gemini-2.5-flash
+      gptel-backend
+      (gptel-make-openai "OpenRouter"
+        :host "openrouter.ai"
+        :endpoint "/api/v1/chat/completions"
+        :stream t
+ :key gptel-api-key ; function that returns key from .authinfo
+ :models '(google/gemini-2.5-pro
+           google/gemini-2.5-flash
+           anthropic/claude-sonnet-4.5
+           openai/gpt-5
+           z-ai/glm-4.6
+           qwen/qwen3-vl-235b-a22b-thinking
+           qwen/qwen3-vl-235b-a22b-instruct
+           deepseek/deepseek-r1-0528))))
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((julia . t)
-   (latex . t)
-   (shell . t)
-   (R . t)))
+;;;; My Local AI Assistant
+;;;
+;;; This section contains the functions for a local AI assistant that
+;;; uses gptel for the brain, and will later use local TTS/STT.
 
-(require 'org-tempo)
+(defcustom my-assistant-backend 'Ollama
+  "The `gptel-backend' to use for the assistant."
+  :type '(symbol)
+  :group 'gptel)
 
-;; (use-package org-latex-preview
-;;   :ensure t
-;;   :config
-;;   (plist-put org-latex-preview-appearance-options
-;;       :page-width 0.8)
-;;   (setq org-latex-preview-live t))
+(defcustom my-assistant-model "qwen3-14b"
+  "The `gptel-model' to use for the assistant."
+  :type '(string)
+  :group 'gptel)
+
+(defun my-assistant-ask (prompt)
+  "Send PROMPT to the assistant's LLM and return the response synchronously.
+This function will block until the LLM response is received."
+  (let ((response-text nil))
+    ;; Call the asynchronous function with our custom callback.
+    (gptel-request prompt
+                   :callback (lambda (response _info)
+                               ;; This runs when the answer arrives.
+                               (setq response-text (or response ""))))
+    ;; Wait for the callback to set the `response-text` variable.
+    (while (not response-text)
+      (accept-process-output nil 0.1))
+    ;; Return the final result.
+    response-text))
+(defcustom my-assistant-piper-model "en_US-kusal-medium"
+  "The Piper voice model to use for TTS."
+  :type 'string
+  :group 'gptel)
+
+(defcustom my-assistant-piper-data-dir nil
+  "Directory containing Piper voice models. If nil, uses current directory."
+  :type '(choice (const :tag "Current directory" nil)
+                 (directory :tag "Custom directory"))
+  :group 'gptel)
+
+(setq my-assistant-piper-data-dir "~/.local/share/piper-voices")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; My Assistant - Core Function
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun my-assistant-speak (text)
+  "Speak TEXT using Piper TTS engine with robust audio playback."
+  (message "ASSISTANT (speak): Requesting TTS for \"%s...\"" (substring text 0 (min 30 (length text))))
+  (unless (executable-find my-assistant-piper-executable)
+    (error "Cannot find Piper executable: '%s'. Check =my-assistant-piper-executable= and Emacs =exec-path="
+           my-assistant-piper-executable))
+  (let* ((temp-file (make-temp-file "piper-tts-" nil ".wav"))
+         (data-dir-arg (when (and my-assistant-piper-data-dir (file-directory-p my-assistant-piper-data-dir))
+                         (list "--data-dir" (expand-file-name my-assistant-piper-data-dir))))
+         (piper-args (append (list "-m" my-assistant-piper-model "-f" temp-file)
+                             data-dir-arg
+                             (list "--" text))))
+    (unwind-protect
+        (let* ((piper-output-buffer (generate-new-buffer "*piper-output*"))
+               (exit-code (apply #'call-process my-assistant-piper-executable nil piper-output-buffer t piper-args)))
+          (if (/= exit-code 0)
+              (progn
+                (display-buffer piper-output-buffer)
+                (error "Piper process failed with exit code %s. See *piper-output* buffer." exit-code))
+            (kill-buffer piper-output-buffer)
+            (when (file-exists-p temp-file)
+              (message "Piper generated audio: %s" temp-file)
+              (if (executable-find "play")
+                  (let ((play-output-buffer (generate-new-buffer "*play-output*")))
+                    (message "Attempting to play audio with 'play'...")
+                    (let ((play-exit-code (call-process "play" nil play-output-buffer t temp-file)))
+                      (if (/= play-exit-code 0)
+                          (progn
+                            (display-buffer play-output-buffer)
+                            (error "Sox 'play' process failed with exit code %d. See *play-output* buffer." play-exit-code))
+                        (kill-buffer play-output-buffer)
+                        (message "Audio playback finished."))))
+                (error "Sox 'play' command not found. Cannot play audio."))))
+          )
+      (when (file-exists-p temp-file)
+        (delete-file temp-file)))))
+
+;; --- Phase 3 Placeholder ---
+(defun my-assistant-listen ()
+  "Listen for audio and return the transcribed text. (Placeholder)"
+  (let ((input (read-from-minibuffer "ASSISTANT (listen): ")))
+    (message "ASSISTANT (listen): You said '%s'" input)
+    input))
+
+;; --- The Main Interactive Function ---
+(defun my-assistant-interactive ()
+  "Ask the assistant a question and get a spoken response."
+  (interactive)
+  (let* ((question (read-from-minibuffer "Ask your assistant: "))
+         (answer (my-assistant-ask question)))
+    (my-assistant-speak answer)))
 
 (use-package ess
   :ensure t
