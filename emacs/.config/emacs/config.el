@@ -617,7 +617,7 @@ one, an error is signaled."
 
 ;; transient required by gptel
 (use-package transient
-  :ensure t
+  :ensure (:ref "v0.10.1")
   :demand t)
 
 (use-package gptel
