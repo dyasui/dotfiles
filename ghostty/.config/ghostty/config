@@ -1,7 +1,7 @@
 # APPEARANCE
 font-family = JetBrains Mono
 font-size = 14
-theme = kanagawabones
+# theme = kanagawabones
 macos-titlebar-style = tabs
 
 # prevent option key from doing alt characters

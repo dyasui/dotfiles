@@ -183,27 +183,27 @@ one, an error is signaled."
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 (load-theme 'kanagawa t)
 
-  (use-package doom-themes
-    :ensure t
-    :config
-    ;; (load-theme 'doom-one t)
-    (setq doom-themes-enable-bold t
-   doom-themes-enable-italic t)
-    (doom-themes-org-config))
-  ;; solaire darkens non-standard buffers' backgrounds
-  ;; (use-package solaire-mode
-  ;;   :ensure t
-  ;;   :config
-  ;;   (solaire-global-mode +1))
-  ;; ;; doom's fancy modeline
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1)
-    :config
-    (setq doom-modeline-env-enable-python t)
-    (setq doom-modeline-env-enable-R t)
-    (setq doom-modeline-env-enable-julia t)
-    (setq doom-modeline-height 18))
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; (load-theme 'doom-one t)
+  (setq doom-themes-enable-bold t
+ doom-themes-enable-italic t)
+  (doom-themes-org-config))
+;; solaire darkens non-standard buffers' backgrounds
+;; (use-package solaire-mode
+;;   :ensure t
+;;   :config
+;;   (solaire-global-mode +1))
+;; ;; doom's fancy modeline
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-env-enable-python t)
+  (setq doom-modeline-env-enable-R t)
+  (setq doom-modeline-env-enable-julia t)
+  (setq doom-modeline-height 18))
 
 (set-face-attribute 'default nil
        :font "Liga SFMono Nerd Font"
@@ -513,10 +513,10 @@ one, an error is signaled."
     "w L" '(buf-move-right :wk "Buffer move right"))
   )
 
-  (global-set-key (kbd "C-=") 'text-scale-increase)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
 (setq org-agenda-files (list "~/Org"))
 
@@ -786,92 +786,3 @@ This function will block until the LLM response is received."
 (use-package pdf-tools
   :ensure t
   :load-path "~/.config/emacs/elpa/pdf-tools-1.1.0")
-
-(defun my/llm-read-config (file-path)
-  "Read and return the content of the specified file."
-  (let ((config-file (expand-file-name "~/.config/emacs/config.org")))
-    (with-current-buffer
-        (insert-file-contents file-path)
-      (buffer-string))))
-
-(gptel-make-tool
- :function #'my/llm-read-config
- :name "read_config_file"
- :description "Read file content from given path. Can be used for reading the Emacs configuration files like config.org or init.el."
- :args '((:name "file-path" :type string :description "Path to the file to read")))
-
-(defun my/llm-read-org-heading (file-path heading)
-  "Read the content of a specific Org mode HEADING from FILE-PATH.
-   Returns the content under the heading as a string."
-  (if (file-regular-p file-path)
-      (with-temp-buffer
-        (insert-file-contents file-path)
-        (goto-char (point-min))
-        (let ((found-heading-p nil)
-              (content-accumulator ()))
-          (while (not (eobp))
-            (if (org-at-heading-p)
-                (progn
-                  (if (string= (org-get-heading) heading)
-                      (setq found-heading-p t)
-                    (if found-heading-p (cl-return)))
-                  (forward-line)) ; Move past the heading line itself
-              (if found-heading-p
-                  (progn
-                    (cl-push (buffer-substring-no-properties (line-beginning-position) (line-end-position)) content-accumulator)
-                    (forward-line))
-                (forward-line)))))
-          (if found-heading-p
-              (mapconcat #'identity (nreverse content-accumulator) "\n")
-            (format "Heading '%s' not found in file '%s'." heading file-path)))
-        )
-    (format "File not found or is not a regular file: %s" file-path)))
-
-(gptel-make-tool
- :function #'my/llm-read-org-heading
- :name "read_org_heading"
- :description "Read content under a specific Org mode heading in a file."
- :args '(
-         (:name "file-path" :type string :description "Path to the Org mode file")
-         (:name "heading" :type string :description "The exact heading string (e.g., "* My Section")")
-         ))
-
-(defun my/llm-read-config (file-path)
-  "Read the content of a file at FILE-PATH."
-  (if (file-exists-p file-path)
-      (with-temp-buffer
-        (insert-file-contents file-path)
-        (buffer-string))
-    (format "File not found: %s" file-path)))
-
-(defun my/llm-read-org-heading (file-path heading)
-  "Read CONTENT under a specific HEADING in an Org mode FILE-PATH."
-  (if (file-exists-p file-path)
-      (with-temp-buffer
-        (insert-file-contents file-path)
-        (org-mode)
-        (goto-char (point-min))
-        (if (re-search-forward (format "^\*+ %s$" (regexp-quote heading)) nil t)
-            (progn
-              (forward-line 1) ;; Move past the heading line
-              (let ((start (point))
-                    end)
-                (if (re-search-forward "^\*+" nil t)
-                    (setq end (match-beginning 0))
-                  (setq end (point-max)))
-                (buffer-substring-no-properties start end)))
-          (format "Heading '%s' not found in %s" heading file-path))
-    (format "File not found: %s" file-path)))
-
-(gptel-make-tool
- :function #'my/llm-read-config
- :name "read_config_file"
- :description "Read a file content"
- :args '((:name "file-path" :type string :description "The full path to the file")))
-
-(gptel-make-tool
- :function #'my/llm-read-org-heading
- :name "read_org_heading"
- :description "Read content under a specific Org mode heading in a file."
- :args '((:name "file-path" :type string :description "The full path to the Org mode file")
-         (:name "heading" :type string :description "The exact heading string (e.g., \"* My Heading\").")))
