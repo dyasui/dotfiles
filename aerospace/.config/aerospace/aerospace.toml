@@ -50,7 +50,7 @@ outer.right      = 4
 # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-alt-shift-t = 'layout tiles horizontal vertical'
+alt-t = 'layout tiles horizontal vertical'
 alt-a = 'layout accordion horizontal vertical'
 
 alt-tab = 'workspace-back-and-forth'
@@ -79,10 +79,10 @@ alt-minus = 'resize smart -50'
 alt-equal = 'resize smart +50'
 
 # App Launchers
-alt-enter = 'exec-and-forget kitty --single-instance ~'
-alt-b = 'exec-and-forget firefox'
-alt-shift-n = 'exec-and-forget Logseq'
-alt-e = 'exec-and-forget emacs'
+# alt-enter = 'exec-and-forget kitty --single-instance ~'
+# alt-b = 'exec-and-forget firefox'
+# alt-shift-n = 'exec-and-forget Logseq'
+# alt-e = 'exec-and-forget emacs'
 
 # WORKSPACES
 alt-1 = 'workspace 1'
@@ -180,3 +180,8 @@ run = "move-node-to-workspace 8"
 if.app-id = 'com.apple.iCal'
 run = "move-node-to-workspace C"
 
+[[on-window-detected]]
+if.app-id="com.mitchellh.ghostty"
+run= [
+  "layout floating",
+]
