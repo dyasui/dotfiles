@@ -28,7 +28,7 @@
  '(org-modern-radio-target '(" ✒ " t " "))
  '(org-modern-replace-stars "◉○❖◈◇")
  '(package-selected-packages
-   '(transient gptel meow modus-themes magit org-journal ivy org-modern ob-mermaid citar cdlatex pdf-tools yasnippet org-mode gpastel transient-cycles))
+   '(org-roam transient gptel meow modus-themes org-journal ivy org-modern ob-mermaid citar cdlatex pdf-tools yasnippet org-mode gpastel transient-cycles))
  '(package-vc-selected-packages
    '((org-mode :url "https://code.tecosaur.net/tec/org-mode" :branch "dev")))
  '(warning-suppress-log-types '((auto-save) (org-babel))))

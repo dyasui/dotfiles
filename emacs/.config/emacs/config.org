@@ -6,9 +6,11 @@
 * TABLE OF CONTENTS :TOC:
 - [[#package-management][Package Management]]
   - [[#elpaca-package-manager][Elpaca Package Manager]]
+  - [[#melpa][MELPA]]
   - [[#evil-mode-collection][Evil Mode Collection]]
 - [[#core-behavior][Core Behavior]]
   - [[#essential-settings][Essential Settings]]
+  - [[#custom-elisp-functions][Custom elisp functions]]
   - [[#temporary-files-location][Temporary Files Location]]
   - [[#window-and-buffer-management][Window and Buffer Management]]
 - [[#appearance][Appearance]]
@@ -30,6 +32,8 @@
   - [[#core-configuration][Core Configuration]]
   - [[#appearance-1][Appearance]]
   - [[#citation-management][Citation Management]]
+- [[#note-takingpersonal-knowledge-management][Note taking/Personal Knowledge Management]]
+  - [[#org-roam][Org-Roam]]
 - [[#ai-integration][AI Integration]]
   - [[#gptel-configuration][=gptel= Configuration]]
   - [[#assistant-functions][Assistant functions]]
@@ -113,6 +117,13 @@
 
 #+end_src
 
+** MELPA
+#+begin_src emacs-lisp
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+#+end_src
+
 ** Evil Mode Collection
 Evil-mode adds vim bindings to text editing buffers when =evil-mode= is active.
 To get the vim bindings to work in other types of buffers
@@ -161,6 +172,20 @@ To get the vim bindings to work in other types of buffers
 (setq-default indent-tabs-mode nil) ;; use spaces instead of tabs
 ;; (global-display-line-numbers-mode nil)
 (global-visual-line-mode t)
+
+;; dired buffer listing options from ls
+(setq dired-listing-switches "-lh")
+;; truncate long visual lines in dired buffers
+(add-hook 'dired-mode-hook (lambda () (setq truncate-lines t)))
+#+end_src
+
+** Custom elisp functions
+Insert current date in YYYY-MM-DD format.
+#+begin_src emacs-lisp
+(defun insert-today-date ()
+  "Insert today's date at point in YYYY-MM-DD format."
+  (interactive)
+  (insert (format-time-string "%Y-%m-%d")))
 #+end_src
 
 ** Temporary Files Location
@@ -537,6 +562,12 @@ Use =recentf-open-files= to see a list of recently opened files
     "f s" '(affe-grep :wk "Find string in current project"))
   
   (dy/leader-keys
+    "a" '(:ignore t :wk "AI tools")
+    "a i" '(gptel :wk "Open GPTel")
+    "a m" '(gptel-menu :wk "GPTel Menu")
+    "a t" '(gptel-tools :wk "Tools menu for GPTel"))
+
+  (dy/leader-keys
     "b" '(:ignore t :wk "buffer")
     "b q" '(kill-this-buffer :wk "Kill buffer")
     "b n" '(next-buffer :wk "Next buffer")
@@ -574,6 +605,10 @@ Use =recentf-open-files= to see a list of recently opened files
     "h v " '(describe-variable :wk "Describe variable")
     "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
   
+  (dy/leader-keys
+    "i" '(:ignore t :wk "Insert")
+    "i t" '(insert-today-date :wk "Insert today's date"))
+
   (dy/leader-keys
     "m" '(:ignore t :wk "Bookmark")
     "m s" '(bookmark-set :wk "Set a bookmark")
@@ -618,7 +653,7 @@ Use =recentf-open-files= to see a list of recently opened files
     "t c" '(quick-calc :wk "Toggle calculator")
     "t i" '(org-toggle-inline-images :wk "Toggle inline images")
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-    "t t" '(visual-line-mode :wk "Toggle truncated lines")
+    "t t" '(toggle-truncate-lines :wk "Toggle truncated lines")
     "t v" '(vterm-toggle :wk "Toggle vterm")
     "t m p" '(mixed-pitch-mode :wk "Toggle mixed-pitch mode")
     "t z" '(olivetti-mode :wk "Toggle olivetti (zen) mode"))
@@ -810,6 +845,30 @@ $$\text{Hello, World!}^\infty \sum_i x_i = \bar{Q}$$
 ;;   :ensure t)
 #+end_src
 
+* Note taking/Personal Knowledge Management
+** Org-Roam
+#+begin_src emacs-lisp
+(use-package cond-let
+  :ensure (:host github :repo "tarsius/cond-let"))
+
+(use-package org-roam
+  :ensure t
+  :after cond-let
+  :demand t
+  :custom
+  (org-roam-directory "~/org-roam")
+  (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "%?"
+      :if-new (file+head "%<%Y%m%d>-${slug}.org" "#+TITLE: ${title}\n#+DATE: %T\n")
+      :unnarrowed t)))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert))
+  :config
+  (org-roam-setup))
+#+end_src
 * AI Integration
 ** =gptel= Configuration
 [[https://github.com/karthink/gptel][gptel documentation]]
@@ -833,9 +892,9 @@ $$\text{Hello, World!}^\infty \sum_i x_i = \bar{Q}$$
  (auth-source-pick-first-password :host "openrouter.ai"))
   (setq gptel-default-mode 'org-mode) ;; chat in org-mode or markdown
   (setq gptel-prompt-prefix-alist
-   '((org-mode . "*  :") (text-mode . "💬 :")))
+   '((org-mode . " :") (text-mode . "💬 :")))
   (setq gptel-response-prefix-alist
-   '((org-mode . "**  ") (text-mode . "> 🤖 ")))
+   '((org-mode . " ") (text-mode . "> 🤖 ")))
   (gptel-make-openai "LMStudio"
     :protocol "http"
     :host "localhost:1234"
@@ -848,22 +907,90 @@ $$\text{Hello, World!}^\infty \sum_i x_i = \bar{Q}$$
               qwen3-30b-a3b
               gemma-3n-e4b
               qwen3-14b))
-  (setq gptel-model   'google/gemini-2.5-flash
+  (setq gptel-model   'openai/gpt-5-mini
       gptel-backend
       (gptel-make-openai "OpenRouter"
         :host "openrouter.ai"
         :endpoint "/api/v1/chat/completions"
         :stream t
- :key gptel-api-key ; function that returns key from .authinfo
- :models '(google/gemini-2.5-pro
-           google/gemini-2.5-flash
-           anthropic/claude-sonnet-4.5
-           openai/gpt-5
-           z-ai/glm-4.6
-           qwen/qwen3-vl-235b-a22b-thinking
-           qwen/qwen3-vl-235b-a22b-instruct
-           deepseek/deepseek-r1-0528))))
+        :key gptel-api-key ; function that returns key from .authinfo
+        :models (m/augment-openrouter-models-list
+                 '(google/gemini-2.5-flash
+                   google/gemini-3-pro-preview
+                   anthropic/claude-sonnet-4.5
+                   anthropic/claude-opus-4.5
+                   openai/gpt-5-mini
+                   openai/gpt-5
+                   z-ai/glm-4.6
+                   qwen/qwen3-vl-235b-a22b-thinking
+                   qwen/qwen3-vl-235b-a22b-instruct
+                   deepseek/deepseek-v3.2-speciale)))))
 #+end_src
+
+Copied from this [[https://github.com/karthink/gptel/discussions/1067][github discussion]] to list openrouter pricing in gptel model selection.
+#+begin_src emacs-lisp
+(defun m--fetch-openrouter-models ()
+  "Fetch and parse the OpenRouter models API synchronously.
+Return an alist of (ID-STRING . raw-model-plist) entries."
+  (let ((url-request-extra-headers '(("Accept" . "application/json"))))
+    (with-current-buffer
+        (url-retrieve-synchronously "https://openrouter.ai/api/v1/models" t t 15)
+      (goto-char (point-min))
+      (re-search-forward "\n\n") ;; skip HTTP headers
+      (let* ((raw (buffer-substring-no-properties (point) (point-max)))
+             (data (json-parse-string raw
+                                      :object-type 'plist
+                                      :array-type 'list
+                                      :null-object nil
+                                      :false-object :json-false)))
+        (mapcar (lambda (m) (cons (plist-get m :id) m))
+                (plist-get data :data))))))
+
+(defun m--guess-capabilities (desc)
+  "Heuristically guess capabilities from DESC string."
+  (let ((d (downcase (or desc "")))
+        caps)
+    (when (string-match-p "tool" d)    (push 'tool-use caps))
+    (when (string-match-p "reason" d)  (push 'reasoning caps))
+    (when (string-match-p "image" d)   (push 'media caps))
+    (when (string-match-p "json" d)    (push 'json caps))
+    (when (string-match-p "url" d)     (push 'url caps))
+    (nreverse caps)))
+
+(defun m--convert-openrouter-to-gptel (m)
+  "Convert OpenRouter model plist M into gptel--openai-models-style plist."
+  (let* ((desc (plist-get m :description))
+         (ctx (or (plist-get m :context_length)
+                  (plist-get (plist-get m :top_provider) :context_length)))
+         (pricing (plist-get m :pricing))
+         (in (and pricing
+                  (* 1e6 (string-to-number (or (plist-get pricing :prompt) "0")))))
+         (out (and pricing
+                   (* 1e6 (string-to-number (or (plist-get pricing :completion) "0"))))))
+    (append (list :description desc)
+            (when ctx (list :context-window (/ ctx 1000.0)))
+            (when in (list :input-cost in))
+            (when out (list :output-cost out))
+            (let ((caps (m--guess-capabilities desc)))
+              (when caps (list :capabilities caps))))))
+
+(defun m/augment-openrouter-models-list (ids)
+  "Augment model IDS using the OpenRouter API.
+Returns a list of (symbol . plist).  If a model is missing, returns (id)."
+  (let* ((all (m--fetch-openrouter-models))
+         (tbl (make-hash-table :test 'equal)))
+    (dolist (m all)
+      (puthash (car m) (cdr m) tbl))
+    (mapcar
+     (lambda (id)
+       (let* ((id-str (if (symbolp id) (symbol-name id) id))
+              (m (gethash id-str tbl)))
+         (if m
+             (cons (intern id-str) (m--convert-openrouter-to-gptel m))
+           (list (intern id-str)))))
+     ids)))
+#+end_src
+
 ** Assistant functions
 #+begin_src emacs-lisp
 ;;;; My Local AI Assistant
@@ -987,6 +1114,7 @@ They seem to be heralding a switch to [[https://github.com/polymode/poly-org][po
   :ensure t
   :config
   (setq TeX-PDF-mode t))
+(setq +latex-viewers '(pdf-tools))
 #+end_src
 #+begin_src emacs-lisp
 ;; (use-package cdlatex

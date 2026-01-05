@@ -66,6 +66,10 @@
 
 ;;; elpaca-setup.el ends here
 
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+
 ;; Expands to: (elpaca evil (use-package evil :demand t))
 (use-package evil
     :init      ;; tweak evil's configuration before loading it
@@ -105,6 +109,16 @@
 (setq-default indent-tabs-mode nil) ;; use spaces instead of tabs
 ;; (global-display-line-numbers-mode nil)
 (global-visual-line-mode t)
+
+;; dired buffer listing options from ls
+(setq dired-listing-switches "-lh")
+;; truncate long visual lines in dired buffers
+(add-hook 'dired-mode-hook (lambda () (setq truncate-lines t)))
+
+(defun insert-today-date ()
+  "Insert today's date at point in YYYY-MM-DD format."
+  (interactive)
+  (insert (format-time-string "%Y-%m-%d")))
 
 ;; save temp files to ~/.config/emacs/auto-save
 ;; (setq auto-save-file-name-transforms
@@ -183,27 +197,27 @@ one, an error is signaled."
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 (load-theme 'kanagawa t)
 
-  (use-package doom-themes
-    :ensure t
-    :config
-    ;; (load-theme 'doom-one t)
-    (setq doom-themes-enable-bold t
-   doom-themes-enable-italic t)
-    (doom-themes-org-config))
-  ;; solaire darkens non-standard buffers' backgrounds
-  ;; (use-package solaire-mode
-  ;;   :ensure t
-  ;;   :config
-  ;;   (solaire-global-mode +1))
-  ;; ;; doom's fancy modeline
-  (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1)
-    :config
-    (setq doom-modeline-env-enable-python t)
-    (setq doom-modeline-env-enable-R t)
-    (setq doom-modeline-env-enable-julia t)
-    (setq doom-modeline-height 18))
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; (load-theme 'doom-one t)
+  (setq doom-themes-enable-bold t
+ doom-themes-enable-italic t)
+  (doom-themes-org-config))
+;; solaire darkens non-standard buffers' backgrounds
+;; (use-package solaire-mode
+;;   :ensure t
+;;   :config
+;;   (solaire-global-mode +1))
+;; ;; doom's fancy modeline
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-env-enable-python t)
+  (setq doom-modeline-env-enable-R t)
+  (setq doom-modeline-env-enable-julia t)
+  (setq doom-modeline-height 18))
 
 (set-face-attribute 'default nil
        :font "Liga SFMono Nerd Font"
@@ -401,6 +415,12 @@ one, an error is signaled."
     "f s" '(affe-grep :wk "Find string in current project"))
   
   (dy/leader-keys
+    "a" '(:ignore t :wk "AI tools")
+    "a i" '(gptel :wk "Open GPTel")
+    "a m" '(gptel-menu :wk "GPTel Menu")
+    "a t" '(gptel-tools :wk "Tools menu for GPTel"))
+
+  (dy/leader-keys
     "b" '(:ignore t :wk "buffer")
     "b q" '(kill-this-buffer :wk "Kill buffer")
     "b n" '(next-buffer :wk "Next buffer")
@@ -438,6 +458,10 @@ one, an error is signaled."
     "h v " '(describe-variable :wk "Describe variable")
     "h r r" '((lambda () (interactive) (load-file "~/.config/emacs/init.el")) :wk "Reload emacs config"))
   
+  (dy/leader-keys
+    "i" '(:ignore t :wk "Insert")
+    "i t" '(insert-today-date :wk "Insert today's date"))
+
   (dy/leader-keys
     "m" '(:ignore t :wk "Bookmark")
     "m s" '(bookmark-set :wk "Set a bookmark")
@@ -482,7 +506,7 @@ one, an error is signaled."
     "t c" '(quick-calc :wk "Toggle calculator")
     "t i" '(org-toggle-inline-images :wk "Toggle inline images")
     "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
-    "t t" '(visual-line-mode :wk "Toggle truncated lines")
+    "t t" '(toggle-truncate-lines :wk "Toggle truncated lines")
     "t v" '(vterm-toggle :wk "Toggle vterm")
     "t m p" '(mixed-pitch-mode :wk "Toggle mixed-pitch mode")
     "t z" '(olivetti-mode :wk "Toggle olivetti (zen) mode"))
@@ -513,10 +537,10 @@ one, an error is signaled."
     "w L" '(buf-move-right :wk "Buffer move right"))
   )
 
-  (global-set-key (kbd "C-=") 'text-scale-increase)
-  (global-set-key (kbd "C--") 'text-scale-decrease)
-  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
 (setq org-agenda-files (list "~/Org"))
 
@@ -615,6 +639,27 @@ one, an error is signaled."
 ;; (use-package embark
 ;;   :ensure t)
 
+(use-package cond-let
+  :ensure (:host github :repo "tarsius/cond-let"))
+
+(use-package org-roam
+  :ensure t
+  :after cond-let
+  :demand t
+  :custom
+  (org-roam-directory "~/org-roam")
+  (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+   '(("d" "default" plain
+      "%?"
+      :if-new (file+head "%<%Y%m%d>-${slug}.org" "#+TITLE: ${title}\n#+DATE: %T\n")
+      :unnarrowed t)))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n i" . org-roam-node-insert))
+  :config
+  (org-roam-setup))
+
 ;; transient required by gptel
 (use-package transient
   :ensure t
@@ -634,9 +679,9 @@ one, an error is signaled."
  (auth-source-pick-first-password :host "openrouter.ai"))
   (setq gptel-default-mode 'org-mode) ;; chat in org-mode or markdown
   (setq gptel-prompt-prefix-alist
-   '((org-mode . "*  :") (text-mode . "💬 :")))
+   '((org-mode . " :") (text-mode . "💬 :")))
   (setq gptel-response-prefix-alist
-   '((org-mode . "**  ") (text-mode . "> 🤖 ")))
+   '((org-mode . " ") (text-mode . "> 🤖 ")))
   (gptel-make-openai "LMStudio"
     :protocol "http"
     :host "localhost:1234"
@@ -649,21 +694,85 @@ one, an error is signaled."
               qwen3-30b-a3b
               gemma-3n-e4b
               qwen3-14b))
-  (setq gptel-model   'google/gemini-2.5-flash
+  (setq gptel-model   'openai/gpt-5-mini
       gptel-backend
       (gptel-make-openai "OpenRouter"
         :host "openrouter.ai"
         :endpoint "/api/v1/chat/completions"
         :stream t
- :key gptel-api-key ; function that returns key from .authinfo
- :models '(google/gemini-2.5-pro
-           google/gemini-2.5-flash
-           anthropic/claude-sonnet-4.5
-           openai/gpt-5
-           z-ai/glm-4.6
-           qwen/qwen3-vl-235b-a22b-thinking
-           qwen/qwen3-vl-235b-a22b-instruct
-           deepseek/deepseek-r1-0528))))
+        :key gptel-api-key ; function that returns key from .authinfo
+        :models (m/augment-openrouter-models-list
+                 '(google/gemini-2.5-flash
+                   google/gemini-3-pro-preview
+                   anthropic/claude-sonnet-4.5
+                   anthropic/claude-opus-4.5
+                   openai/gpt-5-mini
+                   openai/gpt-5
+                   z-ai/glm-4.6
+                   qwen/qwen3-vl-235b-a22b-thinking
+                   qwen/qwen3-vl-235b-a22b-instruct
+                   deepseek/deepseek-v3.2-speciale)))))
+
+(defun m--fetch-openrouter-models ()
+  "Fetch and parse the OpenRouter models API synchronously.
+Return an alist of (ID-STRING . raw-model-plist) entries."
+  (let ((url-request-extra-headers '(("Accept" . "application/json"))))
+    (with-current-buffer
+        (url-retrieve-synchronously "https://openrouter.ai/api/v1/models" t t 15)
+      (goto-char (point-min))
+      (re-search-forward "\n\n") ;; skip HTTP headers
+      (let* ((raw (buffer-substring-no-properties (point) (point-max)))
+             (data (json-parse-string raw
+                                      :object-type 'plist
+                                      :array-type 'list
+                                      :null-object nil
+                                      :false-object :json-false)))
+        (mapcar (lambda (m) (cons (plist-get m :id) m))
+                (plist-get data :data))))))
+
+(defun m--guess-capabilities (desc)
+  "Heuristically guess capabilities from DESC string."
+  (let ((d (downcase (or desc "")))
+        caps)
+    (when (string-match-p "tool" d)    (push 'tool-use caps))
+    (when (string-match-p "reason" d)  (push 'reasoning caps))
+    (when (string-match-p "image" d)   (push 'media caps))
+    (when (string-match-p "json" d)    (push 'json caps))
+    (when (string-match-p "url" d)     (push 'url caps))
+    (nreverse caps)))
+
+(defun m--convert-openrouter-to-gptel (m)
+  "Convert OpenRouter model plist M into gptel--openai-models-style plist."
+  (let* ((desc (plist-get m :description))
+         (ctx (or (plist-get m :context_length)
+                  (plist-get (plist-get m :top_provider) :context_length)))
+         (pricing (plist-get m :pricing))
+         (in (and pricing
+                  (* 1e6 (string-to-number (or (plist-get pricing :prompt) "0")))))
+         (out (and pricing
+                   (* 1e6 (string-to-number (or (plist-get pricing :completion) "0"))))))
+    (append (list :description desc)
+            (when ctx (list :context-window (/ ctx 1000.0)))
+            (when in (list :input-cost in))
+            (when out (list :output-cost out))
+            (let ((caps (m--guess-capabilities desc)))
+              (when caps (list :capabilities caps))))))
+
+(defun m/augment-openrouter-models-list (ids)
+  "Augment model IDS using the OpenRouter API.
+Returns a list of (symbol . plist).  If a model is missing, returns (id)."
+  (let* ((all (m--fetch-openrouter-models))
+         (tbl (make-hash-table :test 'equal)))
+    (dolist (m all)
+      (puthash (car m) (cdr m) tbl))
+    (mapcar
+     (lambda (id)
+       (let* ((id-str (if (symbolp id) (symbol-name id) id))
+              (m (gethash id-str tbl)))
+         (if m
+             (cons (intern id-str) (m--convert-openrouter-to-gptel m))
+           (list (intern id-str)))))
+     ids)))
 
 ;;;; My Local AI Assistant
 ;;;
@@ -774,6 +883,7 @@ This function will block until the LLM response is received."
   :ensure t
   :config
   (setq TeX-PDF-mode t))
+(setq +latex-viewers '(pdf-tools))
 
 ;; (use-package cdlatex
 ;;   :ensure t
