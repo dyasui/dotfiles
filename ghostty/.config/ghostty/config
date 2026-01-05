@@ -9,15 +9,14 @@ macos-option-as-alt = true
 
 # KEYBINDS
 # split terminal windows
-keybind = ctrl+shift+h=new_split:left
-keybind = ctrl+shift+j=new_split:down
-keybind = ctrl+shift+k=new_split:up
-keybind = ctrl+shift+l=new_split:right
+keybind = ctrl+enter=new_split:right
+keybind = ctrl+shift+enter=new_split:down
+
 # move between splits
-keybind = cmd+h=goto_split:left
-keybind = cmd+j=goto_split:bottom
-keybind = cmd+k=goto_split:top
-keybind = cmd+l=goto_split:right
+keybind = super+h=goto_split:left
+keybind = super+j=goto_split:bottom
+keybind = super+k=goto_split:top
+keybind = super+l=goto_split:right
 # open quick terminal
 keybind = ctrl+space=toggle_quick_terminal
 # scroll through terminal lines
