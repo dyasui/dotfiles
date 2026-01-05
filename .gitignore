@@ -28,3 +28,5 @@ emacs/.config/emacs/projects
 emacs/.config/emacs/bookmarks
 project-todo.org
 emacs/.config/emacs/perspectives
+emacs/.config/emacs/image-dired
+emacs/.config/emacs/url
