@@ -197,27 +197,27 @@ one, an error is signaled."
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 (load-theme 'kanagawa t)
 
-(use-package doom-themes
-  :ensure t
-  :config
-  ;; (load-theme 'doom-one t)
-  (setq doom-themes-enable-bold t
- doom-themes-enable-italic t)
-  (doom-themes-org-config))
-;; solaire darkens non-standard buffers' backgrounds
-;; (use-package solaire-mode
-;;   :ensure t
-;;   :config
-;;   (solaire-global-mode +1))
-;; ;; doom's fancy modeline
-(use-package doom-modeline
-  :ensure t
-  :init (doom-modeline-mode 1)
-  :config
-  (setq doom-modeline-env-enable-python t)
-  (setq doom-modeline-env-enable-R t)
-  (setq doom-modeline-env-enable-julia t)
-  (setq doom-modeline-height 18))
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; (load-theme 'doom-one t)
+    (setq doom-themes-enable-bold t
+   doom-themes-enable-italic t)
+    (doom-themes-org-config))
+  ;; solaire darkens non-standard buffers' backgrounds
+  ;; (use-package solaire-mode
+  ;;   :ensure t
+  ;;   :config
+  ;;   (solaire-global-mode +1))
+  ;; ;; doom's fancy modeline
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-env-enable-python t)
+    (setq doom-modeline-env-enable-R t)
+    (setq doom-modeline-env-enable-julia t)
+    (setq doom-modeline-height 18))
 
 (set-face-attribute 'default nil
        :font "Liga SFMono Nerd Font"
@@ -380,6 +380,60 @@ one, an error is signaled."
     ("mkv" . "mpv")
     ("mp4" . "mpv"))))
 
+(defun my/org-wrap-with (char)
+  "Wraps the selected region with CHAR. 
+If no region is selected, inserts CHAR CHAR and places cursor between them."
+  (if (use-region-p)
+      (let ((beg (region-beginning))
+            (end (region-end)))
+        (save-excursion
+          (goto-char end)
+          (insert char)
+          (goto-char beg)
+          (insert char)))
+    (insert char char)
+    (backward-char (length char))
+    (evil-insert-state)))
+
+(defun my/org-bold ()
+  "Wrap region in *bold*."
+  (interactive)
+  (my/org-wrap-with "*"))
+
+(defun my/org-italics ()
+  "Wrap region in /italics/."
+  (interactive)
+  (my/org-wrap-with "/"))
+
+(defun my/org-underline ()
+  "Wrap region in _underline_."
+  (interactive)
+  (my/org-wrap-with "_"))
+
+(defun my/org-code ()
+  "Wrap region in =code=."
+  (interactive)
+  (my/org-wrap-with "="))
+
+(defun my/org-monospace ()
+  "Wrap region in ~monospace~."
+  (interactive)
+  (my/org-wrap-with "~"))
+
+(defun my/org-insert-link (url)
+  "Wrap selected text (description) in a link to URL.
+Syntax: [[URL][Selection]]
+If no region is active, inserts [[URL][]] and places cursor for description."
+  (interactive "sLink URL: ")
+  (if (use-region-p)
+      (let ((beg (region-beginning))
+            (end (region-end))
+            (selection (buffer-substring-no-properties (region-beginning) (region-end))))
+        (delete-region beg end)
+        (insert (format "[[%s][%s]]" url selection)))
+    (insert (format "[[%s][]]" url))
+    (backward-char 2)))
+
 (use-package general
   :ensure t
   :config
@@ -399,9 +453,13 @@ one, an error is signaled."
   
   (general-define-key
    :keymaps 'override
-   "M-n" '(make-frame :wk "Open new frame")
-   "M-w" '(delete-frame :wk "Close current frame")
-   "M-." '(dired :wk "Dired"))
+   "M-N" '(make-frame :wk "Open new frame")
+   "M-w" '(delete-window :wk "Hide window")
+   "M-q" '(delete-buffer-and-window :wk "Quit buffer and window")
+   "M-." '(dired :wk "Dired")
+   "M-s" '(save-buffer :wk "Save buffer")
+   "M-z" '(undo :wk "Undo")
+   "M-Z" '(undo-redo :wk "Redo"))
   
   (dy/leader-keys
     "SPC" '(execute-extended-command :wk "M-x")
@@ -414,6 +472,18 @@ one, an error is signaled."
     "f r" '(recentf :wk "Find recent files")
     "f s" '(affe-grep :wk "Find string in current project"))
   
+  (general-create-definer dy/org-g-def
+    :states '(normal)
+    :prefix "g"
+    :keymaps 'override)
+  (dy/org-g-def
+   "b" #'my/org-bold
+   "i" #'my/org-italics
+   "s" #'my/org-underline
+   "=" #'my/org-code
+   "`" #'my/org-monospace
+   "l" #'my/org-insert-link)
+
   (dy/leader-keys
     "a" '(:ignore t :wk "AI tools")
     "a i" '(gptel :wk "Open GPTel")
@@ -537,10 +607,10 @@ one, an error is signaled."
     "w L" '(buf-move-right :wk "Buffer move right"))
   )
 
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
-(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+  (global-set-key (kbd "C-=") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+  (global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+  (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
 (setq org-agenda-files (list "~/Org"))
 
